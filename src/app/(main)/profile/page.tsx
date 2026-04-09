@@ -1,12 +1,35 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, Phone, User, Shield, ArrowRight, Gift, Store, LayoutList } from "lucide-react";
+import { Mail, Phone, User, Shield, ArrowRight, Gift, Store, LayoutList, Bot, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 export default function ProfilePage() {
+  const [isLightMode, setIsLightMode] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('lisbran_theme');
+    if (saved === 'light') {
+      setIsLightMode(true);
+      document.body.classList.add('theme-light');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    if (isLightMode) {
+      document.body.classList.remove('theme-light');
+      localStorage.setItem('lisbran_theme', 'dark');
+      setIsLightMode(false);
+    } else {
+      document.body.classList.add('theme-light');
+      localStorage.setItem('lisbran_theme', 'light');
+      setIsLightMode(true);
+    }
+  };
+
   return (
     <div className="relative p-6 min-h-screen pb-32 bg-[#0a0a0a] overflow-hidden">
       
@@ -37,6 +60,14 @@ export default function ProfilePage() {
             <p className="text-zinc-400 text-sm">Manage your LisBran presence</p>
           </div>
         </div>
+
+        {/* Theme Toggle Button */}
+        <button 
+          onClick={toggleTheme}
+          className="p-3 bg-white/5 border border-white/10 rounded-full text-zinc-400 theme-preserve hover:text-white hover:bg-white/10 transition-colors shadow-lg"
+        >
+          {isLightMode ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
       </div>
 
       {/* Rewards Navigation */}
@@ -60,19 +91,21 @@ export default function ProfilePage() {
       </Link>
 
       {/* Be a Seller Faction */}
-      <motion.div 
-        whileHover={{ scale: 1.02 }}
-        className="w-full relative overflow-hidden rounded-3xl bg-black border border-white/10 p-6 mb-8 flex flex-col justify-center items-start shadow-xl"
-      >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none" />
-        <div className="flex items-center gap-2 text-white font-bold text-lg mb-2 relative z-10">
-          <Store className="text-blue-500" size={20} /> Become a Seller
-        </div>
-        <p className="text-zinc-400 text-sm font-medium mb-4 relative z-10">
-          Launch your agency, freelancing gig, or marketing service to thousands of localized buyers today.
-        </p>
-        <Button variant="primary" className="py-2.5 px-6 text-sm">Apply Now</Button>
-      </motion.div>
+      <Link href="/seller/onboarding" className="block w-full">
+        <motion.div 
+          whileHover={{ scale: 1.02 }}
+          className="w-full relative overflow-hidden rounded-3xl bg-black border border-white/10 p-6 mb-8 flex flex-col justify-center items-start shadow-xl"
+        >
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none" />
+          <div className="flex items-center gap-2 text-white font-bold text-lg mb-2 relative z-10">
+            <Store className="text-blue-500" size={20} /> Become a Seller
+          </div>
+          <p className="text-zinc-400 text-sm font-medium mb-4 relative z-10">
+            Launch your agency, freelancing gig, or marketing service to thousands of localized buyers today.
+          </p>
+          <Button variant="primary" className="py-2.5 px-6 text-sm pointer-events-none">Apply Now</Button>
+        </motion.div>
+      </Link>
 
       {/* Sign Up Window for First Time Users */}
       <motion.div 
@@ -100,8 +133,27 @@ export default function ProfilePage() {
 
       {/* Community & Support */}
       <h2 className="text-white font-bold text-lg mb-4 mt-8 flex items-center gap-2">
-        <Shield className="text-pink-500" size={20} /> Community & Feedback
+        <Shield className="text-pink-500" size={20} /> Community & Support
       </h2>
+
+      <Link href="/support">
+        <motion.div 
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full text-left glass-card p-5 mb-4 flex justify-between items-center group cursor-pointer border-blue-500/30 bg-gradient-to-r from-blue-900/20 to-transparent hover:border-blue-400 transition-all shadow-[0_0_15px_rgba(59,130,246,0.15)]"
+        >
+          <div className="flex items-start gap-4">
+            <div className="p-3 bg-blue-500/20 rounded-full text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-colors shadow-[0_0_10px_rgba(59,130,246,0.3)]">
+              <Bot size={20} />
+            </div>
+            <div>
+              <h3 className="text-white font-bold flex items-center gap-2">LisBran AI Copilot <span className="bg-blue-500 text-[9px] px-1.5 py-0.5 rounded text-black tracking-widest font-black uppercase">Online</span></h3>
+              <p className="text-blue-200/70 text-xs mt-1">Get instant help with UI or portfolio setups</p>
+            </div>
+          </div>
+          <ArrowRight className="text-blue-500 group-hover:text-white transition-colors" size={20} />
+        </motion.div>
+      </Link>
 
       <Link href="/surveys">
         <motion.div 

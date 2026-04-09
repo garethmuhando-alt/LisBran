@@ -3,7 +3,7 @@
 import { Home, Bookmark, Bell, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { clsx } from "clsx";
+import { cn } from "@/lib/utils";
 
 export default function BottomNav() {
   const pathname = usePathname();
@@ -28,7 +28,7 @@ export default function BottomNav() {
           return (
             <Link key={index} href={item.href} className="relative group">
               <div
-                className={clsx(
+                className={cn(
                   "p-2 rounded-full transition-all duration-300",
                   isActive ? "bg-white/10 text-white" : "text-zinc-500 hover:text-zinc-300"
                 )}

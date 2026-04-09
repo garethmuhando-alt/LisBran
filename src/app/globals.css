@@ -50,3 +50,25 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Global Light Mode — subtle background lift only */
+body.theme-light {
+    background-color: #1a1a1f !important;
+}
+
+body.theme-light .bg-\[\#0a0a0a\],
+body.theme-light .bg-\[\#141417\] {
+    background-color: #1e1e24 !important;
+}
+
+body.theme-light .bg-black\/50,
+body.theme-light .bg-black\/40,
+body.theme-light .bg-black\/30 {
+    background-color: rgba(40, 40, 50, 0.6) !important;
+}
+
+body.theme-light .glass,
+body.theme-light .glass-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}

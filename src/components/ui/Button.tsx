@@ -4,10 +4,15 @@ import { motion } from "framer-motion";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps {
   children: ReactNode;
   variant?: "primary" | "secondary" | "outline" | "ghost";
   fullWidth?: boolean;
+  className?: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
+  form?: string;
 }
 
 export function Button({ 
@@ -15,7 +20,10 @@ export function Button({
   variant = "primary", 
   fullWidth = false,
   className,
-  ...props 
+  onClick,
+  disabled,
+  type = "button",
+  form,
 }: ButtonProps) {
   
   const baseStyles = "relative font-semibold rounded-full px-6 py-3 transition-colors overflow-hidden flex items-center justify-center";
@@ -32,7 +40,10 @@ export function Button({
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       className={cn(baseStyles, variants[variant], fullWidth && "w-full", className)}
-      {...props}
+      onClick={onClick}
+      disabled={disabled}
+      type={type}
+      form={form}
     >
       <span className="relative z-10">{children}</span>
       {variant === "primary" && (

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Bell, MessageSquare, Tag, Zap, MapPin, Calendar } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function NotificationsEventsPage() {
   const [tab, setTab] = useState<"alerts" | "events">("alerts");
@@ -80,12 +81,35 @@ export default function NotificationsEventsPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-6">
-            <div className="flex items-center justify-between text-white bg-blue-500/20 px-4 py-3 rounded-2xl border border-blue-500/30 backdrop-blur-md">
+            <div className="flex items-center justify-between text-white bg-blue-500/20 px-4 py-3 rounded-2xl border border-blue-500/30 backdrop-blur-md mb-2">
               <span className="font-semibold text-sm">Location Advisor:</span>
               <div className="flex items-center gap-1 font-bold text-blue-400 text-sm bg-black/50 px-2 py-1 rounded-lg">
                 <MapPin size={14} /> Kenya Wide
               </div>
             </div>
+
+            <Link href="/events" className="w-full block mb-2">
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                className="relative w-full rounded-3xl overflow-hidden p-6 min-h-[140px] shadow-2xl flex flex-col justify-center border border-orange-700/50 cursor-pointer"
+              >
+                <div className="absolute inset-0 z-0 bg-black">
+                   <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-black md:from-black/80 to-transparent" />
+                   <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/30 blur-3xl rounded-full" />
+                   <div className="absolute bottom-0 right-10 w-32 h-32 bg-yellow-500/20 blur-3xl rounded-full" />
+                </div>
+                
+                <h2 className="text-xl font-black text-orange-400 mb-1 max-w-[220px] leading-tight relative z-10 drop-shadow-xl flex items-center gap-2">
+                  Live Event Radar <MapPin size={18}/>
+                </h2>
+                <p className="text-zinc-300 text-[11px] font-bold tracking-wide relative z-10 mb-3 max-w-[220px]">
+                  Seek out physical gigs matching your portfolio happening closely in your target region today!
+                </p>
+                <button className="bg-orange-500 pointer-events-none text-white px-6 py-2 rounded-full text-xs font-bold w-fit shadow-[0_0_15px_rgba(249,115,22,0.4)] relative z-10 uppercase tracking-widest">
+                  Scan Gigs
+                </button>
+              </motion.div>
+            </Link>
 
             {events.map((evt) => (
               <motion.div 

@@ -6,7 +6,7 @@ import { PenTool, Mic2, Megaphone, Ticket, Printer } from "lucide-react";
 
 export default function CategoriesPage() {
   const categories = [
-    { title: "Graphic Design Services", icon: PenTool, href: "/search/logo-design" },
+    { title: "Graphic Design Services", icon: PenTool, href: "/services/graphic-design" },
     { title: "Influencer Marketing Services", icon: Mic2, href: "/search/influencer" },
     { title: "Influencer and Promotion Services", icon: Megaphone, href: "/search/promotion" },
     { title: "Event and Activation Services", icon: Ticket, href: "/search/events" },

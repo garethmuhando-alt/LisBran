@@ -52,7 +52,7 @@ export default function SplashPage() {
           </motion.div>
         </Link>
         
-        <Link href="/home" className="block w-full">
+        <Link href="/seller/onboarding" className="block w-full">
           <motion.div
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

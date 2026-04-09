@@ -6,8 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
+  const router = useRouter();
   const [mode, setMode] = useState<"buy" | "sell">("buy");
   const [location, setLocation] = useState("nairobi");
   const [isLocOpen, setIsLocOpen] = useState(false);
@@ -102,7 +104,7 @@ export default function HomePage() {
                 Buy
               </button>
               <button 
-                onClick={() => setMode("sell")}
+                onClick={() => { setMode("sell"); router.push("/seller/onboarding"); }}
                 className={`flex-1 relative z-10 h-full flex items-center justify-center transition-colors text-xs font-bold ${mode === "sell" ? "text-white" : "text-zinc-500 hover:text-zinc-300"}`}
               >
                 Sell
@@ -135,7 +137,7 @@ export default function HomePage() {
           <h2 className="text-2xl font-black text-slate-100 mb-3 max-w-[220px] leading-tight relative z-10 drop-shadow-xl">
             Check out these new marketing trends for your next campaign!
           </h2>
-          <button className="bg-slate-200 hover:bg-white text-slate-900 px-6 py-2 rounded-full text-sm font-bold w-fit shadow-lg transition-colors relative z-10">
+          <button onClick={() => router.push('/trends')} className="bg-slate-200 hover:bg-white text-slate-900 px-6 py-2 rounded-full text-sm font-bold w-fit shadow-lg transition-colors relative z-10">
             Read more
           </button>
         </motion.div>
@@ -154,8 +156,8 @@ export default function HomePage() {
           <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-hide snap-x md:grid md:grid-cols-3 md:gap-8">
             {[
               { id: 1, name: "Graphic Design\nServices", image: "/icon-graphic.png", glow: "shadow-slate-500/50", url: "/services/graphic-design" },
-              { id: 2, name: "Marketing\nConsultancy", image: "/icon-marketing.png", glow: "shadow-slate-500/50", url: "#" },
-              { id: 3, name: "Branding &\nPrinting", image: "lucide-gem", glow: "shadow-orange-500/50", url: "#" },
+              { id: 2, name: "Marketing\nConsultancy", image: "/icon-marketing.png", glow: "shadow-slate-500/50", url: "/search/influencer" },
+              { id: 3, name: "Branding &\nPrinting", image: "lucide-gem", glow: "shadow-orange-500/50", url: "/search/printing" },
             ].map((service) => (
               <Link href={service.url} key={service.id} className="snap-start flex flex-col items-center gap-3 w-28 md:w-full flex-shrink-0 group cursor-pointer">
                 <motion.div 
@@ -186,41 +188,34 @@ export default function HomePage() {
         <section className="relative z-10">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <span className="w-2 h-6 bg-slate-600 rounded-full inline-block" /> Popular Vendors
+              <span className="w-2 h-6 bg-slate-600 rounded-full inline-block" /> Top Ranked Vendors
             </h2>
-            <span className="text-zinc-400 text-sm flex items-center gap-1 cursor-pointer hover:text-white transition-colors">
+            <Link href="/categories" className="text-zinc-400 text-sm flex items-center gap-1 hover:text-white transition-colors">
               View more <span className="text-lg">›</span>
-            </span>
+            </Link>
           </div>
           
           <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-hide snap-x">
-             <div className="snap-start min-w-[240px] h-40 bg-blue-600 rounded-3xl p-5 flex flex-col justify-between shadow-[0_10px_30px_rgba(37,99,235,0.4)] relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform border border-blue-500/50 group">
-               <div className="absolute inset-0 z-0">
-                  <Image src="/bg-events.png" alt="Marketing AI" fill className="object-cover opacity-60 mix-blend-overlay scale-110 group-hover:scale-125 transition-transform duration-1000" />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/80 to-blue-400/40 mix-blend-multiply opacity-80" />
-               </div>
-               <div className="flex justify-between items-start relative z-10 w-full">
-                 <div className="bg-white/20 backdrop-blur-md text-white px-2 py-1 flex items-center gap-1 rounded font-bold text-xs"><Star size={12} className="fill-yellow-400 text-yellow-400" /> 4.8</div>
-               </div>
-               <div>
-                 <h3 className="text-white font-black text-xl relative z-10 leading-tight drop-shadow-lg">LINQIA</h3>
-                 <p className="text-blue-100 font-bold text-sm relative z-10 drop-shadow-md">Marketing Consulting Services</p>
-               </div>
-             </div>
-             
-             <div className="snap-start min-w-[240px] h-40 bg-yellow-500 rounded-3xl p-5 flex flex-col justify-between shadow-[0_10px_30px_rgba(234,179,8,0.4)] relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform border border-yellow-400/50 group">
-               <div className="absolute inset-0 z-0">
-                  <Image src="/bg-home.png" alt="Influencer AI" fill className="object-cover opacity-70 mix-blend-color-dodge scale-110 group-hover:scale-125 transition-transform duration-1000" />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-yellow-700/80 to-yellow-300/40 mix-blend-multiply opacity-80" />
-               </div>
-               <div className="flex justify-between items-start relative z-10 w-full">
-                 <div className="bg-black/20 backdrop-blur-md text-white px-2 py-1 flex items-center gap-1 rounded font-bold text-xs"><Star size={12} className="fill-white text-white" /> 4.9</div>
-               </div>
-               <div>
-                 <h3 className="text-white font-black text-xl relative z-10 leading-tight drop-shadow-lg">H&T Marketing</h3>
-                 <p className="text-yellow-50 font-bold text-sm relative z-10 drop-shadow-md">Influencer Services</p>
-               </div>
-             </div>
+             {[
+               { id: "personal-designs", name: "Neon Gravity Co.", rating: 5.0, service: "Graphic Design", bg: "bg-pink-600", border: "border-pink-500/50", shadow: "shadow-[0_10px_30px_rgba(236,72,153,0.4)]", grad: "from-pink-900/80 to-purple-400/40" },
+               { id: "ht-marketing", name: "H&T Marketing", rating: 4.9, service: "Influencer Services", bg: "bg-yellow-500", border: "border-yellow-400/50", shadow: "shadow-[0_10px_30px_rgba(234,179,8,0.4)]", grad: "from-yellow-700/80 to-yellow-300/40" },
+               { id: "linqia", name: "LINQIA", rating: 4.8, service: "Consulting", bg: "bg-blue-600", border: "border-blue-500/50", shadow: "shadow-[0_10px_30px_rgba(37,99,235,0.4)]", grad: "from-blue-900/80 to-blue-400/40" },
+               { id: "sp-studio", name: "SP Studio", rating: 4.7, service: "Web & App Design", bg: "bg-emerald-600", border: "border-emerald-500/50", shadow: "shadow-[0_10px_30px_rgba(16,185,129,0.4)]", grad: "from-emerald-900/80 to-emerald-400/40" },
+             ].sort((a,b)=> b.rating - a.rating).map((vendor) => (
+               <Link href={`/supplier/${vendor.id}`} key={vendor.id} className={`snap-start min-w-[240px] h-40 ${vendor.bg} rounded-3xl p-5 flex flex-col justify-between ${vendor.shadow} relative overflow-hidden transition-transform hover:scale-[1.02] border ${vendor.border} group`}>
+                 <div className="absolute inset-0 z-0">
+                    <Image src="/bg-events.png" alt={vendor.name} fill className="object-cover opacity-60 mix-blend-overlay scale-110 group-hover:scale-125 transition-transform duration-1000" />
+                    <div className={`absolute inset-0 bg-gradient-to-tr ${vendor.grad} mix-blend-multiply opacity-80`} />
+                 </div>
+                 <div className="flex justify-between items-start relative z-10 w-full">
+                   <div className="bg-black/40 backdrop-blur-md text-white px-2 py-1 flex items-center gap-1 rounded font-bold text-xs"><Star size={12} className="fill-yellow-400 text-yellow-400" /> {vendor.rating}</div>
+                 </div>
+                 <div>
+                   <h3 className="text-white font-black text-xl relative z-10 leading-tight drop-shadow-lg">{vendor.name}</h3>
+                   <p className="text-white/90 font-bold text-sm relative z-10 drop-shadow-md">{vendor.service}</p>
+                 </div>
+               </Link>
+             ))}
           </div>
         </section>
       </div>

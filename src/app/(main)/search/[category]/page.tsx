@@ -1,15 +1,62 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { SlidersHorizontal, ArrowLeft, TrendingUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { SupplierCard } from "@/components/ui/SupplierCard";
 import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabase";
+import { use } from "react";
 
 export default function SearchResultsPage({ params }: { params: Promise<{ category: string }> }) {
-  const resolvedParams = React.use(params);
+  const resolvedParams = use(params);
   const router = useRouter();
-  
+  const [suppliers, setSuppliers] = useState<any[]>([]);
+
+  useEffect(() => {
+    const baseMockup = [
+      { id: "pete-barret", name: "Pete & Barret Designs", initials: "PB", rating: 4.9, reviews: 450, description: `Premium specialists. We deliver unmatched high-end aesthetics tailored to modern tech and luxury brands.`, glowColor: "purple" },
+      { id: "sps", name: "SP Studio", initials: "SP", rating: 4.7, reviews: 157, description: `Award-winning studio focused exclusively on design for startups scaling globally.`, glowColor: "blue" },
+      { id: "personal-designs", name: "Neon Gravity Co.", initials: "NG", rating: 5.0, reviews: 81, description: `The ultimate "anti-gravity" feeling. Our services utilize 3D textures, floating layers, and vivid colors.`, glowColor: "pink" }
+    ];
+
+    const load = async () => {
+      // Pull live verified vendors from Supabase if connected
+      if (supabase) {
+        const { data } = await supabase
+          .from('vendors')
+          .select('*')
+          .eq('verified', true);
+
+        if (data && data.length > 0) {
+          const liveVendors = data.map((v: any) => ({
+            id: v.business_name.toLowerCase().replace(/\s+/g, '-'),
+            name: v.business_name,
+            initials: v.business_name.substring(0, 2).toUpperCase(),
+            rating: 5.0,
+            reviews: 1,
+            description: v.bio || `Verified LisBran vendor offering ${v.category} services.`,
+            glowColor: "orange"
+          }));
+          setSuppliers([...liveVendors, ...baseMockup]);
+          return;
+        }
+      }
+
+      // localStorage fallback
+      const verifiedStatus = localStorage.getItem('seller_verified');
+      if (verifiedStatus === 'true') {
+        const liveName = localStorage.getItem('seller_name') || "Verified Seller";
+        const newCard = { id: liveName.toLowerCase().replace(/\s/g, '-'), name: liveName, initials: liveName.substring(0, 2).toUpperCase(), rating: 5.0, reviews: 1, description: `Newly verified and officially launched LisBran vendor serving the Kenyan sector.`, glowColor: "orange" };
+        setSuppliers([newCard, ...baseMockup]);
+      } else {
+        setSuppliers(baseMockup);
+      }
+    };
+
+    load();
+  }, []);
+
   const titleMap: Record<string, string> = {
     "logo-design": "Logo Design",
     "brand-style-guides": "Brand Style Guides",
@@ -31,8 +78,7 @@ export default function SearchResultsPage({ params }: { params: Promise<{ catego
 
   return (
     <div className="relative p-6 pt-12 min-h-screen bg-[#141417] overflow-hidden">
-      {/* Background Effect */}
-      <motion.div 
+      <motion.div
         animate={{ scale: [1.05, 1.15, 1.05] }}
         transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
         className="fixed inset-0 z-0 pointer-events-none opacity-20"
@@ -42,7 +88,6 @@ export default function SearchResultsPage({ params }: { params: Promise<{ catego
       </motion.div>
 
       <div className="relative z-10 flex flex-col h-full max-w-md mx-auto">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8 sticky top-0 pt-6 pb-4 bg-[#141417]/90 backdrop-blur-xl z-20 border-b border-white/5">
           <button onClick={() => router.back()} className="p-2 bg-white/5 rounded-full border border-white/10 hover:bg-white/20 transition-colors">
             <ArrowLeft className="text-white" size={20} />
@@ -55,8 +100,7 @@ export default function SearchResultsPage({ params }: { params: Promise<{ catego
           </button>
         </div>
 
-        {/* Highlight Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8 flex items-center justify-between bg-gradient-to-r from-pink-500/10 to-purple-500/10 border border-pink-500/20 rounded-2xl p-5 backdrop-blur-sm"
@@ -69,45 +113,23 @@ export default function SearchResultsPage({ params }: { params: Promise<{ catego
           </div>
         </motion.div>
 
-        {/* Results List */}
         <div className="flex flex-col gap-6 pb-20">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <SupplierCard
-              id="pete-barret"
-              name="Pete & Barret Designs"
-              initials="PB"
-              rating={4.9}
-              reviews={450}
-              description={`Premium ${title.toLowerCase()} specialists. We deliver unmatched high-end aesthetics tailored to modern tech and luxury brands.`}
-              glowColor="purple"
-            />
-          </motion.div>
-          
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-            <SupplierCard
-              id="sps"
-              name="SP Studio"
-              initials="SP"
-              rating={4.7}
-              reviews={157}
-              description={`Award-winning studio focused exclusively on ${title.toLowerCase()} for startups scaling globally.`}
-              glowColor="blue"
-            />
-          </motion.div>
-          
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-            <SupplierCard
-              id="personal-designs"
-              name="Neon Gravity Co."
-              initials="NG"
-              rating={5.0}
-              reviews={81}
-              description={`The ultimate "anti-gravity" feeling. Our ${title.toLowerCase()} services utilize 3D textures, floating layers, and vivid colors.`}
-              glowColor="pink"
-            />
-          </motion.div>
+          {suppliers.map((s, idx) => (
+            <motion.div key={s.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.1 }}>
+              <SupplierCard
+                id={s.id}
+                name={s.name}
+                initials={s.initials}
+                rating={s.rating}
+                reviews={s.reviews}
+                description={s.description}
+                glowColor={s.glowColor}
+              />
+            </motion.div>
+          ))}
         </div>
       </div>
     </div>
   );
 }
+
