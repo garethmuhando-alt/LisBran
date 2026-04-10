@@ -1,12 +1,15 @@
+import dynamic from "next/dynamic";
 import BottomNav from "@/components/BottomNav";
-import { FloatingSuggestionBox } from "@/components/ui/FloatingSuggestionBox";
-import { AnimatedBackground } from "@/components/ui/AnimatedBackground";
 
-export default function MainLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+// Lazy-load heavy components — downloaded only when first rendered
+const AnimatedBackground = dynamic(
+  () => import("@/components/ui/AnimatedBackground").then(m => ({ default: m.AnimatedBackground }))
+);
+const FloatingSuggestionBox = dynamic(
+  () => import("@/components/ui/FloatingSuggestionBox").then(m => ({ default: m.FloatingSuggestionBox }))
+);
+
+export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <AnimatedBackground />

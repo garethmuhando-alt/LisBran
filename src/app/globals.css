@@ -51,6 +51,16 @@ body {
   background-clip: text;
 }
 
+/* CSS-only background breathe — replaces framer-motion infinite animation */
+@keyframes bg-breathe {
+  0%, 100% { transform: scale(1.05) rotate(0deg); }
+  50%       { transform: scale(1.15) rotate(-1deg); }
+}
+.anim-bg-breathe {
+  animation: bg-breathe 30s ease-in-out infinite;
+  will-change: transform;
+}
+
 /* Global Light Mode — subtle background lift only */
 body.theme-light {
     background-color: #1a1a1f !important;
