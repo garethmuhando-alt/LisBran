@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Settings, MessageSquare, TrendingUp, Star, MapPin, Eye, Bell } from "lucide-react";
+import { Settings, MessageSquare, TrendingUp, Star, MapPin, Eye, Bell, CalendarCheck, Users, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,9 @@ export default function SellerDashboardPage() {
   const [vendorInitials, setVendorInitials] = useState("NG");
   const [portfolio, setPortfolio] = useState<{url: string, type: string}[]>([]);
   const [isVerified, setIsVerified] = useState(true);
+  const [profileViews, setProfileViews] = useState(0);
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [showNotifs, setShowNotifs] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -28,6 +31,13 @@ export default function SellerDashboardPage() {
     if (savedName) {
       setVendorName(savedName);
       setVendorInitials(savedName.substring(0, 2).toUpperCase());
+
+      // Load profile views & bookings
+      const sellerId = savedName.toLowerCase().replace(/\s+/g, '-');
+      const views = parseInt(localStorage.getItem(`profile_views_${sellerId}`) || '0', 10);
+      setProfileViews(views);
+      const bks = JSON.parse(localStorage.getItem(`seller_bookings_${sellerId}`) || '[]');
+      setBookings(bks);
     }
 
     const savedPortfolio = localStorage.getItem('seller_portfolio');
@@ -61,8 +71,16 @@ export default function SellerDashboardPage() {
           <Link href="/home" className="text-xs font-bold text-purple-400 bg-purple-500/10 px-3 py-1.5 rounded-full border border-purple-500/20">
             Exit to Marketplace
           </Link>
-          <div className="flex gap-3 text-zinc-400">
-            <Bell size={22} className="hover:text-white transition-colors cursor-pointer" />
+          <div className="flex gap-3 text-zinc-400 items-center">
+            <button
+              onClick={() => setShowNotifs(v => !v)}
+              className="relative"
+            >
+              <Bell size={22} className={`transition-colors ${showNotifs ? 'text-white' : 'hover:text-white'}`} />
+              {(bookings.length > 0 || profileViews > 0) && (
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#111] animate-pulse" />
+              )}
+            </button>
             <Settings size={22} className="hover:text-white transition-colors cursor-pointer" />
           </div>
         </div>
@@ -94,7 +112,7 @@ export default function SellerDashboardPage() {
               <Eye size={18} />
               <span className="text-xs text-green-400 flex items-center gap-1"><TrendingUp size={12} /> +12%</span>
             </div>
-            <span className="text-3xl font-black text-white">1.4k</span>
+            <span className="text-3xl font-black text-white">{profileViews > 0 ? profileViews.toLocaleString() : '1.4k'}</span>
             <span className="text-xs font-bold text-zinc-500">PROFILE VIEWS (30D)</span>
           </div>
 
@@ -102,10 +120,60 @@ export default function SellerDashboardPage() {
             <div className="flex items-center justify-between text-zinc-400 mb-2">
               <MessageSquare size={18} />
             </div>
-            <span className="text-3xl font-black text-white">24</span>
+            <span className="text-3xl font-black text-white">{bookings.length > 0 ? bookings.length : 24}</span>
             <span className="text-xs font-bold text-zinc-500">ACTIVE LEADS</span>
           </div>
         </div>
+
+        {/* Notifications Panel */}
+        {showNotifs && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 bg-white/5 border border-white/10 rounded-3xl overflow-hidden"
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
+              <h2 className="font-bold text-white flex items-center gap-2 text-sm">
+                <Bell size={15} className="text-purple-400" /> Notifications
+              </h2>
+              <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+                {bookings.length + (profileViews > 0 ? 1 : 0)} items
+              </span>
+            </div>
+
+            {/* Profile views row */}
+            {profileViews > 0 && (
+              <div className="flex items-center gap-3 px-5 py-4 border-b border-white/5 bg-blue-500/5">
+                <div className="w-9 h-9 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                  <Users size={16} className="text-blue-400" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-white">{profileViews} people viewed your profile</p>
+                  <p className="text-[11px] text-zinc-500">Keep your portfolio updated to convert more views</p>
+                </div>
+                <Eye size={14} className="text-zinc-600" />
+              </div>
+            )}
+
+            {/* Booking notifications */}
+            {bookings.length > 0 ? bookings.map((b: any) => (
+              <div key={b.id} className="flex items-center gap-3 px-5 py-4 border-b border-white/5 hover:bg-white/5 transition-colors">
+                <div className="w-9 h-9 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                  <CalendarCheck size={16} className="text-green-400" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-white">{b.name} wants to book</p>
+                  <p className="text-[11px] text-zinc-500">{b.service} · via {b.via} · {b.time}</p>
+                </div>
+                <ChevronRight size={14} className="text-zinc-600" />
+              </div>
+            )) : (
+              <div className="px-5 py-6 text-center">
+                <p className="text-zinc-600 text-xs">No booking requests yet. Share your profile to get leads!</p>
+              </div>
+            )}
+          </motion.div>
+        )}
 
         {/* Portfolio Section */}
         <div className="mb-8 relative">

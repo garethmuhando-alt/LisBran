@@ -14,6 +14,11 @@
   color-scheme: dark;
 }
 
+html {
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+}
+
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
@@ -21,6 +26,11 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+}
+
+/* Remove tap flash on Android */
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Glassmorphism Utilities */
@@ -53,12 +63,43 @@ body {
 
 /* CSS-only background breathe — replaces framer-motion infinite animation */
 @keyframes bg-breathe {
-  0%, 100% { transform: scale(1.05) rotate(0deg); }
-  50%       { transform: scale(1.15) rotate(-1deg); }
+  0%, 100% { transform: scale(1.05) rotate(0deg) translateZ(0); }
+  50%       { transform: scale(1.12) rotate(-0.5deg) translateZ(0); }
 }
 .anim-bg-breathe {
-  animation: bg-breathe 30s ease-in-out infinite;
+  animation: bg-breathe 40s ease-in-out infinite;
   will-change: transform;
+  contain: layout style;
+}
+
+/* GPU-composited float animations — replace framer-motion y:[0,-N,0] infinite */
+@keyframes float-lg {
+  0%, 100% { transform: translateY(0) translateZ(0); }
+  50%       { transform: translateY(-6px) translateZ(0); }
+}
+@keyframes float-md {
+  0%, 100% { transform: translateY(0) translateZ(0); }
+  50%       { transform: translateY(-4px) translateZ(0); }
+}
+@keyframes float-sm {
+  0%, 100% { transform: translateY(0) translateZ(0); }
+  50%       { transform: translateY(-3px) translateZ(0); }
+}
+
+.anim-float    { animation: float-lg 3.5s ease-in-out infinite; will-change: transform; }
+.anim-float-sm { animation: float-md 4.5s ease-in-out infinite; will-change: transform; }
+.anim-float-pin{ animation: float-sm 2s ease-in-out infinite;   will-change: transform; }
+/* Staggered delays for service icons */
+.anim-float-1  { animation: float-md 5s ease-in-out infinite;        will-change: transform; }
+.anim-float-2  { animation: float-md 6s ease-in-out infinite 0.4s;   will-change: transform; }
+.anim-float-3  { animation: float-md 7s ease-in-out infinite 0.8s;   will-change: transform; }
+
+/* Scroll containers — smooth momentum on Android */
+.scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
 }
 
 /* Global Light Mode — subtle background lift only */
@@ -81,4 +122,20 @@ body.theme-light .glass,
 body.theme-light .glass-card {
     background: linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%) !important;
     border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ── Mobile perf: reduce blur cost on Android Chrome ─────────────── */
+@media (max-width: 768px) {
+  .glass {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .glass-card {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  /* Disable duration-1000 transitions that cause jank while scrolling */
+  .transition-transform {
+    transition-duration: 200ms !important;
+  }
 }

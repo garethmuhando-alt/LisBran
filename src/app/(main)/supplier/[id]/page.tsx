@@ -61,6 +61,11 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
           setVideos(legacy.filter(m => m.type === 'video').map(m => m.url));
         }
       } else {
+        // ── Track profile view for the seller ────────────────────────────────
+        const viewKey = `profile_views_${resolvedParams.id}`;
+        const current = parseInt(localStorage.getItem(viewKey) || '0', 10);
+        localStorage.setItem(viewKey, String(current + 1));
+
         const mockVendors: Record<string, any> = {
           "pete-barret": { name: "Pete & Barret Designs", category: "Graphic Design", location: "Nairobi", bio: "Premium graphic design specialists delivering unmatched high-end aesthetics for modern brands.", priceRating: "$$$", phone: "+254700000001", email: "pete@petebarret.co.ke", rating: 4.9, reviews: 450 },
           "sps": { name: "SP Design Services", category: "Graphic Design", location: "Nairobi", bio: "SP Design Services delivers fast, reliable, and high-quality logo designs you can trust. We specialize in urgent and last-minute design requests.", priceRating: "$$", phone: "+254700000002", email: "studio@spstudio.co.ke", rating: 3.9, reviews: 157 },
@@ -76,10 +81,31 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
     } catch (e) { console.error(e); }
   }, [resolvedParams.id]);
 
+
   const handleWhatsApp = () => {
     if (!vendor?.phone) return;
     const cleaned = vendor.phone.replace(/\D/g, '');
     window.open(`https://wa.me/${cleaned}?text=Hi%20${encodeURIComponent(vendor.name)}%2C%20I%20found%20your%20profile%20on%20LisBran%20and%20I%27m%20interested%20in%20your%20services!`, '_blank');
+  };
+
+  const handleBookService = () => {
+    if (!vendor?.phone) return;
+    const cleaned = vendor.phone.replace(/\D/g, '');
+    const msg = `Hi ${vendor.name}! 👋 I found your profile on LisBran and I'd like to book your ${vendor.category || 'services'}. When are you available? Let's connect!`;
+    window.open(`https://wa.me/${cleaned}?text=${encodeURIComponent(msg)}`, '_blank');
+
+    // Store booking notification for the seller
+    const sellerId = resolvedParams.id;
+    const bookingKey = `seller_bookings_${sellerId}`;
+    const existing = JSON.parse(localStorage.getItem(bookingKey) || '[]');
+    existing.unshift({
+      id: Date.now(),
+      name: 'A LisBran Client',
+      service: vendor.category || 'General Service',
+      time: new Date().toLocaleString('en-KE', { dateStyle: 'short', timeStyle: 'short' }),
+      via: 'WhatsApp',
+    });
+    localStorage.setItem(bookingKey, JSON.stringify(existing.slice(0, 20)));
   };
 
   const saveEdit = (field: string) => {
@@ -348,26 +374,37 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
       </div>
 
       {/* CONTACT BUTTONS */}
-      <div className="relative z-10 px-6 mt-8 flex gap-3">
-        <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-          onClick={handleWhatsApp}
-          className="flex-1 bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-sm shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:shadow-[0_0_40px_rgba(168,85,247,0.6)] transition-all">
-          <MessageCircle size={17} /> Message
-        </motion.button>
-        {vendor.email ? (
-          <motion.a whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-            href={`mailto:${vendor.email}`}
-            className="flex-1 bg-white/5 border border-white/15 hover:bg-white/10 hover:border-white/25 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm backdrop-blur-sm">
-            <Mail size={17} /> Email
-          </motion.a>
-        ) : (
+      <div className="relative z-10 px-6 mt-8 space-y-3">
+        {/* Book Service — primary CTA */}
+        {!isOwner && (
           <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-            onClick={() => setSaved(s => !s)}
-            className={`flex-1 border transition-all text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-sm backdrop-blur-sm ${saved ? 'bg-purple-500/20 border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'bg-white/5 border-white/15 hover:bg-white/10'}`}>
-            <Bookmark size={17} className={saved ? 'fill-purple-400 text-purple-400' : ''} />
-            {saved ? 'Saved' : 'Save'}
+            onClick={handleBookService}
+            className="w-full bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 text-sm shadow-[0_0_30px_rgba(34,197,94,0.4)] hover:shadow-[0_0_40px_rgba(34,197,94,0.6)] transition-all tracking-wide uppercase">
+            📲 Book This Service via WhatsApp
           </motion.button>
         )}
+
+        <div className="flex gap-3">
+          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+            onClick={handleWhatsApp}
+            className="flex-1 bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-sm shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:shadow-[0_0_40px_rgba(168,85,247,0.6)] transition-all">
+            <MessageCircle size={17} /> Message
+          </motion.button>
+          {vendor.email ? (
+            <motion.a whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+              href={`mailto:${vendor.email}`}
+              className="flex-1 bg-white/5 border border-white/15 hover:bg-white/10 hover:border-white/25 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm backdrop-blur-sm">
+              <Mail size={17} /> Email
+            </motion.a>
+          ) : (
+            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+              onClick={() => setSaved(s => !s)}
+              className={`flex-1 border transition-all text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-sm backdrop-blur-sm ${saved ? 'bg-purple-500/20 border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'bg-white/5 border-white/15 hover:bg-white/10'}`}>
+              <Bookmark size={17} className={saved ? 'fill-purple-400 text-purple-400' : ''} />
+              {saved ? 'Saved' : 'Save'}
+            </motion.button>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MapPin, Star, Gem } from "lucide-react";
+import { MapPin, Star, Gem, Map } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { SearchInput } from "@/components/ui/SearchInput";
@@ -31,14 +31,12 @@ export default function HomePage() {
         <header className="flex items-start justify-between mt-2 relative">
           
           <div className="flex flex-col gap-1 items-center">
-            <motion.div 
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-              className="w-14 h-14 bg-black border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.2)] rounded-full flex items-center justify-center text-white text-2xl cursor-pointer"
-              style={{ fontFamily: "'Brush Script MT', 'Great Vibes', cursive" }}
-            >
-              LB
-            </motion.div>
+          <div 
+            className="anim-float w-14 h-14 bg-black border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.2)] rounded-full flex items-center justify-center text-white text-2xl cursor-pointer"
+            style={{ fontFamily: "'Brush Script MT', 'Great Vibes', cursive" }}
+          >
+            LB
+          </div>
             <p 
               className="text-pink-300 text-2xl font-bold tracking-widest drop-shadow-[0_0_10px_rgba(236,72,153,0.8)] mt-1" 
               style={{ fontFamily: "'Brush Script MT', cursive" }}
@@ -55,9 +53,9 @@ export default function HomePage() {
                 onClick={() => setIsLocOpen(!isLocOpen)}
                 className="flex items-center justify-center gap-2 bg-black/60 backdrop-blur-xl border border-purple-500/50 rounded-full px-4 py-1.5 shadow-[0_0_20px_rgba(168,85,247,0.4)] cursor-pointer relative group text-white text-sm font-black"
               >
-                <motion.div animate={{ y: [0, -3, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                <div className="anim-float-pin">
                    <MapPin size={16} className="text-pink-400 drop-shadow-[0_0_8px_rgba(236,72,153,1)]" />
-                </motion.div>
+                </div>
                 {location.charAt(0).toUpperCase() + location.slice(1)}
               </motion.div>
               
@@ -86,10 +84,8 @@ export default function HomePage() {
           </div>
 
           {/* Floating Colorful Buy/Sell Toggle */}
-          <motion.div 
-            animate={{ y: [0, -4, 0] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-            className="bg-zinc-900 border border-pink-500/40 p-1 rounded-full flex flex-col items-center shadow-[0_0_20px_rgba(236,72,153,0.3)] relative group mt-1"
+          <div 
+            className="anim-float-sm bg-zinc-900 border border-pink-500/40 p-1 rounded-full flex flex-col items-center shadow-[0_0_20px_rgba(236,72,153,0.3)] relative group mt-1"
           >
             <div className="flex items-center relative z-10 w-[90px] h-[30px]">
               <motion.div 
@@ -116,7 +112,7 @@ export default function HomePage() {
                 {mode === "buy" ? "I'm looking for talented people to work with." : "I'd like to offer my services."}
               </p>
             </div>
-          </motion.div>
+          </div>
         </header>
 
         {/* Search */}
@@ -124,13 +120,25 @@ export default function HomePage() {
           <SearchInput placeholder="Search services..." />
         </div>
 
+        {/* ── Events Map CTA card ────────────────────────────── */}
+        <Link href="/map" className="relative w-full rounded-3xl overflow-hidden border border-purple-500/30 shadow-[0_0_25px_rgba(168,85,247,0.2)] flex items-center gap-4 px-5 py-4 bg-gradient-to-r from-purple-900/60 via-indigo-900/40 to-pink-900/30 hover:shadow-[0_0_35px_rgba(168,85,247,0.4)] transition-all group">
+          <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+            <Map size={22} className="text-purple-400" />
+          </div>
+          <div className="flex-1">
+            <p className="text-white font-black text-sm">Kenya Events Map 📍</p>
+            <p className="text-zinc-400 text-xs">Explore events & vendors across Kenya</p>
+          </div>
+          <span className="text-purple-400 font-bold text-lg">›</span>
+        </Link>
+
         {/* Banner with dynamically generated AI bg-banner.png */}
         <motion.div
           whileHover={{ scale: 1.02 }}
           className="relative w-full rounded-3xl overflow-hidden p-6 min-h-[200px] shadow-2xl flex flex-col justify-center border border-slate-700/50 mt-2 z-10"
         >
           <div className="absolute inset-0 z-0 bg-black">
-             <Image src="/bg-banner.png" alt="Marketing Trends" fill className="object-cover opacity-50 mix-blend-screen hover:scale-105 transition-transform duration-1000" priority />
+             <Image src="/bg-banner.png" alt="Marketing Trends" fill className="object-cover opacity-50 mix-blend-screen hover:scale-105 transition-transform duration-200" priority />
              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
           </div>
           
@@ -162,9 +170,9 @@ export default function HomePage() {
               <Link href={service.url} key={service.id} className="snap-start flex flex-col items-center gap-3 w-28 md:w-full flex-shrink-0 group cursor-pointer">
                 <motion.div 
                   whileHover={{ scale: 1.05 }}
-                  animate={{ y: [0, -4, 0] }}
-                  transition={{ duration: 4 + service.id, repeat: Infinity, ease: "easeInOut" }}
-                  className={`p-1 rounded-full bg-black/40 shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-slate-700/50 cursor-pointer transition-shadow hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] relative ${service.glow}`}
+                  className={`p-1 rounded-full bg-black/40 shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-slate-700/50 cursor-pointer transition-shadow hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] relative ${service.glow} ${
+                    service.id === 1 ? 'anim-float-1' : service.id === 2 ? 'anim-float-2' : 'anim-float-3'
+                  }`}
                 >
                   <div className={`relative w-24 h-24 rounded-full overflow-hidden bg-black/80 flex items-center justify-center`}>
                     {service.image === "lucide-gem" ? (
@@ -174,7 +182,7 @@ export default function HomePage() {
                         <Gem size={38} className="text-orange-400 drop-shadow-[0_0_15px_rgba(249,115,22,1)] relative z-10" strokeWidth={1.5} />
                       </div>
                     ) : (
-                      <Image src={service.image} alt={service.name.replace('\n', ' ')} fill className="object-cover mix-blend-screen scale-110 group-hover:scale-125 transition-transform duration-500" />
+                      <Image src={service.image} alt={service.name.replace('\n', ' ')} fill className="object-cover mix-blend-screen scale-110 group-hover:scale-125 transition-transform duration-200" />
                     )}
                   </div>
                 </motion.div>
@@ -204,7 +212,7 @@ export default function HomePage() {
              ].sort((a,b)=> b.rating - a.rating).map((vendor) => (
                <Link href={`/supplier/${vendor.id}`} key={vendor.id} className={`snap-start min-w-[240px] h-40 ${vendor.bg} rounded-3xl p-5 flex flex-col justify-between ${vendor.shadow} relative overflow-hidden transition-transform hover:scale-[1.02] border ${vendor.border} group`}>
                  <div className="absolute inset-0 z-0">
-                    <Image src="/bg-events.png" alt={vendor.name} fill className="object-cover opacity-60 mix-blend-overlay scale-110 group-hover:scale-125 transition-transform duration-1000" />
+                    <Image src="/bg-events.png" alt={vendor.name} fill className="object-cover opacity-60 mix-blend-overlay scale-110 group-hover:scale-125 transition-transform duration-200" />
                     <div className={`absolute inset-0 bg-gradient-to-tr ${vendor.grad} mix-blend-multiply opacity-80`} />
                  </div>
                  <div className="flex justify-between items-start relative z-10 w-full">
