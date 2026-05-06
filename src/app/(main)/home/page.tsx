@@ -5,7 +5,7 @@ import { MapPin, Star, Gem, Map } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { SearchInput } from "@/components/ui/SearchInput";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 export default function HomePage() {
@@ -48,16 +48,15 @@ export default function HomePage() {
           {/* Centered Floating Neon Location Selector with Custom Dropdown */}
           <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center top-0 z-50 pt-2">
             <div className="relative w-32">
-              <motion.div 
-                whileHover={{ scale: 1.05 }}
+              <div
                 onClick={() => { setIsLocOpen(!isLocOpen); }}
-                className="flex items-center justify-center gap-2 bg-black/60 backdrop-blur-xl border border-purple-500/50 rounded-full px-4 py-1.5 shadow-[0_0_20px_rgba(168,85,247,0.4)] cursor-pointer relative group text-white text-sm font-black"
+                className="flex items-center justify-center gap-2 bg-black/60 backdrop-blur-xl border border-purple-500/50 rounded-full px-4 py-1.5 shadow-[0_0_20px_rgba(168,85,247,0.4)] cursor-pointer relative group text-white text-sm font-black hover:scale-105 transition-transform duration-150"
               >
                 <div className="anim-float-pin">
                    <MapPin size={16} className="text-pink-400 drop-shadow-[0_0_8px_rgba(236,72,153,1)]" />
                 </div>
                 {location.charAt(0).toUpperCase() + location.slice(1)}
-              </motion.div>
+              </div>
               
               <AnimatePresence>
                 {isLocOpen && (
@@ -88,10 +87,10 @@ export default function HomePage() {
             className="anim-float-sm bg-zinc-900 border border-pink-500/40 p-1 rounded-full flex flex-col items-center shadow-[0_0_20px_rgba(236,72,153,0.3)] relative group mt-1"
           >
             <div className="flex items-center relative z-10 w-[90px] h-[30px]">
-              <motion.div 
-                className="absolute top-0 bottom-0 w-[45px] bg-gradient-to-r from-pink-600 to-purple-600 rounded-full z-0 shadow-md"
-                animate={{ x: mode === "buy" ? 0 : "45px" }}
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              {/* CSS transition replaces framer-motion spring — GPU composited */}
+              <div
+                className="absolute top-0 bottom-0 w-[45px] bg-gradient-to-r from-pink-600 to-purple-600 rounded-full z-0 shadow-md transition-transform duration-200"
+                style={{ transform: mode === "buy" ? 'translateX(0)' : 'translateX(45px)' }}
               />
               <button 
                 onClick={() => { setMode("buy"); }}
@@ -133,9 +132,8 @@ export default function HomePage() {
         </Link>
 
         {/* Banner with dynamically generated AI bg-banner.png */}
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          className="relative w-full rounded-3xl overflow-hidden p-6 min-h-[200px] shadow-2xl flex flex-col justify-center border border-slate-700/50 mt-2 z-10"
+        <div
+          className="relative w-full rounded-3xl overflow-hidden p-6 min-h-[200px] shadow-2xl flex flex-col justify-center border border-slate-700/50 mt-2 z-10 hover:scale-[1.02] transition-transform duration-150"
         >
           <div className="absolute inset-0 z-0 bg-black">
              <Image src="/bg-banner.png" alt="Marketing Trends" fill className="object-cover opacity-50 mix-blend-screen hover:scale-105 transition-transform duration-200" priority />
@@ -148,7 +146,7 @@ export default function HomePage() {
           <button onClick={() => { router.push('/trends'); }} className="bg-slate-200 hover:bg-white text-slate-900 px-6 py-2 rounded-full text-sm font-bold w-fit shadow-lg transition-colors relative z-10">
             Read more
           </button>
-        </motion.div>
+        </div>
 
         {/* Services Section */}
         <section className="mt-4 relative z-10">
@@ -168,9 +166,8 @@ export default function HomePage() {
               { id: 3, name: "Branding &\nPrinting", image: "lucide-gem", glow: "shadow-orange-500/50", url: "/search/printing" },
             ].map((service) => (
               <Link href={service.url} key={service.id} className="snap-start flex flex-col items-center gap-3 w-28 md:w-full flex-shrink-0 group cursor-pointer">
-                <motion.div 
-                  whileHover={{ scale: 1.05 }}
-                  className={`p-1 rounded-full bg-black/40 shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-slate-700/50 cursor-pointer transition-shadow hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] relative ${service.glow} ${
+                <div
+                  className={`p-1 rounded-full bg-black/40 shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-slate-700/50 cursor-pointer transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] hover:scale-105 relative ${service.glow} ${
                     service.id === 1 ? 'anim-float-1' : service.id === 2 ? 'anim-float-2' : 'anim-float-3'
                   }`}
                 >
@@ -185,7 +182,7 @@ export default function HomePage() {
                       <Image src={service.image} alt={service.name.replace('\n', ' ')} fill className="object-cover mix-blend-screen scale-110 group-hover:scale-125 transition-transform duration-200" />
                     )}
                   </div>
-                </motion.div>
+                </div>
                 <span className="text-xs md:text-sm text-center text-zinc-300 font-bold whitespace-pre-line leading-tight group-hover:text-white transition-colors">{service.name}</span>
               </Link>
             ))}
