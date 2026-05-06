@@ -46,7 +46,7 @@ export default function AdminControlRoom() {
 
   const handleApprove = async () => {
     // Update Supabase if available
-    if (supabase && (pendingVendor as unknown as {id?: string})?.id) {
+    if (supabase && (pendingVendor as unknown as {id?: string}).id) {
       await supabase.from('vendors').update({ verified: true }).eq('id', (pendingVendor as unknown as {id: string}).id);
     }
     // Always update localStorage too

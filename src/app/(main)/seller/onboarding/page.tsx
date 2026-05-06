@@ -60,7 +60,7 @@ export default function SellerOnboardingPage() {
   useEffect(() => {
     if (signupResendCountdown <= 0) return;
     const t = setTimeout(() => { setSignupResendCountdown(c => c - 1); }, 1000);
-    return () => clearTimeout(t);
+    return () => { clearTimeout(t); };
   }, [signupResendCountdown]);
 
   // ─── OTP: Send code ──────────────────────────────────────────────────────────
@@ -134,8 +134,8 @@ export default function SellerOnboardingPage() {
       }
       loadSellerFromDB(data);
       router.push("/seller/dashboard");
-    } catch (err: any) {
-      setLoginError(err.message || "Invalid code. Please check and try again.");
+    } catch (err: unknown) {
+      setLoginError((err as Error).message || "Invalid code. Please check and try again.");
     }
     setIsSubmitting(false);
   };
@@ -313,7 +313,7 @@ export default function SellerOnboardingPage() {
               .single()
               .then(({ data, error }) => ({ data, error }));
 
-            const result = await Promise.race([insertPromise, timeoutPromise]) as { data: any; error: any } | null;
+            const result = await Promise.race([insertPromise, timeoutPromise]) as { data: unknown; error: unknown } | null;
 
             if (result && !result.error && result.data) {
               const vendorData = result.data;
@@ -567,14 +567,14 @@ export default function SellerOnboardingPage() {
                           <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest pl-2">Create Password</label>
                           <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-4 focus-within:border-purple-500/50 transition-colors">
                             <Lock className="text-zinc-500" size={16} />
-                            <input type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-transparent border-none outline-none text-white w-full placeholder:text-zinc-600 text-sm font-bold" />
+                            <input type="password" placeholder="••••••••" value={password} onChange={(e) => { setPassword(e.target.value); }} className="bg-transparent border-none outline-none text-white w-full placeholder:text-zinc-600 text-sm font-bold" />
                           </div>
                         </div>
                         <div className="space-y-2">
                           <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest pl-2">Confirm Key</label>
                           <div className={`flex items-center gap-3 bg-white/5 border rounded-2xl p-4 focus-within:border-purple-500/50 transition-colors ${confirmPassword.length > 0 && confirmPassword !== password ? 'border-red-500/70' : 'border-white/10'}`}>
                             <Lock className="text-zinc-500" size={16} />
-                            <input type="password" placeholder="••••••••" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="bg-transparent border-none outline-none text-white w-full placeholder:text-zinc-600 text-sm font-bold" />
+                            <input type="password" placeholder="••••••••" value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value); }} className="bg-transparent border-none outline-none text-white w-full placeholder:text-zinc-600 text-sm font-bold" />
                           </div>
                           {confirmPassword.length > 0 && confirmPassword !== password && (
                             <p className="text-red-400 text-[11px] font-bold pl-2">⚠ Passwords don't match</p>

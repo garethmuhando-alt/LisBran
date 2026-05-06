@@ -242,10 +242,10 @@ export default function MapPage() {
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
                   style={selectedType === "event"
-                    ? { background: `${CATEGORY_COLORS[(selected as any).type] || CATEGORY_COLORS.Default}22`, border: `1px solid ${CATEGORY_COLORS[(selected as any).type] || CATEGORY_COLORS.Default}55` }
+                    ? { background: `${CATEGORY_COLORS[(selected as {type: string}).type] || CATEGORY_COLORS.Default}22`, border: `1px solid ${CATEGORY_COLORS[(selected as {type: string}).type] || CATEGORY_COLORS.Default}55` }
                     : { background: "#e879f922", border: "1px solid #e879f955" }}>
                   {selectedType === "event"
-                    ? <Calendar size={20} style={{ color: CATEGORY_COLORS[(selected as any).type] || CATEGORY_COLORS.Default }} />
+                    ? <Calendar size={20} style={{ color: CATEGORY_COLORS[(selected as {type: string}).type] || CATEGORY_COLORS.Default }} />
                     : <Briefcase size={20} className="text-pink-400" />}
                 </div>
                 <div>

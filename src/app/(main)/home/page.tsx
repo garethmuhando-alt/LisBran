@@ -94,7 +94,7 @@ export default function HomePage() {
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
               />
               <button 
-                onClick={() => setMode("buy")}
+                onClick={() => { setMode("buy"); }}
                 className={`flex-1 relative z-10 h-full flex items-center justify-center transition-colors text-xs font-bold ${mode === "buy" ? "text-white" : "text-zinc-500 hover:text-zinc-300"}`}
               >
                 Buy
