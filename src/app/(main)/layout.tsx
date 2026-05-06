@@ -13,7 +13,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <>
       <AnimatedBackground />
-      <div className="flex-1 overflow-y-auto pb-24 relative z-10 text-white min-h-screen">
+      <div
+        className="flex-1 pb-24 relative z-10 text-white min-h-screen"
+        style={{
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          WebkitOverflowScrolling: 'touch' as never,
+          overscrollBehavior: 'none',
+          touchAction: 'pan-y',
+        }}
+      >
         {children}
       </div>
       <FloatingSuggestionBox />

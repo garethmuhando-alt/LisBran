@@ -26,11 +26,18 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  /* Prevent overscroll bounce causing repaint on Android */
+  overscroll-behavior: none;
+  /* Force GPU layer for the root */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 /* Remove tap flash on Android */
 * {
   -webkit-tap-highlight-color: transparent;
+  /* Ensure box-sizing is consistent */
+  box-sizing: border-box;
 }
 
 /* Glassmorphism Utilities */
@@ -100,6 +107,15 @@ body {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
+  touch-action: pan-x;
+}
+
+/* Vertical scroll — the main page container */
+.scroll-y {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
+  touch-action: pan-y;
 }
 
 /* Global Light Mode — subtle background lift only */
@@ -124,18 +140,51 @@ body.theme-light .glass-card {
     border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* ── Mobile perf: reduce blur cost on Android Chrome ─────────────── */
+/* ── Mobile perf: the #1 jank cause on Android is backdrop-filter ── */
 @media (max-width: 768px) {
-  .glass {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+  /* Disable ALL backdrop-filter — single biggest perf win on Android Chrome */
+  .glass,
+  .glass-card,
+  [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    /* Compensate with a solid semi-transparent bg so UI still looks good */
+    background-color: rgba(20, 20, 23, 0.92) !important;
   }
-  .glass-card {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+
+  /* Disable heavy blur divs that cause GPU overdraw every scroll frame */
+  [class*="blur-["] {
+    filter: none !important;
   }
-  /* Disable duration-1000 transitions that cause jank while scrolling */
+
+  /* Reduce transition cost during scroll */
   .transition-transform {
-    transition-duration: 200ms !important;
+    transition-duration: 150ms !important;
+  }
+  .transition-colors {
+    transition-duration: 100ms !important;
+  }
+  /* Disable slow duration-500+ transitions entirely on mobile */
+  .duration-500, .duration-700, .duration-1000 {
+    transition-duration: 150ms !important;
+    animation-duration: 150ms !important;
+  }
+
+  /* Stop infinite float animations on mobile — saves ~3ms/frame */
+  .anim-float, .anim-float-sm, .anim-float-pin,
+  .anim-float-1, .anim-float-2, .anim-float-3 {
+    animation: none !important;
+    will-change: auto !important;
+  }
+
+  /* Slow down bg-breathe so it doesn't compete with scroll */
+  .anim-bg-breathe {
+    animation-duration: 80s !important;
+  }
+
+  /* content-visibility: auto lets the browser skip off-screen rendering */
+  .glass-card {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 200px;
   }
 }
