@@ -59,7 +59,7 @@ export default function AISupportPage() {
 
       {/* Header */}
       <div className="flex items-center gap-3 px-6 py-5 bg-black/40 backdrop-blur-md border-b border-white/5 relative z-10 w-full md:max-w-2xl md:mx-auto">
-        <button onClick={() => router.back()} className="p-2 rounded-full hover:bg-white/10 transition-colors text-white bg-white/5 border border-white/10">
+        <button onClick={() => { router.back(); }} className="p-2 rounded-full hover:bg-white/10 transition-colors text-white bg-white/5 border border-white/10">
           <ArrowLeft size={20} />
         </button>
         <div className="flex flex-1 items-center justify-between">
@@ -77,13 +77,13 @@ export default function AISupportPage() {
 
       {/* Quick Action Chips */}
       <div className="px-4 py-3 flex gap-2 overflow-x-auto scrollbar-hide border-b border-white/5 relative z-10 w-full md:max-w-2xl md:mx-auto">
-        <button onClick={() => setInput("How do I format my portfolio?")} className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-300 hover:bg-white/10 whitespace-nowrap transition-colors">
+        <button onClick={() => { setInput("How do I format my portfolio?"); }} className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-300 hover:bg-white/10 whitespace-nowrap transition-colors">
           <ImageIcon size={14} className="text-purple-400"/> Formatting Portfolios
         </button>
-        <button onClick={() => setInput("How do I navigate the App UI?")} className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-300 hover:bg-white/10 whitespace-nowrap transition-colors">
+        <button onClick={() => { setInput("How do I navigate the App UI?"); }} className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-300 hover:bg-white/10 whitespace-nowrap transition-colors">
           <Sparkles size={14} className="text-blue-400"/> UI Navigation
         </button>
-        <button onClick={() => setInput("I want to become a verified seller.")} className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-300 hover:bg-white/10 whitespace-nowrap transition-colors">
+        <button onClick={() => { setInput("I want to become a verified seller."); }} className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-300 hover:bg-white/10 whitespace-nowrap transition-colors">
           <Briefcase size={14} className="text-orange-400"/> Vendor Setup
         </button>
       </div>
@@ -128,7 +128,7 @@ export default function AISupportPage() {
           <input 
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => { setInput(e.target.value); }}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Ask AI about navigation, portfolios..."
             className="flex-1 bg-transparent px-4 py-3 text-white focus:outline-none placeholder-zinc-500 text-sm font-medium"

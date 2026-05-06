@@ -64,7 +64,7 @@ export default function LogoDesignPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <button 
-            onClick={() => step === 1 ? router.back() : setStep((prev) => (prev - 1) as Step)} 
+            onClick={() => { step === 1 ? router.back() : setStep((prev) => (prev - 1) as Step); }} 
             className="p-2 bg-white/5 rounded-full backdrop-blur-md border border-white/10 hover:bg-white/20 transition-colors"
           >
             <ArrowLeft className="text-white" size={22} />
@@ -96,7 +96,7 @@ export default function LogoDesignPage() {
                   {styles.map((style) => (
                     <button
                       key={style.id}
-                      onClick={() => setSelectedStyle(style.id)}
+                      onClick={() => { setSelectedStyle(style.id); }}
                       className={`relative p-6 rounded-3xl flex flex-col items-center justify-center gap-4 transition-all duration-300 border ${
                         selectedStyle === style.id 
                           ? "bg-pink-500/20 border-pink-500 text-white shadow-[0_0_20px_rgba(236,72,153,0.3)]" 
@@ -137,7 +137,7 @@ export default function LogoDesignPage() {
                     <input 
                       type="text"
                       value={brandName}
-                      onChange={(e) => setBrandName(e.target.value)}
+                      onChange={(e) => { setBrandName(e.target.value); }}
                       placeholder="e.g. LisBran Marketplace"
                       className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-pink-500 focus:bg-pink-500/5 transition-all"
                     />
@@ -147,7 +147,7 @@ export default function LogoDesignPage() {
                     <input 
                       type="text"
                       value={slogan}
-                      onChange={(e) => setSlogan(e.target.value)}
+                      onChange={(e) => { setSlogan(e.target.value); }}
                       placeholder="e.g. Elevating Brands"
                       className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-pink-500 focus:bg-pink-500/5 transition-all"
                     />

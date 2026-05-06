@@ -50,7 +50,7 @@ export default function HomePage() {
             <div className="relative w-32">
               <motion.div 
                 whileHover={{ scale: 1.05 }}
-                onClick={() => setIsLocOpen(!isLocOpen)}
+                onClick={() => { setIsLocOpen(!isLocOpen); }}
                 className="flex items-center justify-center gap-2 bg-black/60 backdrop-blur-xl border border-purple-500/50 rounded-full px-4 py-1.5 shadow-[0_0_20px_rgba(168,85,247,0.4)] cursor-pointer relative group text-white text-sm font-black"
               >
                 <div className="anim-float-pin">
@@ -70,7 +70,7 @@ export default function HomePage() {
                     {Object.keys(locationQuotes).map((loc) => (
                       <button
                         key={loc}
-                        onMouseEnter={() => setHoverLoc(loc)}
+                        onMouseEnter={() => { setHoverLoc(loc); }}
                         onClick={() => { setLocation(loc); setIsLocOpen(false); }}
                         className={`py-2 px-3 text-sm text-center transition-colors ${location === loc ? "bg-purple-600" : "hover:bg-white/10"}`}
                       >
@@ -145,7 +145,7 @@ export default function HomePage() {
           <h2 className="text-2xl font-black text-slate-100 mb-3 max-w-[220px] leading-tight relative z-10 drop-shadow-xl">
             Check out these new marketing trends for your next campaign!
           </h2>
-          <button onClick={() => router.push('/trends')} className="bg-slate-200 hover:bg-white text-slate-900 px-6 py-2 rounded-full text-sm font-bold w-fit shadow-lg transition-colors relative z-10">
+          <button onClick={() => { router.push('/trends'); }} className="bg-slate-200 hover:bg-white text-slate-900 px-6 py-2 rounded-full text-sm font-bold w-fit shadow-lg transition-colors relative z-10">
             Read more
           </button>
         </motion.div>

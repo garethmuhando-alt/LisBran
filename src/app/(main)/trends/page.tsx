@@ -59,7 +59,7 @@ export default function MarketingTrendsPage() {
       <div className="relative z-10 flex flex-col h-full max-w-md mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8 sticky top-0 pt-6 pb-4 bg-[#141417]/90 backdrop-blur-xl z-20 border-b border-white/5">
-          <button onClick={() => router.back()} className="p-2 bg-white/5 rounded-full border border-white/10 hover:bg-white/20 transition-colors">
+          <button onClick={() => { router.back(); }} className="p-2 bg-white/5 rounded-full border border-white/10 hover:bg-white/20 transition-colors">
             <ArrowLeft className="text-white" size={20} />
           </button>
           <div className="flex items-center gap-2">
@@ -132,7 +132,7 @@ export default function MarketingTrendsPage() {
         >
           <h3 className="text-lg font-bold text-white mb-2">Ready to implement?</h3>
           <p className="text-zinc-400 text-sm mb-4">Find top-tier professionals on LisBran who specialize in these exact trends.</p>
-          <button onClick={() => router.push('/categories')} className="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-zinc-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+          <button onClick={() => { router.push('/categories'); }} className="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-zinc-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)]">
             Explore Services
           </button>
         </motion.div>

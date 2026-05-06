@@ -17,7 +17,7 @@ export function FloatingSuggestionBox() {
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        onClick={() => setIsOpen(true)}
+        onClick={() => { setIsOpen(true); }}
         className="fixed bottom-24 right-6 w-14 h-14 bg-gradient-to-tr from-pink-600 to-purple-600 rounded-full flex items-center justify-center text-white shadow-[0_10px_30px_rgba(236,72,153,0.5)] z-50 cursor-pointer border border-white/20"
       >
         <MessageCircle size={28} />
@@ -35,7 +35,7 @@ export function FloatingSuggestionBox() {
             <div className="flex justify-between items-center">
               <h3 className="text-white font-bold text-lg">Rate a Vendor</h3>
               <button 
-                onClick={() => setIsOpen(false)}
+                onClick={() => { setIsOpen(false); }}
                 className="text-zinc-500 hover:text-white transition-colors"
               >
                 ✕
@@ -51,7 +51,7 @@ export function FloatingSuggestionBox() {
                   key={star}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
-                  onClick={() => setRating(star)}
+                  onClick={() => { setRating(star); }}
                 >
                   <Star 
                     size={28} 

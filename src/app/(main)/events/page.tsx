@@ -20,7 +20,7 @@ export default function EventRadarPage() {
       
       <div className="relative z-10 max-w-2xl mx-auto">
         <div className="flex items-center gap-4 mb-6 sticky top-0 bg-[#0a0a0a]/80 backdrop-blur-md py-4 z-50">
-          <button onClick={() => router.back()} className="p-2 rounded-full hover:bg-white/10 transition-colors text-white bg-white/5 border border-white/10">
+          <button onClick={() => { router.back(); }} className="p-2 rounded-full hover:bg-white/10 transition-colors text-white bg-white/5 border border-white/10">
             <ArrowLeft size={20} />
           </button>
           <div>

@@ -11,7 +11,7 @@ import { use } from "react";
 export default function SearchResultsPage({ params }: { params: Promise<{ category: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
-  const [suppliers, setSuppliers] = useState<any[]>([]);
+  const [suppliers, setSuppliers] = useState<unknown[]>([]);
 
   useEffect(() => {
     const baseMockup = [
@@ -29,7 +29,7 @@ export default function SearchResultsPage({ params }: { params: Promise<{ catego
           .eq('verified', true);
 
         if (data && data.length > 0) {
-          const liveVendors = data.map((v: any) => ({
+          const liveVendors = data.map((v: unknown) => ({
             id: v.business_name.toLowerCase().replace(/\s+/g, '-'),
             name: v.business_name,
             initials: v.business_name.substring(0, 2).toUpperCase(),
@@ -54,7 +54,7 @@ export default function SearchResultsPage({ params }: { params: Promise<{ catego
       }
     };
 
-    load();
+    void load();
   }, []);
 
   const titleMap: Record<string, string> = {
@@ -89,7 +89,7 @@ export default function SearchResultsPage({ params }: { params: Promise<{ catego
 
       <div className="relative z-10 flex flex-col h-full max-w-md mx-auto">
         <div className="flex items-center justify-between mb-8 sticky top-0 pt-6 pb-4 bg-[#141417]/90 backdrop-blur-xl z-20 border-b border-white/5">
-          <button onClick={() => router.back()} className="p-2 bg-white/5 rounded-full border border-white/10 hover:bg-white/20 transition-colors">
+          <button onClick={() => { router.back(); }} className="p-2 bg-white/5 rounded-full border border-white/10 hover:bg-white/20 transition-colors">
             <ArrowLeft className="text-white" size={20} />
           </button>
           <h1 className="text-white font-black text-lg tracking-wide absolute left-1/2 -translate-x-1/2 drop-shadow-md whitespace-nowrap">

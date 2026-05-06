@@ -42,7 +42,7 @@ export default function GraphicDesignServices() {
       <div className="relative z-10 flex flex-col h-full max-w-md mx-auto">
         {/* Top Header */}
         <div className="flex items-center mb-8">
-          <button onClick={() => router.push('/home')} className="p-2 bg-white/5 rounded-full backdrop-blur-md border border-white/10 hover:bg-white/20 transition-colors">
+          <button onClick={() => { router.push('/home'); }} className="p-2 bg-white/5 rounded-full backdrop-blur-md border border-white/10 hover:bg-white/20 transition-colors">
             <ArrowLeft className="text-white" size={22} />
           </button>
         </div>

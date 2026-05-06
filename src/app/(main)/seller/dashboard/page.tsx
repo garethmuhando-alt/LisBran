@@ -14,7 +14,7 @@ export default function SellerDashboardPage() {
   const [portfolio, setPortfolio] = useState<{url: string, type: string}[]>([]);
   const [isVerified, setIsVerified] = useState(true);
   const [profileViews, setProfileViews] = useState(0);
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<unknown[]>([]);
   const [showNotifs, setShowNotifs] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -73,7 +73,7 @@ export default function SellerDashboardPage() {
           </Link>
           <div className="flex gap-3 text-zinc-400 items-center">
             <button
-              onClick={() => setShowNotifs(v => !v)}
+              onClick={() => { setShowNotifs(v => !v); }}
               className="relative"
             >
               <Bell size={22} className={`transition-colors ${showNotifs ? 'text-white' : 'hover:text-white'}`} />
@@ -156,7 +156,7 @@ export default function SellerDashboardPage() {
             )}
 
             {/* Booking notifications */}
-            {bookings.length > 0 ? bookings.map((b: any) => (
+            {bookings.length > 0 ? bookings.map((b: unknown) => (
               <div key={b.id} className="flex items-center gap-3 px-5 py-4 border-b border-white/5 hover:bg-white/5 transition-colors">
                 <div className="w-9 h-9 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
                   <CalendarCheck size={16} className="text-green-400" />

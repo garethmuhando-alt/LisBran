@@ -52,14 +52,14 @@ export default function SellerOnboardingPage() {
   // Login OTP countdown
   useEffect(() => {
     if (resendCountdown <= 0) return;
-    const t = setTimeout(() => setResendCountdown(c => c - 1), 1000);
-    return () => clearTimeout(t);
+    const t = setTimeout(() => { setResendCountdown(c => c - 1); }, 1000);
+    return () => { clearTimeout(t); };
   }, [resendCountdown]);
 
   // Signup OTP countdown
   useEffect(() => {
     if (signupResendCountdown <= 0) return;
-    const t = setTimeout(() => setSignupResendCountdown(c => c - 1), 1000);
+    const t = setTimeout(() => { setSignupResendCountdown(c => c - 1); }, 1000);
     return () => clearTimeout(t);
   }, [signupResendCountdown]);
 
@@ -102,8 +102,8 @@ export default function SellerOnboardingPage() {
       }
       setLoginStep('otp');
       setResendCountdown(60);
-    } catch (err: any) {
-      setLoginError(err.message || "Failed to send code. Please try again.");
+    } catch (err: unknown) {
+      setLoginError((err as Error).message || "Failed to send code. Please try again.");
     }
     setIsSendingOtp(false);
   };
@@ -113,12 +113,12 @@ export default function SellerOnboardingPage() {
     setIsSubmitting(true);
     setLoginError("");
     try {
-      let verifyErr: any = null;
+      let verifyErr: unknown = null;
       if (loginMethod === 'email') {
-        const { error } = await supabase!.auth.verifyOtp({ email: loginEmail, token: otpCode, type: 'email' });
+        const { error } = await supabase?.auth.verifyOtp({ email: loginEmail, token: otpCode, type: 'email' });
         verifyErr = error;
       } else {
-        const { error } = await supabase!.auth.verifyOtp({ phone: `+254${loginPhone}`, token: otpCode, type: 'sms' });
+        const { error } = await supabase?.auth.verifyOtp({ phone: `+254${loginPhone}`, token: otpCode, type: 'sms' });
         verifyErr = error;
       }
       if (verifyErr) throw verifyErr;
@@ -126,7 +126,7 @@ export default function SellerOnboardingPage() {
       // Load vendor data from DB
       const field = loginMethod === 'email' ? 'email' : 'phone';
       const value = loginMethod === 'email' ? loginEmail : `+254${loginPhone}`;
-      const { data } = await supabase!.from('vendors').select('*').eq(field, value).single();
+      const { data } = await supabase?.from('vendors').select('*').eq(field, value).single();
       if (!data) {
         setLoginError("No seller account found with this contact. Please sign up first.");
         setIsSubmitting(false);
@@ -140,7 +140,7 @@ export default function SellerOnboardingPage() {
     setIsSubmitting(false);
   };
 
-  const loadSellerFromDB = (data: any) => {
+  const loadSellerFromDB = (data: unknown) => {
     localStorage.setItem('seller_name', data.business_name);
     localStorage.setItem('seller_phone', data.phone);
     localStorage.setItem('seller_email', data.email);
@@ -238,7 +238,7 @@ export default function SellerOnboardingPage() {
           setLoginError(loginMethod === 'email' ? "Enter a valid email address." : "Enter a valid phone number.");
           return;
         }
-        handleSendOtp();
+        void handleSendOtp();
         return;
       }
       // OTP verification step
@@ -246,14 +246,14 @@ export default function SellerOnboardingPage() {
         setLoginError("Enter the 6-digit code sent to you.");
         return;
       }
-      handleVerifyOtp();
+      void handleVerifyOtp();
       return;
     }
 
     if (step < 3) {
       if (step === 1) {
         // Step 1 → send signup OTP before advancing
-        handleSendSignupOtp();
+        void handleSendSignupOtp();
       } else {
         setStep(step + 1);
       }
@@ -295,7 +295,7 @@ export default function SellerOnboardingPage() {
         if (supabase) {
           try {
             const timeoutPromise = new Promise<null>((_, reject) =>
-              setTimeout(() => reject(new Error('Supabase timeout')), 10000)
+              setTimeout(() => { reject(new Error('Supabase timeout')); }, 10000)
             );
             const insertPromise = supabase
               .from('vendors')
@@ -428,7 +428,7 @@ export default function SellerOnboardingPage() {
                   type="number"
                   maxLength={6}
                   value={signupOtpCode}
-                  onChange={e => setSignupOtpCode(e.target.value.slice(0, 6))}
+                  onChange={e => { setSignupOtpCode(e.target.value.slice(0, 6)); }}
                   placeholder="— — — — — —"
                   autoFocus
                   className="w-full bg-white/5 border border-purple-500/40 rounded-2xl px-5 py-5 text-white text-center text-3xl font-black tracking-[0.6em] placeholder-zinc-700 focus:outline-none focus:border-purple-500 focus:shadow-[0_0_20px_rgba(168,85,247,0.2)] transition-all"
@@ -453,7 +453,7 @@ export default function SellerOnboardingPage() {
                   <p className="text-zinc-500">Resend in <span className="text-purple-400 font-bold">{signupResendCountdown}s</span></p>
                 ) : (
                   <button
-                    onClick={() => { setSignupOtpCode(''); handleSendSignupOtp(); }}
+                    onClick={() => { setSignupOtpCode(''); void handleSendSignupOtp(); }}
                     disabled={isSendingSignupOtp}
                     className="flex items-center gap-1.5 text-purple-400 font-bold hover:text-purple-300 transition-colors disabled:opacity-50"
                   >
@@ -475,7 +475,7 @@ export default function SellerOnboardingPage() {
       <div className="relative z-10 flex flex-col h-full max-w-md mx-auto">
         <div className="flex items-center mb-8 sticky top-0 bg-[#141417]/80 backdrop-blur-xl z-20 py-2">
           <button 
-            onClick={() => step === 1 ? router.back() : setStep(step - 1)} 
+            onClick={() => { step === 1 ? router.back() : setStep(step - 1); }} 
             className="p-2 bg-white/5 rounded-full border border-white/10 hover:bg-white/20 transition-colors"
           >
             <ArrowLeft className="text-white" size={20} />
@@ -492,8 +492,8 @@ export default function SellerOnboardingPage() {
             {step === 1 && (
               <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6 pb-20">
                 <div className="flex bg-black/40 p-1 rounded-2xl border border-white/10 mb-6 sticky top-[60px] z-20 backdrop-blur-lg">
-                  <button onClick={() => setIsLoginMode(false)} className={`flex-1 py-2 text-sm font-bold rounded-xl transition-all ${!isLoginMode ? 'bg-purple-500 text-white shadow-lg' : 'text-zinc-500 hover:text-white'}`}>New Seller</button>
-                  <button onClick={() => setIsLoginMode(true)} className={`flex-1 py-2 text-sm font-bold rounded-xl transition-all ${isLoginMode ? 'bg-purple-500 text-white shadow-lg' : 'text-zinc-500 hover:text-white'}`}>Existing</button>
+                  <button onClick={() => { setIsLoginMode(false); }} className={`flex-1 py-2 text-sm font-bold rounded-xl transition-all ${!isLoginMode ? 'bg-purple-500 text-white shadow-lg' : 'text-zinc-500 hover:text-white'}`}>New Seller</button>
+                  <button onClick={() => { setIsLoginMode(true); }} className={`flex-1 py-2 text-sm font-bold rounded-xl transition-all ${isLoginMode ? 'bg-purple-500 text-white shadow-lg' : 'text-zinc-500 hover:text-white'}`}>Existing</button>
                 </div>
 
                 {!isLoginMode ? (
@@ -507,7 +507,7 @@ export default function SellerOnboardingPage() {
                         <input 
                           type="text"
                           value={businessName}
-                          onChange={(e) => setBusinessName(e.target.value)}
+                          onChange={(e) => { setBusinessName(e.target.value); }}
                           placeholder="e.g. Neon Gravity Co."
                           className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-purple-500 transition-all font-bold"
                         />
@@ -520,7 +520,7 @@ export default function SellerOnboardingPage() {
                           <input 
                             type="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => { setEmail(e.target.value); }}
                             placeholder="hello@brand.co.ke"
                             className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-purple-500 transition-all font-medium"
                           />
@@ -535,7 +535,7 @@ export default function SellerOnboardingPage() {
                           <input 
                             type="tel"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={(e) => { setPhone(e.target.value); }}
                             placeholder="712 345 678"
                             className="w-full bg-transparent px-4 py-4 text-white placeholder-zinc-600 focus:outline-none font-bold"
                           />
@@ -548,7 +548,7 @@ export default function SellerOnboardingPage() {
                           {categories.map((c) => (
                             <button
                               key={c.id}
-                              onClick={() => setCategory(c.id)}
+                              onClick={() => { setCategory(c.id); }}
                               className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all ${
                                 category === c.id 
                                   ? "bg-purple-500/20 border-purple-500 text-white shadow-[0_0_15px_rgba(168,85,247,0.2)]" 
@@ -595,7 +595,7 @@ export default function SellerOnboardingPage() {
                           {/* Email / Phone toggle */}
                           <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10">
                             <button
-                              onClick={() => setLoginMethod('email')}
+                              onClick={() => { setLoginMethod('email'); }}
                               className={`flex-1 py-2 text-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-all ${
                                 loginMethod === 'email' ? 'bg-purple-500 text-white shadow-md' : 'text-zinc-500'
                               }`}
@@ -603,7 +603,7 @@ export default function SellerOnboardingPage() {
                               <Mail size={14} /> Email
                             </button>
                             <button
-                              onClick={() => setLoginMethod('phone')}
+                              onClick={() => { setLoginMethod('phone'); }}
                               className={`flex-1 py-2 text-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-all ${
                                 loginMethod === 'phone' ? 'bg-purple-500 text-white shadow-md' : 'text-zinc-500'
                               }`}
@@ -620,7 +620,7 @@ export default function SellerOnboardingPage() {
                                 <input
                                   type="email"
                                   value={loginEmail}
-                                  onChange={e => setLoginEmail(e.target.value)}
+                                  onChange={e => { setLoginEmail(e.target.value); }}
                                   placeholder="name@business.co.ke"
                                   className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-purple-500 transition-all font-bold"
                                 />
@@ -635,7 +635,7 @@ export default function SellerOnboardingPage() {
                                 <input
                                   type="tel"
                                   value={loginPhone}
-                                  onChange={e => setLoginPhone(e.target.value.replace(/\D/g, ''))}
+                                  onChange={e => { setLoginPhone(e.target.value.replace(/\D/g, '')); }}
                                   placeholder="712 345 678"
                                   className="w-full bg-transparent px-4 py-4 text-white placeholder-zinc-600 focus:outline-none font-bold"
                                 />
@@ -660,7 +660,7 @@ export default function SellerOnboardingPage() {
                               type="number"
                               maxLength={6}
                               value={otpCode}
-                              onChange={e => setOtpCode(e.target.value.slice(0, 6))}
+                              onChange={e => { setOtpCode(e.target.value.slice(0, 6)); }}
                               placeholder="——  ——  ——"
                               className="w-full bg-white/5 border border-purple-500/40 rounded-2xl px-5 py-5 text-white text-center text-2xl font-black tracking-[0.5em] placeholder-zinc-700 focus:outline-none focus:border-purple-500 transition-all"
                             />
@@ -672,7 +672,7 @@ export default function SellerOnboardingPage() {
                               <p className="text-zinc-500 text-xs">Resend code in <span className="text-purple-400 font-bold">{resendCountdown}s</span></p>
                             ) : (
                               <button
-                                onClick={() => { setOtpCode(''); handleSendOtp(); }}
+                                onClick={() => { setOtpCode(''); void handleSendOtp(); }}
                                 disabled={isSendingOtp}
                                 className="flex items-center gap-1.5 text-purple-400 text-xs font-bold hover:text-purple-300 transition-colors disabled:opacity-50"
                               >
@@ -707,7 +707,7 @@ export default function SellerOnboardingPage() {
                   <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest pl-2 flex items-center gap-1"><Edit size={12}/> Service Description / Bio</label>
                   <textarea 
                     value={bio}
-                    onChange={(e) => setBio(e.target.value)}
+                    onChange={(e) => { setBio(e.target.value); }}
                     placeholder="Sell yourself! E.g. Award winning agency focusing on hyper-growth scaling inside Nairobi..."
                     className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-purple-500 transition-all font-medium min-h-[120px] resize-none"
                   />
@@ -718,7 +718,7 @@ export default function SellerOnboardingPage() {
                     <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest pl-2 flex items-center gap-1"><DollarSign size={12}/> Price Range</label>
                     <select 
                       value={price}
-                      onChange={(e) => setPrice(e.target.value)}
+                      onChange={(e) => { setPrice(e.target.value); }}
                       className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-4 text-white focus:outline-none focus:border-purple-500 transition-all font-bold appearance-none"
                     >
                       <option value="$">Budget ($)</option>
@@ -731,7 +731,7 @@ export default function SellerOnboardingPage() {
                     <input 
                       type="url"
                       value={socialLink}
-                      onChange={(e) => setSocialLink(e.target.value)}
+                      onChange={(e) => { setSocialLink(e.target.value); }}
                       placeholder="Instagram/Github link"
                       className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-purple-500 transition-all text-sm font-medium"
                     />
@@ -774,7 +774,7 @@ export default function SellerOnboardingPage() {
                              <Image src={media.url} alt={`preview-${idx}`} fill className="object-cover transition-transform group-hover:scale-110 unoptimized" unoptimized />
                            )}
                            <button 
-                             onClick={() => removeMedia(idx)}
+                             onClick={() => { removeMedia(idx); }}
                              className="absolute top-1 right-1 bg-black/60 backdrop-blur-md p-1 rounded-full text-white/80 hover:text-red-400 hover:bg-black transition-colors"
                            >
                              <X size={14} />

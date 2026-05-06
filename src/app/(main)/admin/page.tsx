@@ -41,13 +41,13 @@ export default function AdminControlRoom() {
         });
       }
     };
-    load();
+    void load();
   }, []);
 
   const handleApprove = async () => {
     // Update Supabase if available
-    if (supabase && (pendingVendor as any)?.id) {
-      await supabase.from('vendors').update({ verified: true }).eq('id', (pendingVendor as any).id);
+    if (supabase && (pendingVendor as unknown as {id?: string})?.id) {
+      await supabase.from('vendors').update({ verified: true }).eq('id', (pendingVendor as unknown as {id: string}).id);
     }
     // Always update localStorage too
     localStorage.setItem('seller_verified', 'true');
@@ -99,7 +99,7 @@ export default function AdminControlRoom() {
                 <input 
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => { setEmail(e.target.value); }}
                   placeholder="name@lisbran.com"
                   className="w-full bg-black/50 border border-white/10 rounded-xl pl-10 px-4 py-3 text-white placeholder-zinc-700 text-sm focus:outline-none focus:border-green-500 focus:bg-green-500/5 transition-all"
                 />
@@ -112,7 +112,7 @@ export default function AdminControlRoom() {
                 <input 
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => { setPassword(e.target.value); }}
                   placeholder="••••••••"
                   className="w-full bg-black/50 border border-white/10 rounded-xl pl-10 px-4 py-3 text-white placeholder-zinc-700 text-sm focus:outline-none focus:border-green-500 focus:bg-green-500/5 transition-all"
                 />
@@ -152,17 +152,17 @@ export default function AdminControlRoom() {
                <p className="text-[10px] text-zinc-500 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block"/> SERVER ONLINE — NAIROBI NODE</p>
              </div>
           </div>
-          <button onClick={() => setIsAuthenticated(false)} className="text-[10px] text-zinc-500 hover:text-red-400 transition-colors tracking-widest uppercase">
+          <button onClick={() => { setIsAuthenticated(false); }} className="text-[10px] text-zinc-500 hover:text-red-400 transition-colors tracking-widest uppercase">
             LOGOUT
           </button>
         </div>
 
         {/* System Toggle Tabs */}
         <div className="flex w-full mb-8 border-b border-white/10">
-          <button onClick={() => setActiveTab('control')} className={`flex-1 py-3 text-xs font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === 'control' ? 'border-green-500 text-green-400' : 'border-transparent text-zinc-500 hover:text-white'}`}>
+          <button onClick={() => { setActiveTab('control'); }} className={`flex-1 py-3 text-xs font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === 'control' ? 'border-green-500 text-green-400' : 'border-transparent text-zinc-500 hover:text-white'}`}>
             Control Node
           </button>
-          <button onClick={() => setActiveTab('analytics')} className={`flex-1 py-3 text-xs font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === 'analytics' ? 'border-purple-500 text-purple-400' : 'border-transparent text-zinc-500 hover:text-white'}`}>
+          <button onClick={() => { setActiveTab('analytics'); }} className={`flex-1 py-3 text-xs font-bold tracking-widest uppercase transition-colors border-b-2 ${activeTab === 'analytics' ? 'border-purple-500 text-purple-400' : 'border-transparent text-zinc-500 hover:text-white'}`}>
             Analytics Engine
           </button>
         </div>
@@ -217,7 +217,7 @@ export default function AdminControlRoom() {
                         <p className="text-[10px] text-zinc-400 mt-0.5">{pendingVendor.cat} • {pendingVendor.phone}</p>
                       </div>
                       <div className="flex gap-2 relative z-10">
-                        <button onClick={() => setPendingVendor(null)} className="w-8 h-8 rounded bg-red-500/20 border border-red-500/50 flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all shadow-lg">
+                        <button onClick={() => { setPendingVendor(null); }} className="w-8 h-8 rounded bg-red-500/20 border border-red-500/50 flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all shadow-lg">
                           <X size={16} />
                         </button>
                         <button onClick={handleApprove} className="w-8 h-8 rounded bg-green-500/20 border border-green-500/50 flex items-center justify-center text-green-400 hover:bg-green-500 hover:text-white transition-all shadow-lg">
@@ -252,7 +252,7 @@ export default function AdminControlRoom() {
                  <h2 className="text-sm font-bold text-blue-400 border-b border-blue-400/30 pb-1 uppercase tracking-widest">Global Telemetry</h2>
                  <select 
                    value={categoryFilter} 
-                   onChange={(e) => setCategoryFilter(e.target.value)}
+                   onChange={(e) => { setCategoryFilter(e.target.value); }}
                    className="bg-purple-900/30 border border-purple-500/50 text-purple-200 text-xs font-bold rounded-xl px-3 py-1 outline-none cursor-pointer focus:bg-black"
                  >
                    <option value="all">ALL CATEGORIES</option>

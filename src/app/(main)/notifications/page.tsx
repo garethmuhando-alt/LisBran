@@ -44,13 +44,13 @@ export default function NotificationsEventsPage() {
           </motion.div>
           <div className="bg-[#111]/80 p-1 rounded-full border border-white/10 flex items-center text-sm font-semibold shadow-inner ml-4">
             <button 
-              onClick={() => setTab("alerts")}
+              onClick={() => { setTab("alerts"); }}
               className={`px-4 py-1.5 rounded-full transition-colors ${tab === "alerts" ? "bg-white text-black" : "text-zinc-400 hover:text-white"}`}
             >
               Alerts
             </button>
             <button 
-              onClick={() => setTab("events")}
+              onClick={() => { setTab("events"); }}
               className={`px-4 py-1.5 rounded-full transition-colors ${tab === "events" ? "bg-white text-black" : "text-zinc-400 hover:text-white"}`}
             >
               Events

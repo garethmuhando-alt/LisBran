@@ -58,7 +58,7 @@ const mapOptions = {
 
 export default function MapPage() {
   const router = useRouter();
-  const [selected, setSelected] = useState<any>(null);
+  const [selected, setSelected] = useState<unknown>(null);
   const [selectedType, setSelectedType] = useState<"event" | "vendor" | null>(null);
   const [showEvents, setShowEvents] = useState(true);
   const [showVendors, setShowVendors] = useState(true);
@@ -101,7 +101,7 @@ export default function MapPage() {
           className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold px-6 py-3 rounded-2xl text-sm mb-4 block">
           Get a Free API Key →
         </a>
-        <button onClick={() => router.back()} className="text-zinc-500 text-sm hover:text-zinc-300 transition-colors">
+        <button onClick={() => { router.back(); }} className="text-zinc-500 text-sm hover:text-zinc-300 transition-colors">
           ← Go back
         </button>
 
@@ -141,7 +141,7 @@ export default function MapPage() {
 
       {/* ── Top bar ─────────────────────────────────────────────────────────── */}
       <div className="absolute top-0 left-0 right-0 z-20 flex items-center gap-3 px-4 pt-5 pb-3 bg-gradient-to-b from-black/80 to-transparent">
-        <button onClick={() => router.back()} className="p-2.5 bg-white/10 backdrop-blur-xl rounded-full border border-white/15 text-white hover:bg-white/20 transition-colors flex-shrink-0">
+        <button onClick={() => { router.back(); }} className="p-2.5 bg-white/10 backdrop-blur-xl rounded-full border border-white/15 text-white hover:bg-white/20 transition-colors flex-shrink-0">
           <ArrowLeft size={18} />
         </button>
         <div className="flex-1">
@@ -149,11 +149,11 @@ export default function MapPage() {
           <p className="text-zinc-400 text-xs">{filteredEvents.length} events · {VENDORS.length} vendors</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => setShowEvents(v => !v)}
+          <button onClick={() => { setShowEvents(v => !v); }}
             className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${showEvents ? 'bg-purple-500/30 border-purple-500/60 text-purple-300' : 'bg-white/5 border-white/10 text-zinc-500'}`}>
             <Calendar size={11} className="inline mr-1" />Events
           </button>
-          <button onClick={() => setShowVendors(v => !v)}
+          <button onClick={() => { setShowVendors(v => !v); }}
             className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${showVendors ? 'bg-pink-500/30 border-pink-500/60 text-pink-300' : 'bg-white/5 border-white/10 text-zinc-500'}`}>
             <Briefcase size={11} className="inline mr-1" />Vendors
           </button>
@@ -163,7 +163,7 @@ export default function MapPage() {
       {/* ── Filter chips ─────────────────────────────────────────────────────── */}
       <div className="absolute top-20 left-0 right-0 z-20 flex gap-2 px-4 overflow-x-auto scrollbar-hide pb-1">
         {eventTypes.map(type => (
-          <button key={type} onClick={() => setFilterType(type)}
+          <button key={type} onClick={() => { setFilterType(type); }}
             className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold border transition-all ${
               filterType === type ? 'bg-white text-black border-transparent' : 'bg-black/40 backdrop-blur-md border-white/10 text-zinc-400'
             }`}>
@@ -179,7 +179,7 @@ export default function MapPage() {
         zoom={6}
         options={mapOptions}
         onLoad={onLoad}
-        onClick={() => setSelected(null)}
+        onClick={() => { setSelected(null); }}
       >
         {/* Event markers */}
         {showEvents && filteredEvents.map(ev => (
@@ -257,7 +257,7 @@ export default function MapPage() {
                   </p>
                 </div>
               </div>
-              <button onClick={() => setSelected(null)} className="p-2 bg-white/5 rounded-full text-zinc-500 hover:text-white transition-colors">
+              <button onClick={() => { setSelected(null); }} className="p-2 bg-white/5 rounded-full text-zinc-500 hover:text-white transition-colors">
                 <X size={16} />
               </button>
             </div>
@@ -267,7 +267,7 @@ export default function MapPage() {
                 <p className="text-zinc-300 text-sm leading-relaxed mb-4">{selected.description}</p>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleWhatsApp(selected.contact, selected.name)}
+                    onClick={() => { handleWhatsApp((selected as {contact: string; name: string}).contact, (selected as {contact: string; name: string}).name); }}
                     className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold py-3 rounded-2xl flex items-center justify-center gap-2 text-sm shadow-[0_0_20px_rgba(34,197,94,0.3)]">
                     <Phone size={15} /> Offer Services via WhatsApp
                   </button>
