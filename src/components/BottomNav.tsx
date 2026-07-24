@@ -26,7 +26,7 @@ export default function BottomNav() {
           const isActive = pathname === item.href;
           const Icon = item.icon;
           return (
-            <Link key={index} href={item.href} className="relative group">
+            <Link key={index} href={item.href} prefetch={true} className="relative group">
               <div
                 className={cn(
                   "p-2 rounded-full transition-all duration-300",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MapPin, Star, Gem, Map } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +14,14 @@ export default function HomePage() {
   const [location, setLocation] = useState("nairobi");
   const [isLocOpen, setIsLocOpen] = useState(false);
   const [hoverLoc, setHoverLoc] = useState("nairobi");
+
+  useEffect(() => {
+    router.prefetch('/trends');
+    router.prefetch('/seller/onboarding');
+    router.prefetch('/categories');
+    router.prefetch('/map');
+    router.prefetch('/services/graphic-design');
+  }, [router]);
 
   const locationQuotes: Record<string, string> = {
     nairobi: "The Green City in the Sun! 🌆",

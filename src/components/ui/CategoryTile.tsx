@@ -12,11 +12,9 @@ interface CategoryTileProps {
 
 export function CategoryTile({ title, icon: Icon, href }: CategoryTileProps) {
   return (
-    <Link href={href} className="block w-full">
-      <motion.div
-        whileHover={{ scale: 1.02, x: 5 }}
-        whileTap={{ scale: 0.98 }}
-        className="flex items-center gap-4 py-4 border-b border-white/5 transition-colors group"
+    <Link href={href} prefetch={true} className="block w-full">
+      <div
+        className="flex items-center gap-4 py-4 border-b border-white/5 transition-all duration-150 hover:translate-x-1 group cursor-pointer"
       >
         <div className="relative flex-shrink-0">
           <div className="absolute inset-0 bg-gradient-to-tr from-purple-600 to-pink-500 rounded-full blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
@@ -36,7 +34,7 @@ export function CategoryTile({ title, icon: Icon, href }: CategoryTileProps) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
           </svg>
         </div>
-      </motion.div>
+      </div>
     </Link>
   );
 }
