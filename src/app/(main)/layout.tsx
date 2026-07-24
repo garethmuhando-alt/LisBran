@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import BottomNav from "@/components/BottomNav";
+import ThemeProvider from "@/components/ThemeProvider";
 
 // Lazy-load heavy components — downloaded only when first rendered
 const AnimatedBackground = dynamic(
@@ -11,7 +12,7 @@ const FloatingSuggestionBox = dynamic(
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <ThemeProvider>
       <AnimatedBackground />
       <div
         className="flex-1 pb-24 relative z-10 text-white min-h-screen"
@@ -27,6 +28,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       </div>
       <FloatingSuggestionBox />
       <BottomNav />
-    </>
+    </ThemeProvider>
   );
 }

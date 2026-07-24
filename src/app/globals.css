@@ -121,11 +121,12 @@ body {
 /* ── Global Dark & Light Mode Theme Definitions ── */
 
 /* Global Light Mode — Affects background canvas ONLY; button gradients and components remain 100% untouched */
-body.theme-light {
-    background-color: #f3f4f6 !important;
-}
-
-body.theme-light .theme-light-bg {
+body.theme-light,
+body.theme-light main,
+body.theme-light .theme-light-bg,
+body.theme-light .bg-\[\#141417\],
+body.theme-light .bg-\[\#0a0a0a\],
+body.theme-light .bg-black {
     background-color: #f3f4f6 !important;
 }
 
