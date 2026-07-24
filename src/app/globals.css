@@ -118,15 +118,12 @@ body {
   touch-action: pan-y;
 }
 
-/* ── Global Dark & Light Mode Theme Definitions ── */
+/* ── System-Style Dark & Light Mode Theme Canvas ── */
 
-/* Global Light Mode — Affects background canvas ONLY; button gradients and components remain 100% untouched */
+/* Global Light Mode — Affects root page background canvas ONLY (like iOS / Android system light mode). Service buttons, tiles, cards, and gradients remain 100% untouched */
 body.theme-light,
-body.theme-light main,
-body.theme-light .theme-light-bg,
-body.theme-light .bg-\[\#141417\],
-body.theme-light .bg-\[\#0a0a0a\],
-body.theme-light .bg-black {
+body.theme-light > main,
+body.theme-light .theme-light-bg {
     background-color: #f3f4f6 !important;
 }
 
@@ -135,19 +132,19 @@ body.theme-light .theme-light-gradient {
 }
 
 body.theme-light .theme-light-blob1 {
-    background-color: rgba(244, 114, 182, 0.12) !important;
+    background-color: rgba(244, 114, 182, 0.1) !important;
 }
 
 body.theme-light .theme-light-blob2 {
-    background-color: rgba(96, 165, 250, 0.12) !important;
+    background-color: rgba(96, 165, 250, 0.1) !important;
 }
 
 body.theme-light .theme-light-blob3 {
-    background-color: rgba(192, 132, 252, 0.1) !important;
+    background-color: rgba(192, 132, 252, 0.08) !important;
 }
 
 body.theme-light .theme-light-blob4 {
-    background-color: rgba(251, 191, 36, 0.1) !important;
+    background-color: rgba(251, 191, 36, 0.08) !important;
 }
 
 /* ── Mobile perf: GPU composited without jank ── */
