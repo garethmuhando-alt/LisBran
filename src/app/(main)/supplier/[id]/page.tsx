@@ -9,7 +9,7 @@ import { use } from "react";
 export default function SupplierProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
-  const [vendor, setVendor] = useState<unknown>(null);
+  const [vendor, setVendor] = useState<any>(null);
   const [images, setImages] = useState<string[]>([]);
   const [videos, setVideos] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<'description' | 'portfolio'>('description');
@@ -28,13 +28,13 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
       const sellerName = localStorage.getItem('seller_name') || '';
       const sellerId = sellerName.toLowerCase().replace(/\s+/g, '-');
       const isCurrentSeller = sellerId === resolvedParams.id;
-      setIsOwner(isCurrentSeller);
 
       // Load saved profile picture
       const savedPic = localStorage.getItem('seller_profile_pic');
-      if (savedPic) setProfilePic(savedPic);
 
-      let vendorData: unknown = null;
+      let vendorData: any = null;
+      let imgs: string[] = [];
+      let vids: string[] = [];
 
       if (isCurrentSeller) {
         vendorData = {
@@ -53,12 +53,12 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
         const vidsRaw = localStorage.getItem('seller_portfolio_videos');
         const legacyRaw = localStorage.getItem('seller_portfolio');
         if (imgsRaw || vidsRaw) {
-          setImages(imgsRaw ? JSON.parse(imgsRaw) : []);
-          setVideos(vidsRaw ? JSON.parse(vidsRaw) : []);
+          imgs = imgsRaw ? JSON.parse(imgsRaw) : [];
+          vids = vidsRaw ? JSON.parse(vidsRaw) : [];
         } else if (legacyRaw) {
           const legacy: { url: string; type: string }[] = JSON.parse(legacyRaw);
-          setImages(legacy.filter(m => m.type === 'image').map(m => m.url));
-          setVideos(legacy.filter(m => m.type === 'video').map(m => m.url));
+          imgs = legacy.filter(m => m.type === 'image').map(m => m.url);
+          vids = legacy.filter(m => m.type === 'video').map(m => m.url);
         }
       } else {
         // ── Track profile view for the seller ────────────────────────────────
@@ -74,10 +74,18 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
         vendorData = mockVendors[resolvedParams.id] || null;
       }
 
-      if (vendorData) {
-        setVendor(vendorData);
-        setEditValues({ bio: vendorData.bio || '', location: vendorData.location || 'Nairobi' });
-      }
+      Promise.resolve().then(() => {
+        setIsOwner(isCurrentSeller);
+        if (savedPic) setProfilePic(savedPic);
+        if (isCurrentSeller) {
+          setImages(imgs);
+          setVideos(vids);
+        }
+        if (vendorData) {
+          setVendor(vendorData);
+          setEditValues({ bio: vendorData.bio || '', location: vendorData.location || 'Nairobi' });
+        }
+      });
     } catch (e) { console.error(e); }
   }, [resolvedParams.id]);
 
@@ -365,7 +373,7 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
                   <p className="text-zinc-500 text-sm font-medium">No portfolio media yet.</p>
                   {isOwner
                     ? <p className="text-purple-400/60 text-xs">Use the buttons above to add your images and videos.</p>
-                    : <p className="text-zinc-700 text-xs">This vendor hasn't uploaded portfolio media yet.</p>}
+                    : <p className="text-zinc-700 text-xs">{"This vendor hasn't uploaded portfolio media yet."}</p>}
                 </div>
               )}
             </motion.div>

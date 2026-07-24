@@ -11,7 +11,7 @@ import { use } from "react";
 export default function SearchResultsPage({ params }: { params: Promise<{ category: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
-  const [suppliers, setSuppliers] = useState<unknown[]>([]);
+  const [suppliers, setSuppliers] = useState<any[]>([]);
 
   useEffect(() => {
     const baseMockup = [
@@ -29,7 +29,7 @@ export default function SearchResultsPage({ params }: { params: Promise<{ catego
           .eq('verified', true);
 
         if (data && data.length > 0) {
-          const liveVendors = data.map((v: unknown) => ({
+          const liveVendors = data.map((v: any) => ({
             id: v.business_name.toLowerCase().replace(/\s+/g, '-'),
             name: v.business_name,
             initials: v.business_name.substring(0, 2).toUpperCase(),

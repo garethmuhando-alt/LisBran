@@ -115,18 +115,19 @@ export default function SellerOnboardingPage() {
     try {
       let verifyErr: unknown = null;
       if (loginMethod === 'email') {
-        const { error } = await supabase?.auth.verifyOtp({ email: loginEmail, token: otpCode, type: 'email' });
-        verifyErr = error;
+        const res = await supabase?.auth.verifyOtp({ email: loginEmail, token: otpCode, type: 'email' });
+        verifyErr = res?.error;
       } else {
-        const { error } = await supabase?.auth.verifyOtp({ phone: `+254${loginPhone}`, token: otpCode, type: 'sms' });
-        verifyErr = error;
+        const res = await supabase?.auth.verifyOtp({ phone: `+254${loginPhone}`, token: otpCode, type: 'sms' });
+        verifyErr = res?.error;
       }
       if (verifyErr) throw verifyErr;
 
       // Load vendor data from DB
       const field = loginMethod === 'email' ? 'email' : 'phone';
       const value = loginMethod === 'email' ? loginEmail : `+254${loginPhone}`;
-      const { data } = await supabase?.from('vendors').select('*').eq(field, value).single();
+      const vendorRes = await supabase?.from('vendors').select('*').eq(field, value).single();
+      const data = vendorRes?.data;
       if (!data) {
         setLoginError("No seller account found with this contact. Please sign up first.");
         setIsSubmitting(false);
@@ -140,7 +141,7 @@ export default function SellerOnboardingPage() {
     setIsSubmitting(false);
   };
 
-  const loadSellerFromDB = (data: unknown) => {
+  const loadSellerFromDB = (data: any) => {
     localStorage.setItem('seller_name', data.business_name);
     localStorage.setItem('seller_phone', data.phone);
     localStorage.setItem('seller_email', data.email);
@@ -313,7 +314,7 @@ export default function SellerOnboardingPage() {
               .single()
               .then(({ data, error }) => ({ data, error }));
 
-            const result = await Promise.race([insertPromise, timeoutPromise]) as { data: unknown; error: unknown } | null;
+            const result = await Promise.race([insertPromise, timeoutPromise]) as { data: any; error: any } | null;
 
             if (result && !result.error && result.data) {
               const vendorData = result.data;
@@ -325,7 +326,7 @@ export default function SellerOnboardingPage() {
                 message: `New seller "${businessName}" (${category}) has applied and is pending approval.`,
                 vendor_id: vendorData.id,
                 read: false,
-              }).then(() => {}).catch(() => {});
+              }).then(() => {}, () => {});
             }
           } catch (err) {
             console.warn('Supabase save failed or timed out, using localStorage fallback:', err);
@@ -577,7 +578,7 @@ export default function SellerOnboardingPage() {
                             <input type="password" placeholder="••••••••" value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value); }} className="bg-transparent border-none outline-none text-white w-full placeholder:text-zinc-600 text-sm font-bold" />
                           </div>
                           {confirmPassword.length > 0 && confirmPassword !== password && (
-                            <p className="text-red-400 text-[11px] font-bold pl-2">⚠ Passwords don't match</p>
+                            <p className="text-red-400 text-[11px] font-bold pl-2">{"⚠ Passwords don't match"}</p>
                           )}
                         </div>
                       </div>

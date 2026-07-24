@@ -5,7 +5,7 @@ import { MapPin, Star, Gem, Map } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { SearchInput } from "@/components/ui/SearchInput";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 export default function HomePage() {

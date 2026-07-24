@@ -222,7 +222,7 @@ export default function LogoDesignPage() {
                 <div>
                   <h1 className="text-3xl font-black text-white mb-3">Brief Ready!</h1>
                   <p className="text-zinc-400 max-w-xs mx-auto">
-                    We'll match your <span className="text-white font-bold">{styles.find(s => s.id === selectedStyle)?.name}</span> logo brief for <span className="text-white font-bold">"{brandName}"</span> with top-tier LisBran designers.
+                    We&apos;ll match your <span className="text-white font-bold">{styles.find(s => s.id === selectedStyle)?.name}</span> logo brief for <span className="text-white font-bold">&ldquo;{brandName}&rdquo;</span> with top-tier LisBran designers.
                   </p>
                 </div>
               </motion.div>

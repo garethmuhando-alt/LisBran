@@ -21,29 +21,31 @@ export default function SellerDashboardPage() {
   useEffect(() => {
     const savedName = localStorage.getItem('seller_name');
     const verifiedStatus = localStorage.getItem('seller_verified');
-    
-    if (verifiedStatus === 'false') {
-       setIsVerified(false);
-    } else {
-       setIsVerified(true);
-    }
-
-    if (savedName) {
-      setVendorName(savedName);
-      setVendorInitials(savedName.substring(0, 2).toUpperCase());
-
-      // Load profile views & bookings
-      const sellerId = savedName.toLowerCase().replace(/\s+/g, '-');
-      const views = parseInt(localStorage.getItem(`profile_views_${sellerId}`) || '0', 10);
-      setProfileViews(views);
-      const bks = JSON.parse(localStorage.getItem(`seller_bookings_${sellerId}`) || '[]');
-      setBookings(bks);
-    }
-
     const savedPortfolio = localStorage.getItem('seller_portfolio');
-    if (savedPortfolio) {
-      setPortfolio(JSON.parse(savedPortfolio));
-    }
+    
+    Promise.resolve().then(() => {
+      if (verifiedStatus === 'false') {
+         setIsVerified(false);
+      } else {
+         setIsVerified(true);
+      }
+
+      if (savedName) {
+        setVendorName(savedName);
+        setVendorInitials(savedName.substring(0, 2).toUpperCase());
+
+        // Load profile views & bookings
+        const sellerId = savedName.toLowerCase().replace(/\s+/g, '-');
+        const views = parseInt(localStorage.getItem(`profile_views_${sellerId}`) || '0', 10);
+        setProfileViews(views);
+        const bks = JSON.parse(localStorage.getItem(`seller_bookings_${sellerId}`) || '[]');
+        setBookings(bks);
+      }
+
+      if (savedPortfolio) {
+        setPortfolio(JSON.parse(savedPortfolio));
+      }
+    });
   }, []);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,7 +158,7 @@ export default function SellerDashboardPage() {
             )}
 
             {/* Booking notifications */}
-            {bookings.length > 0 ? bookings.map((b: unknown) => (
+            {bookings.length > 0 ? bookings.map((b: any) => (
               <div key={b.id} className="flex items-center gap-3 px-5 py-4 border-b border-white/5 hover:bg-white/5 transition-colors">
                 <div className="w-9 h-9 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
                   <CalendarCheck size={16} className="text-green-400" />

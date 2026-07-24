@@ -58,7 +58,7 @@ const mapOptions = {
 
 export default function MapPage() {
   const router = useRouter();
-  const [selected, setSelected] = useState<unknown>(null);
+  const [selected, setSelected] = useState<any>(null);
   const [selectedType, setSelectedType] = useState<"event" | "vendor" | null>(null);
   const [showEvents, setShowEvents] = useState(true);
   const [showVendors, setShowVendors] = useState(true);

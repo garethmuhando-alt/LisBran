@@ -89,7 +89,7 @@ export default function MarketingTrendsPage() {
               The Edge of Marketing
             </h2>
             <p className="text-zinc-300 text-sm font-medium">
-              Stay ahead of the curve. What's working right now in Nairobi and beyond.
+              {"Stay ahead of the curve. What's working right now in Nairobi and beyond."}
             </p>
           </div>
         </motion.div>

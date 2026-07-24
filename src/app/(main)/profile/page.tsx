@@ -13,7 +13,9 @@ export default function ProfilePage() {
   useEffect(() => {
     const saved = localStorage.getItem('lisbran_theme');
     if (saved === 'light') {
-      setIsLightMode(true);
+      Promise.resolve().then(() => {
+        setIsLightMode(true);
+      });
       document.body.classList.add('theme-light');
     }
   }, []);

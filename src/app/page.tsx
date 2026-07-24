@@ -30,7 +30,7 @@ export default function SplashPage() {
         className="flex items-center gap-3 mb-12 self-start pl-4"
       >
         <div className="bg-zinc-800/80 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-lg font-medium border border-white/10">
-          Let's get started!
+          {"Let's get started!"}
         </div>
         <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white/50">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -48,7 +48,7 @@ export default function SplashPage() {
             className="w-full bg-white rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-lg"
           >
             <span className="text-purple-600 font-semibold text-lg">Find a service</span>
-            <span className="text-zinc-500 text-sm mt-1">I'm looking for talented people to work with</span>
+            <span className="text-zinc-500 text-sm mt-1">{"I'm looking for talented people to work with"}</span>
           </motion.div>
         </Link>
         
@@ -59,7 +59,7 @@ export default function SplashPage() {
             className="w-full bg-white rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-lg"
           >
             <span className="text-pink-600 font-semibold text-lg">Sell a service</span>
-            <span className="text-zinc-500 text-sm mt-1">I'd like to offer my services</span>
+            <span className="text-zinc-500 text-sm mt-1">{"I'd like to offer my services"}</span>
           </motion.div>
         </Link>
       </div>
