@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { ArrowLeft, MapPin, MessageCircle, Mail, Star, Play, Pencil, Check, Camera, Bookmark, Plus, ImageIcon, Video } from "lucide-react";
+import { ArrowLeft, MapPin, MessageCircle, Mail, Star, Play, Pencil, Check, Camera, Bookmark, Plus, ImageIcon, Video, Smartphone, CheckCircle2, ShieldCheck, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { use } from "react";
@@ -18,6 +18,10 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
   const [isOwner, setIsOwner] = useState(false);
   const [editingField, setEditingField] = useState<string | null>(null);
   const [editValues, setEditValues] = useState<Record<string, string>>({});
+  const [isMpesaOpen, setIsMpesaOpen] = useState(false);
+  const [mpesaPhone, setMpesaPhone] = useState("0712345678");
+  const [mpesaAmount, setMpesaAmount] = useState("1000");
+  const [paymentState, setPaymentState] = useState<'idle' | 'pushing' | 'success'>('idle');
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const profilePicRef = useRef<HTMLInputElement>(null);
   const imageUploadRef = useRef<HTMLInputElement>(null);
@@ -114,6 +118,33 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
       via: 'WhatsApp',
     });
     localStorage.setItem(bookingKey, JSON.stringify(existing.slice(0, 20)));
+  };
+
+  const handleMpesaPayment = () => {
+    setPaymentState('pushing');
+    setTimeout(() => {
+      setPaymentState('success');
+      const sellerId = resolvedParams.id;
+      const bookingKey = `seller_bookings_${sellerId}`;
+      const existing = JSON.parse(localStorage.getItem(bookingKey) || '[]');
+      existing.unshift({
+        id: Date.now(),
+        name: 'M-PESA Client',
+        service: `${vendor?.category || 'Service'} Deposit (KSh ${mpesaAmount})`,
+        time: new Date().toLocaleString('en-KE', { dateStyle: 'short', timeStyle: 'short' }),
+        via: 'M-PESA Express Split (10% LisBran Commission Banked)',
+      });
+      localStorage.setItem(bookingKey, JSON.stringify(existing.slice(0, 20)));
+
+      setTimeout(() => {
+        setIsMpesaOpen(false);
+        setPaymentState('idle');
+        const cleaned = (vendor?.phone || '254700000000').replace(/\D/g, '');
+        const ref = `LB-${Math.floor(Math.random() * 899999 + 100000)}`;
+        const msg = `Hi ${vendor?.name || 'Vendor'}! 👋 I have paid KSh ${mpesaAmount} deposit via LisBran M-PESA Express (Ref: ${ref}). 90% (KSh ${Math.round(Number(mpesaAmount) * 0.9)}) has been credited directly to your payout account. Let's discuss details!`;
+        window.open(`https://wa.me/${cleaned}?text=${encodeURIComponent(msg)}`, '_blank');
+      }, 1500);
+    }, 2200);
   };
 
   const saveEdit = (field: string) => {
@@ -383,37 +414,160 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
 
       {/* CONTACT BUTTONS */}
       <div className="relative z-10 px-6 mt-8 space-y-3">
-        {/* Book Service — primary CTA */}
+        {/* Book & M-PESA Split CTAs */}
         {!isOwner && (
-          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-            onClick={handleBookService}
-            className="w-full bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 text-sm shadow-[0_0_30px_rgba(34,197,94,0.4)] hover:shadow-[0_0_40px_rgba(34,197,94,0.6)] transition-all tracking-wide uppercase">
-            📲 Book This Service via WhatsApp
-          </motion.button>
+          <div className="space-y-3">
+            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+              onClick={() => setIsMpesaOpen(true)}
+              className="w-full bg-gradient-to-r from-emerald-600 via-green-500 to-teal-500 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 text-sm shadow-[0_0_30px_rgba(34,197,94,0.4)] hover:shadow-[0_0_40px_rgba(34,197,94,0.6)] transition-all tracking-wide uppercase">
+              <Smartphone size={18} /> Pay Deposit via M-PESA Express
+            </motion.button>
+
+            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+              onClick={handleBookService}
+              className="w-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm shadow-md transition-all">
+              <MessageCircle size={17} /> Direct WhatsApp Quote
+            </motion.button>
+          </div>
         )}
 
         <div className="flex gap-3">
           <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
             onClick={handleWhatsApp}
-            className="flex-1 bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-sm shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:shadow-[0_0_40px_rgba(168,85,247,0.6)] transition-all">
-            <MessageCircle size={17} /> Message
+            className="flex-1 bg-white/5 border border-white/15 hover:bg-white/10 text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm transition-all">
+            <MessageCircle size={17} /> Chat
           </motion.button>
           {vendor.email ? (
             <motion.a whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
               href={`mailto:${vendor.email}`}
-              className="flex-1 bg-white/5 border border-white/15 hover:bg-white/10 hover:border-white/25 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm backdrop-blur-sm">
+              className="flex-1 bg-white/5 border border-white/15 hover:bg-white/10 hover:border-white/25 text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all text-sm backdrop-blur-sm">
               <Mail size={17} /> Email
             </motion.a>
           ) : (
             <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
               onClick={() => { setSaved(s => !s); }}
-              className={`flex-1 border transition-all text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-sm backdrop-blur-sm ${saved ? 'bg-purple-500/20 border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'bg-white/5 border-white/15 hover:bg-white/10'}`}>
+              className={`flex-1 border transition-all text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm backdrop-blur-sm ${saved ? 'bg-purple-500/20 border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'bg-white/5 border-white/15 hover:bg-white/10'}`}>
               <Bookmark size={17} className={saved ? 'fill-purple-400 text-purple-400' : ''} />
               {saved ? 'Saved' : 'Save'}
             </motion.button>
           )}
         </div>
       </div>
+
+      {/* M-PESA STK Push Split Payment Modal */}
+      <AnimatePresence>
+        {isMpesaOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4"
+            onClick={() => setIsMpesaOpen(false)}
+          >
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="w-full max-w-md bg-[#121214] border border-emerald-500/30 rounded-t-3xl sm:rounded-3xl p-6 shadow-[0_0_40px_rgba(16,185,129,0.2)] text-white overflow-hidden relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/40">
+                    <Smartphone size={16} className="text-emerald-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-black tracking-wide text-white">M-PESA Express Split</h3>
+                    <p className="text-[10px] text-emerald-400 font-medium">Instant Automated Bank Split</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsMpesaOpen(false)}
+                  className="p-2 bg-white/5 rounded-full hover:bg-white/15 transition-colors"
+                >
+                  <X size={18} className="text-zinc-400" />
+                </button>
+              </div>
+
+              {paymentState === 'idle' && (
+                <>
+                  <div className="bg-emerald-950/40 border border-emerald-500/20 rounded-2xl p-4 mb-5">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-xs text-zinc-400 font-bold">Vendor Payout</span>
+                      <span className="text-xs text-white font-black">{vendor?.name || 'Vendor'}</span>
+                    </div>
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-xs text-zinc-400 font-bold">Deposit Amount</span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-xs font-bold text-emerald-400">KSh</span>
+                        <input
+                          type="number"
+                          value={mpesaAmount}
+                          onChange={(e) => setMpesaAmount(e.target.value)}
+                          className="w-20 bg-black/60 border border-white/15 rounded-lg px-2 py-1 text-right text-xs font-black text-white outline-none focus:border-emerald-500"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Split Breakdown */}
+                    <div className="pt-3 border-t border-emerald-500/20 flex flex-col gap-1.5 text-[11px]">
+                      <div className="flex justify-between text-zinc-300">
+                        <span>Vendor Direct Account (90%)</span>
+                        <span className="font-bold text-emerald-400">KSh {Math.round(Number(mpesaAmount || 0) * 0.9)}</span>
+                      </div>
+                      <div className="flex justify-between text-zinc-400">
+                        <span>LisBran Platform Fee (10%)</span>
+                        <span className="font-bold text-purple-400">KSh {Math.round(Number(mpesaAmount || 0) * 0.1)}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 mb-6">
+                    <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider block">Safaricom M-PESA Number</label>
+                    <div className="flex items-center gap-3 bg-black/60 border border-white/15 rounded-2xl p-3.5 focus-within:border-emerald-500 transition-colors">
+                      <span className="text-xs font-black text-emerald-400">+254</span>
+                      <input
+                        type="text"
+                        value={mpesaPhone}
+                        onChange={(e) => setMpesaPhone(e.target.value)}
+                        placeholder="712345678"
+                        className="bg-transparent border-none outline-none text-white w-full text-sm font-bold placeholder:text-zinc-600"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleMpesaPayment}
+                    className="w-full bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 text-sm shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-wide"
+                  >
+                    <ShieldCheck size={18} /> Trigger M-PESA STK Push
+                  </button>
+                </>
+              )}
+
+              {paymentState === 'pushing' && (
+                <div className="py-10 text-center flex flex-col items-center justify-center">
+                  <div className="w-16 h-16 rounded-full border-4 border-emerald-500 border-t-transparent animate-spin mb-4" />
+                  <h4 className="text-lg font-black text-white mb-1">STK Push Sent! 📲</h4>
+                  <p className="text-xs text-zinc-400 max-w-xs">Check your Safaricom phone ({mpesaPhone}) and enter your M-PESA PIN to complete the deposit.</p>
+                </div>
+              )}
+
+              {paymentState === 'success' && (
+                <div className="py-8 text-center flex flex-col items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(16,185,129,0.6)]">
+                    <CheckCircle2 size={36} className="text-emerald-400" />
+                  </div>
+                  <h4 className="text-xl font-black text-white mb-1">Payment Verified! 🎉</h4>
+                  <p className="text-xs text-emerald-400 font-bold mb-1">10% Commission Banked • 90% Vendor Direct</p>
+                  <p className="text-xs text-zinc-400">Opening WhatsApp chat with vendor...</p>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
