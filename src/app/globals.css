@@ -118,7 +118,9 @@ body {
   touch-action: pan-y;
 }
 
-/* Global Light Mode — Significantly lighter, crisp white aesthetic */
+/* ── Global Dark & Light Mode Theme Definitions ── */
+
+/* 1. Global Light Mode — Crisp White & High Contrast Dark Text */
 body.theme-light {
     background-color: #f8fafc !important;
     color: #0f172a !important;
@@ -131,7 +133,8 @@ body.theme-light .bg-\[\#111\],
 body.theme-light .bg-\[\#0f0f1e\],
 body.theme-light .bg-\[\#18181b\],
 body.theme-light .bg-\[\#121214\],
-body.theme-light .bg-black {
+body.theme-light .bg-black,
+body.theme-light .bg-zinc-900 {
     background-color: #ffffff !important;
 }
 
@@ -161,13 +164,14 @@ body.theme-light .bg-white\/5,
 body.theme-light .bg-white\/10 {
     background-color: #f1f5f9 !important;
     border-color: #e2e8f0 !important;
+    color: #0f172a !important;
 }
 
 body.theme-light .glass,
 body.theme-light .glass-card {
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
 }
 
 body.theme-light .border-white\/5,
@@ -182,18 +186,31 @@ body.theme-light input,
 body.theme-light select,
 body.theme-light textarea {
     color: #0f172a !important;
+    background-color: #ffffff !important;
 }
 
-/* ── Mobile perf: the #1 jank cause on Android is backdrop-filter ── */
+body.theme-light input::placeholder {
+    color: #94a3b8 !important;
+}
+
+/* ── Mobile perf: GPU composited without jank ── */
 @media (max-width: 768px) {
-  /* Disable ALL backdrop-filter — single biggest perf win on Android Chrome */
-  .glass,
-  .glass-card,
-  [class*="backdrop-blur"] {
+  /* Dark mode mobile card background */
+  body:not(.theme-light) .glass,
+  body:not(.theme-light) .glass-card,
+  body:not(.theme-light) [class*="backdrop-blur"] {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    /* Compensate with a solid semi-transparent bg so UI still looks good */
-    background-color: rgba(20, 20, 23, 0.92) !important;
+    background-color: rgba(18, 18, 22, 0.95) !important;
+  }
+
+  /* Light mode mobile card background */
+  body.theme-light .glass,
+  body.theme-light .glass-card,
+  body.theme-light [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background-color: #ffffff !important;
   }
 
   /* Disable heavy blur divs that cause GPU overdraw every scroll frame */
