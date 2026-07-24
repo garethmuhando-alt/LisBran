@@ -53,41 +53,78 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Centered Floating Neon Location Selector with Custom Dropdown */}
-          <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center top-0 z-50 pt-2">
-            <div className="relative w-32">
-              <div
-                onClick={() => { setIsLocOpen(!isLocOpen); }}
-                className="flex items-center justify-center gap-2 bg-black/60 backdrop-blur-xl border border-purple-500/50 rounded-full px-4 py-1.5 shadow-[0_0_20px_rgba(168,85,247,0.4)] cursor-pointer relative group text-white text-sm font-black hover:scale-105 transition-transform duration-150"
-              >
-                <div className="anim-float-pin">
-                   <MapPin size={16} className="text-pink-400 drop-shadow-[0_0_8px_rgba(236,72,153,1)]" />
-                </div>
-                {location.charAt(0).toUpperCase() + location.slice(1)}
+          {/* Centered Floating Location Selector with Backdrop Dismiss */}
+          <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center top-0 z-40 pt-2">
+            <button
+              type="button"
+              onClick={() => { setIsLocOpen(!isLocOpen); }}
+              className="flex items-center justify-center gap-2 bg-zinc-900/90 border border-purple-500/50 rounded-full px-4 py-1.5 shadow-[0_0_20px_rgba(168,85,247,0.3)] cursor-pointer text-white text-sm font-bold hover:scale-105 transition-transform duration-150 active:scale-95"
+            >
+              <div className="anim-float-pin">
+                 <MapPin size={16} className="text-pink-400 drop-shadow-[0_0_8px_rgba(236,72,153,1)]" />
               </div>
-              
-              <AnimatePresence>
-                {isLocOpen && (
+              {location.charAt(0).toUpperCase() + location.slice(1)}
+            </button>
+            
+            <AnimatePresence>
+              {isLocOpen && (
+                <>
+                  {/* Backdrop overlay for seamless outside click dismissal */}
                   <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="absolute top-full left-0 mt-2 w-full bg-black/90 backdrop-blur-xl border border-purple-500/30 rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.8)] flex flex-col z-50 text-white font-bold"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setIsLocOpen(false)}
+                    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs"
+                  />
+
+                  {/* Centered Floating City Selector Sheet */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                    className="fixed top-20 left-1/2 -translate-x-1/2 w-80 max-w-[90vw] bg-zinc-900 border border-purple-500/40 rounded-2xl p-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)] z-50 flex flex-col gap-3 text-white"
                   >
-                    {Object.keys(locationQuotes).map((loc) => (
-                      <button
-                        key={loc}
-                        onMouseEnter={() => { setHoverLoc(loc); }}
-                        onClick={() => { setLocation(loc); setIsLocOpen(false); }}
-                        className={`py-2 px-3 text-sm text-center transition-colors ${location === loc ? "bg-purple-600" : "hover:bg-white/10"}`}
+                    <div className="flex justify-between items-center pb-2 border-b border-white/10">
+                      <div className="flex items-center gap-2 font-bold text-sm">
+                        <MapPin size={18} className="text-pink-400" />
+                        <span>Select City / Region</span>
+                      </div>
+                      <button 
+                        type="button"
+                        onClick={() => setIsLocOpen(false)}
+                        className="text-zinc-400 hover:text-white p-1 text-xs font-bold"
                       >
-                        {loc.charAt(0).toUpperCase() + loc.slice(1)}
+                        ✕
                       </button>
-                    ))}
+                    </div>
+
+                    <div className="flex flex-col gap-1.5 max-h-60 overflow-y-auto">
+                      {Object.entries(locationQuotes).map(([loc, quote]) => (
+                        <button
+                          key={loc}
+                          type="button"
+                          onMouseEnter={() => setHoverLoc(loc)}
+                          onClick={() => {
+                            setLocation(loc);
+                            localStorage.setItem('lisbran_location', loc);
+                            setIsLocOpen(false);
+                          }}
+                          className={`flex items-center justify-between p-3 rounded-xl text-left text-sm font-medium transition-all ${
+                            location === loc 
+                              ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold shadow-md" 
+                              : "bg-white/5 hover:bg-white/10 text-zinc-200"
+                          }`}
+                        >
+                          <span className="capitalize">{loc}</span>
+                          <span className="text-xs text-zinc-400 opacity-90">{quote}</span>
+                        </button>
+                      ))}
+                    </div>
                   </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+                </>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Floating Colorful Buy/Sell Toggle */}
