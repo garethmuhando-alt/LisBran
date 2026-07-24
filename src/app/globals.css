@@ -118,121 +118,35 @@ body {
   touch-action: pan-y;
 }
 
-/* ── Global Dark & Light Mode Theme Definitions (Jarida Inspired) ── */
+/* ── Global Dark & Light Mode Theme Definitions ── */
 
-/* 1. Global Light Mode — Soft Ambient Canvas & Frosted Glass Floating Cards */
+/* Global Light Mode — Affects background canvas ONLY; button gradients and components remain 100% untouched */
 body.theme-light {
-    background-color: #edf0f5 !important;
-    color: #1e293b !important;
-    color-scheme: light !important;
+    background-color: #f3f4f6 !important;
 }
 
 body.theme-light .theme-light-bg {
-    background-color: #edf0f5 !important;
+    background-color: #f3f4f6 !important;
 }
 
 body.theme-light .theme-light-gradient {
-    background: linear-gradient(to top, rgba(237, 240, 245, 0.85) 0%, rgba(237, 240, 245, 0.4) 50%, rgba(237, 240, 245, 0.85) 100%) !important;
+    background: linear-gradient(to top, #f3f4f6 0%, rgba(243, 244, 246, 0.7) 50%, #f3f4f6 100%) !important;
 }
 
 body.theme-light .theme-light-blob1 {
-    background-color: rgba(244, 114, 182, 0.28) !important;
+    background-color: rgba(244, 114, 182, 0.12) !important;
 }
 
 body.theme-light .theme-light-blob2 {
-    background-color: rgba(96, 165, 250, 0.28) !important;
+    background-color: rgba(96, 165, 250, 0.12) !important;
 }
 
 body.theme-light .theme-light-blob3 {
-    background-color: rgba(192, 132, 252, 0.25) !important;
+    background-color: rgba(192, 132, 252, 0.1) !important;
 }
 
 body.theme-light .theme-light-blob4 {
-    background-color: rgba(251, 191, 36, 0.22) !important;
-}
-
-/* Translucent Frosted Cards — Allows background ambient glow to shine through */
-body.theme-light .bg-\[\#0a0a0a\],
-body.theme-light .bg-\[\#141417\],
-body.theme-light .bg-\[\#111\],
-body.theme-light .bg-\[\#0f0f1e\],
-body.theme-light .bg-\[\#18181b\],
-body.theme-light .bg-\[\#121214\],
-body.theme-light .bg-black\/80,
-body.theme-light .bg-black\/60,
-body.theme-light .bg-black\/50,
-body.theme-light .bg-black\/40,
-body.theme-light .bg-black\/30,
-body.theme-light .bg-white\/5,
-body.theme-light .bg-white\/10,
-body.theme-light .glass,
-body.theme-light .glass-card {
-    background: rgba(255, 255, 255, 0.78) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.8) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
-    border-radius: 24px !important;
-    color: #1e293b !important;
-}
-
-/* Soft Readable Typography */
-body.theme-light .text-white,
-body.theme-light .text-slate-100,
-body.theme-light .text-zinc-100,
-body.theme-light .text-zinc-200 {
-    color: #1e293b !important;
-}
-
-body.theme-light .text-zinc-300,
-body.theme-light .text-zinc-400,
-body.theme-light [class*="text-white/"] {
-    color: #334155 !important;
-}
-
-body.theme-light .text-zinc-500,
-body.theme-light .text-zinc-600 {
-    color: #64748b !important;
-}
-
-/* ── PRESERVE VIBRANT COLOR ACCENT BUTTONS & CARDS ── */
-body.theme-light [class*="bg-purple"] *,
-body.theme-light [class*="bg-pink"] *,
-body.theme-light [class*="bg-blue"] *,
-body.theme-light [class*="bg-indigo"] *,
-body.theme-light [class*="bg-gradient"] *,
-body.theme-light .bg-gradient-premium *,
-body.theme-light button[class*="bg-"] *,
-body.theme-light [class*="bg-purple"],
-body.theme-light [class*="bg-pink"],
-body.theme-light [class*="bg-blue"],
-body.theme-light [class*="bg-indigo"],
-body.theme-light [class*="bg-gradient"],
-body.theme-light .bg-gradient-premium {
-    color: #ffffff !important;
-}
-
-body.theme-light .border-white\/5,
-body.theme-light .border-white\/10,
-body.theme-light .border-white\/15,
-body.theme-light .border-white\/20,
-body.theme-light .border-white\/30 {
-    border-color: rgba(226, 232, 240, 0.8) !important;
-}
-
-/* Form Inputs & Search */
-body.theme-light input,
-body.theme-light select,
-body.theme-light textarea {
-    color: #0f172a !important;
-    background-color: rgba(255, 255, 255, 0.85) !important;
-    border: 1px solid #cbd5e1 !important;
-}
-
-body.theme-light input::placeholder,
-body.theme-light textarea::placeholder {
-    color: #64748b !important;
-    opacity: 1 !important;
+    background-color: rgba(251, 191, 36, 0.1) !important;
 }
 
 /* ── Mobile perf: GPU composited without jank ── */
