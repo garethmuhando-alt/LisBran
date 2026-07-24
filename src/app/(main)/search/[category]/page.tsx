@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { SlidersHorizontal, ArrowLeft, TrendingUp } from "lucide-react";
+import { SlidersHorizontal, ArrowLeft, TrendingUp, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { SupplierCard } from "@/components/ui/SupplierCard";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { use } from "react";
 
@@ -12,6 +12,10 @@ export default function SearchResultsPage({ params }: { params: Promise<{ catego
   const resolvedParams = use(params);
   const router = useRouter();
   const [suppliers, setSuppliers] = useState<any[]>([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState("All");
+  const [selectedRating, setSelectedRating] = useState("All");
+  const [selectedPrice, setSelectedPrice] = useState("All");
 
   useEffect(() => {
     const baseMockup = [
@@ -95,7 +99,7 @@ export default function SearchResultsPage({ params }: { params: Promise<{ catego
           <h1 className="text-white font-black text-lg tracking-wide absolute left-1/2 -translate-x-1/2 drop-shadow-md whitespace-nowrap">
             {title}
           </h1>
-          <button className="p-2 bg-white/5 rounded-full border border-white/10 hover:bg-white/20 transition-colors">
+          <button onClick={() => setIsFilterOpen(true)} className="p-2 bg-white/5 rounded-full border border-white/10 hover:bg-white/20 transition-colors">
             <SlidersHorizontal size={20} className="text-pink-400" />
           </button>
         </div>
@@ -129,6 +133,120 @@ export default function SearchResultsPage({ params }: { params: Promise<{ catego
           ))}
         </div>
       </div>
+
+      {/* Filter Bottom Sheet */}
+      <AnimatePresence>
+        {isFilterOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4"
+            onClick={() => setIsFilterOpen(false)}
+          >
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="w-full max-w-md bg-[#18181b] border border-white/10 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl text-white overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
+                <h3 className="text-lg font-black tracking-wide flex items-center gap-2">
+                  <SlidersHorizontal size={18} className="text-pink-400" /> Filter Services
+                </h3>
+                <button
+                  onClick={() => setIsFilterOpen(false)}
+                  className="p-2 bg-white/5 rounded-full hover:bg-white/15 transition-colors"
+                >
+                  <X size={18} className="text-zinc-400" />
+                </button>
+              </div>
+
+              {/* Location Filter */}
+              <div className="mb-6">
+                <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-3">Location</label>
+                <div className="flex flex-wrap gap-2">
+                  {["All", "Nairobi", "Mombasa", "Kisumu", "Nakuru"].map((loc) => (
+                    <button
+                      key={loc}
+                      onClick={() => setSelectedLocation(loc)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
+                        selectedLocation === loc
+                          ? "bg-pink-500 text-white border-pink-400 shadow-[0_0_12px_rgba(236,72,153,0.5)]"
+                          : "bg-white/5 text-zinc-400 border-white/10 hover:border-white/20"
+                      }`}
+                    >
+                      {loc}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Rating Filter */}
+              <div className="mb-6">
+                <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-3">Rating</label>
+                <div className="flex gap-2">
+                  {["All", "4.5+", "4.8+", "5.0 ★"].map((rate) => (
+                    <button
+                      key={rate}
+                      onClick={() => setSelectedRating(rate)}
+                      className={`flex-1 py-2 rounded-xl text-xs font-bold border text-center transition-all ${
+                        selectedRating === rate
+                          ? "bg-purple-600 text-white border-purple-400 shadow-[0_0_12px_rgba(168,85,247,0.5)]"
+                          : "bg-white/5 text-zinc-400 border-white/10 hover:border-white/20"
+                      }`}
+                    >
+                      {rate}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price Tier Filter */}
+              <div className="mb-8">
+                <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-3">Price Tier</label>
+                <div className="flex gap-2">
+                  {["All", "$", "$$", "$$$"].map((price) => (
+                    <button
+                      key={price}
+                      onClick={() => setSelectedPrice(price)}
+                      className={`flex-1 py-2 rounded-xl text-xs font-bold border text-center transition-all ${
+                        selectedPrice === price
+                          ? "bg-blue-600 text-white border-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.5)]"
+                          : "bg-white/5 text-zinc-400 border-white/10 hover:border-white/20"
+                      }`}
+                    >
+                      {price}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    setSelectedLocation("All");
+                    setSelectedRating("All");
+                    setSelectedPrice("All");
+                  }}
+                  className="flex-1 py-3 rounded-2xl bg-white/5 text-zinc-400 font-bold text-sm hover:bg-white/10 transition-colors"
+                >
+                  Reset
+                </button>
+                <button
+                  onClick={() => setIsFilterOpen(false)}
+                  className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black text-sm shadow-[0_0_20px_rgba(236,72,153,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-transform"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
