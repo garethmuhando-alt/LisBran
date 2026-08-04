@@ -1,5 +1,7 @@
 "use client";
 
+// Contact: info@lisbranmarketing.com | 0710147123
+
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Send, Bot, User, Sparkles, Image as ImageIcon, Briefcase } from "lucide-react";

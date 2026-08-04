@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MapPin, Star, Gem, Map } from "lucide-react";
+import { MapPin, Star, Map, Palette, Share2, Target, Printer, Megaphone, ShoppingBag, Box, Camera, LineChart, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { SearchInput } from "@/components/ui/SearchInput";
@@ -197,38 +197,37 @@ export default function HomePage() {
         <section className="mt-4 relative z-10">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <span className="w-2 h-6 bg-slate-500 rounded-full inline-block" /> Services
+              <span className="w-2 h-6 bg-slate-500 rounded-full inline-block" /> LisBran Services
             </h2>
             <Link href="/categories" className="text-zinc-400 text-sm flex items-center gap-1 hover:text-white transition-colors">
               View more <span className="text-lg">›</span>
             </Link>
           </div>
-          
-          <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-hide snap-x md:grid md:grid-cols-3 md:gap-8">
+
+          <div className="flex gap-5 overflow-x-auto pb-6 scrollbar-hide snap-x">
             {[
-              { id: 1, name: "Graphic Design\nServices", image: "/icon-graphic.png", glow: "shadow-slate-500/50", url: "/services/graphic-design" },
-              { id: 2, name: "Marketing\nConsultancy", image: "/icon-marketing.png", glow: "shadow-slate-500/50", url: "/search/influencer" },
-              { id: 3, name: "Branding &\nPrinting", image: "lucide-gem", glow: "shadow-orange-500/50", url: "/search/printing" },
+              { id: 1,  name: "Creative\nDesign",          icon: <Palette   size={32} className="text-pink-400"   />, glow: "shadow-pink-500/30",    url: "/services/graphic-design" },
+              { id: 2,  name: "Social Media\nManagement",  icon: <Share2    size={32} className="text-purple-400" />, glow: "shadow-purple-500/30",  url: "/search/influencer" },
+              { id: 3,  name: "Brand Strategy\n& Position",icon: <Target    size={32} className="text-indigo-400" />, glow: "shadow-indigo-500/30",  url: "/categories" },
+              { id: 4,  name: "Branding &\nPrinting",      icon: <Printer   size={32} className="text-rose-400"   />, glow: "shadow-rose-500/30",    url: "/search/printing" },
+              { id: 5,  name: "Brand\nActivation",         icon: <Megaphone size={32} className="text-amber-400"  />, glow: "shadow-amber-500/30",   url: "/categories" },
+              { id: 6,  name: "Marketing\nMaterials",      icon: <ShoppingBag size={32} className="text-emerald-400"/>, glow: "shadow-emerald-500/30", url: "/categories" },
+              { id: 7,  name: "3D\nModelling",             icon: <Box       size={32} className="text-cyan-400"   />, glow: "shadow-cyan-500/30",    url: "/categories" },
+              { id: 8,  name: "Photography\n& Video",      icon: <Camera    size={32} className="text-violet-400" />, glow: "shadow-violet-500/30",  url: "/categories" },
+              { id: 9,  name: "Sales &\nConsultancy",      icon: <LineChart size={32} className="text-orange-400" />, glow: "shadow-orange-500/30",  url: "/categories" },
+              { id: 10, name: "Influencer\nManagement",    icon: <Users     size={32} className="text-pink-300"   />, glow: "shadow-pink-400/30",    url: "/search/influencer" },
             ].map((service) => (
-              <Link href={service.url} key={service.id} className="snap-start flex flex-col items-center gap-3 w-28 md:w-full flex-shrink-0 group cursor-pointer">
+              <Link href={service.url} key={service.id} className="snap-start flex flex-col items-center gap-3 w-28 flex-shrink-0 group cursor-pointer">
                 <div
-                  className={`p-1 rounded-full bg-black/40 shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-slate-700/50 cursor-pointer transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] hover:scale-105 relative ${service.glow} ${
-                    service.id === 1 ? 'anim-float-1' : service.id === 2 ? 'anim-float-2' : 'anim-float-3'
-                  }`}
+                  className={`p-1 rounded-full bg-black/40 shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-slate-700/50 cursor-pointer transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 relative ${service.glow}`}
                 >
-                  <div className={`relative w-24 h-24 rounded-full overflow-hidden bg-black/80 flex items-center justify-center`}>
-                    {service.image === "lucide-gem" ? (
-                      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-orange-900/60 to-orange-500/20 group-hover:scale-125 transition-transform duration-500">
-                        <Image src="/bg-events.png" alt="Branding Base" fill className="opacity-50 mix-blend-screen scale-150 rotate-90" />
-                        <div className="absolute inset-0 border-[2px] border-orange-500/30 rounded-full m-4 shadow-[0_0_10px_rgba(249,115,22,0.8)]" />
-                        <Gem size={38} className="text-orange-400 drop-shadow-[0_0_15px_rgba(249,115,22,1)] relative z-10" strokeWidth={1.5} />
-                      </div>
-                    ) : (
-                      <Image src={service.image} alt={service.name.replace('\n', ' ')} fill className="object-cover mix-blend-screen scale-110 group-hover:scale-125 transition-transform duration-200" />
-                    )}
+                  <div className="relative w-24 h-24 rounded-full overflow-hidden bg-black/80 flex items-center justify-center">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      {service.icon}
+                    </div>
                   </div>
                 </div>
-                <span className="text-xs md:text-sm text-center text-zinc-300 font-bold whitespace-pre-line leading-tight group-hover:text-white transition-colors">{service.name}</span>
+                <span className="text-xs text-center text-zinc-300 font-bold whitespace-pre-line leading-tight group-hover:text-white transition-colors">{service.name}</span>
               </Link>
             ))}
           </div>
