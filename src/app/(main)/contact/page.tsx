@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Mail, Phone, MessageCircle, Instagram, Linkedin, ArrowLeft } from "lucide-react";
+import { Mail, Phone, MessageCircle, ArrowLeft } from "lucide-react";
 
 export default function ContactPage() {
   return (
@@ -90,7 +90,7 @@ export default function ContactPage() {
           className="flex items-center gap-4 bg-zinc-900/80 border border-white/10 rounded-2xl p-5 hover:border-pink-500/40 hover:shadow-[0_0_20px_rgba(236,72,153,0.15)] transition-all group"
         >
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-orange-500/20 border border-pink-500/30 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-            <Instagram size={22} className="text-pink-400" />
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-pink-400"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           </div>
           <div>
             <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest mb-0.5">Instagram</p>
@@ -107,7 +107,7 @@ export default function ContactPage() {
           className="flex items-center gap-4 bg-zinc-900/80 border border-white/10 rounded-2xl p-5 hover:border-blue-500/40 hover:shadow-[0_0_20px_rgba(37,99,235,0.15)] transition-all group"
         >
           <div className="w-12 h-12 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-            <Linkedin size={22} className="text-blue-400" />
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
           </div>
           <div>
             <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest mb-0.5">LinkedIn</p>
