@@ -17,17 +17,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <AnimatedBackground />
       {/* Sticky top navigation — visible on every page */}
       <TopNav />
-      <div
-        className="flex-1 pb-24 relative z-10 text-white min-h-screen"
-        style={{
-          overflowY: 'scroll',
-          overflowX: 'hidden',
-          WebkitOverflowScrolling: 'touch' as never,
-          overscrollBehavior: 'contain',
-          touchAction: 'pan-y',
-          scrollbarWidth: 'none',
-        }}
-      >
+      <div className="flex-1 relative z-10 text-white pb-24">
         {children}
       </div>
       <FloatingSuggestionBox />
