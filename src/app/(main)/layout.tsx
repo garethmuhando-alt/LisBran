@@ -20,15 +20,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <div
         className="flex-1 pb-24 relative z-10 text-white min-h-screen"
         style={{
-          overflowY: 'auto',
+          overflowY: 'scroll',
           overflowX: 'hidden',
           WebkitOverflowScrolling: 'touch' as never,
           overscrollBehavior: 'contain',
           touchAction: 'pan-y',
-        }}
-        onWheel={(e) => {
-          // Ensure mouse wheel scrolling works on desktop
-          e.currentTarget.scrollTop += e.deltaY;
+          scrollbarWidth: 'none',
         }}
       >
         {children}
