@@ -41,7 +41,7 @@ export default function HomePage() {
           <Link href="/home" className="flex flex-col gap-1 items-center">
             <div className="anim-float w-14 h-14 bg-white border border-white/20 shadow-[0_0_15px_rgba(0,0,0,0.15)] rounded-full flex items-center justify-center overflow-hidden cursor-pointer">
               <Image
-                src="/LisBran PNG  Logo (512px by 512px)- Black.png"
+                src="/LisBran PNG  Logo (512px by 512px)- White.png"
                 alt="LisBran logo"
                 width={44}
                 height={44}
