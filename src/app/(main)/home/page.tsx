@@ -38,32 +38,27 @@ export default function HomePage() {
         {/* Header */}
         <header className="flex items-start justify-between mt-2 relative">
           
-          <div className="flex flex-col gap-1 items-center">
-          <div 
-            className="anim-float w-14 h-14 bg-black border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.2)] rounded-full flex items-center justify-center text-white text-2xl cursor-pointer"
-            style={{ fontFamily: "'Brush Script MT', 'Great Vibes', cursive" }}
-          >
-            LB
-          </div>
-            <p 
-              className="text-pink-300 text-2xl font-bold tracking-widest drop-shadow-[0_0_10px_rgba(236,72,153,0.8)] mt-1" 
-              style={{ fontFamily: "'Brush Script MT', cursive" }}
-            >
-              Hi, LisBran!
-            </p>
-          </div>
+          <Link href="/home" className="flex flex-col gap-1 items-center">
+            <div className="anim-float w-14 h-14 bg-white border border-white/20 shadow-[0_0_15px_rgba(0,0,0,0.15)] rounded-full flex items-center justify-center overflow-hidden cursor-pointer">
+              <Image
+                src="/LisBran PNG  Logo (512px by 512px)- Black.png"
+                alt="LisBran logo"
+                width={44}
+                height={44}
+                className="object-contain"
+                priority
+              />
+            </div>
+          </Link>
 
           {/* Centered Floating Location Selector with Backdrop Dismiss */}
           <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center top-0 z-40 pt-2">
             <button
               type="button"
               onClick={() => { setIsLocOpen(!isLocOpen); }}
-              className="flex items-center justify-center gap-2 bg-zinc-900/90 border border-purple-500/50 rounded-full px-4 py-1.5 shadow-[0_0_20px_rgba(168,85,247,0.3)] cursor-pointer text-white text-sm font-bold hover:scale-105 transition-transform duration-150 active:scale-95"
+              className="min-w-[150px] flex items-center justify-center bg-zinc-900/95 border border-purple-500/60 rounded-full px-5 py-2 shadow-[0_0_25px_rgba(168,85,247,0.25)] cursor-pointer text-white text-sm font-bold hover:scale-105 transition-transform duration-150 active:scale-95"
             >
-              <div className="anim-float-pin">
-                 <MapPin size={16} className="text-pink-400 drop-shadow-[0_0_8px_rgba(236,72,153,1)]" />
-              </div>
-              {location.charAt(0).toUpperCase() + location.slice(1)}
+              Choose a location
             </button>
             
             <AnimatePresence>
@@ -104,7 +99,6 @@ export default function HomePage() {
                         <button
                           key={loc}
                           type="button"
-                          onMouseEnter={() => setHoverLoc(loc)}
                           onClick={() => {
                             setLocation(loc);
                             localStorage.setItem('lisbran_location', loc);

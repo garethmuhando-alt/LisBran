@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function SplashPage() {
@@ -18,7 +19,15 @@ export default function SplashPage() {
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         className="relative z-10 w-32 h-32 mb-16 rounded-full bg-black border-2 border-white/20 flex items-center justify-center shadow-[0_20px_50px_rgba(0,0,0,0.6)] cursor-pointer hover:shadow-[0_20px_60px_rgba(168,85,247,0.3)] transition-shadow"
       >
-        <span className="text-white text-[4.5rem] leading-none pb-2" style={{ fontFamily: "'Brush Script MT', 'Great Vibes', cursive" }}>LB</span>
+        <div className="relative w-24 h-24 rounded-full overflow-hidden">
+          <Image
+            src="/LisBran PNG  Logo (512px by 512px)- White.png"
+            alt="LisBran logo"
+            fill
+            className="object-contain"
+            priority
+          />
+        </div>
         <div className="absolute inset-0 rounded-full bg-gradient-to-bl from-pink-500/10 to-purple-500/10 blur-xl -z-10" />
       </motion.div>
 

@@ -17,6 +17,8 @@
 html {
   text-rendering: optimizeSpeed;
   -webkit-font-smoothing: antialiased;
+  overflow-y: auto;
+  height: auto;
 }
 
 body {
@@ -26,11 +28,18 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  overflow-y: auto;
   /* Prevent overscroll bounce causing repaint on Android */
   overscroll-behavior: none;
   /* Force GPU layer for the root */
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
+}
+
+@media (min-width: 768px) {
+  .overflow-hidden {
+    overflow-y: visible !important;
+  }
 }
 
 /* Remove tap flash on Android */
@@ -118,33 +127,85 @@ body {
   touch-action: pan-y;
 }
 
-/* ── System-Style Dark & Light Mode Theme Canvas ── */
-
-/* Global Light Mode — Affects root page background canvas ONLY (like iOS / Android system light mode). Service buttons, tiles, cards, and gradients remain 100% untouched */
+/* ── System-Style Light Canvas ── */
+/* Only change the root page background canvas and invert text color for readability.
+   Do NOT alter card/panel backgrounds or component styles here. */
 body.theme-light,
 body.theme-light > main,
 body.theme-light .theme-light-bg {
-    background-color: #f3f4f6 !important;
+  background-color: #f8fafc !important;
+  color-scheme: light;
 }
 
 body.theme-light .theme-light-gradient {
-    background: linear-gradient(to top, #f3f4f6 0%, rgba(243, 244, 246, 0.7) 50%, #f3f4f6 100%) !important;
+  background-image: linear-gradient(to top, #f8fafc, rgba(248,250,252,0.75)) !important;
 }
 
 body.theme-light .theme-light-blob1 {
-    background-color: rgba(244, 114, 182, 0.1) !important;
+  background-color: rgba(236, 72, 153, 0.12) !important;
 }
 
 body.theme-light .theme-light-blob2 {
-    background-color: rgba(96, 165, 250, 0.1) !important;
+  background-color: rgba(59, 130, 246, 0.12) !important;
 }
 
 body.theme-light .theme-light-blob3 {
-    background-color: rgba(192, 132, 252, 0.08) !important;
+  background-color: rgba(168, 85, 247, 0.12) !important;
 }
 
 body.theme-light .theme-light-blob4 {
-    background-color: rgba(251, 191, 36, 0.08) !important;
+  background-color: rgba(251, 191, 36, 0.12) !important;
+}
+
+body.theme-light [class*="bg-[#0a0a0a]"],
+body.theme-light [class*="bg-[#141417]"],
+body.theme-light [class*="bg-[#111]"],
+body.theme-light [class*="bg-[#0d0d1a]"],
+body.theme-light [class*="bg-[#0b0b0f]"],
+body.theme-light [class*="bg-[#06060a]"] {
+  background-color: #f8fafc !important;
+  background-image: none !important;
+}
+
+body.theme-light .glass,
+body.theme-light .glass-card,
+body.theme-light [class*="bg-black/"] {
+  background: rgba(255, 255, 255, 0.88) !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+  color: #0f172a !important;
+}
+
+body.theme-light .glass-card {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+body.theme-light .bg-white\/5 {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+}
+
+body.theme-light .bg-white\/10 {
+  background-color: rgba(255, 255, 255, 0.82) !important;
+}
+
+body.theme-light .bg-zinc-900\/95,
+body.theme-light .bg-zinc-900\/60,
+body.theme-light .bg-zinc-900 {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+}
+
+body.theme-light .text-white,
+body.theme-light .text-slate-50,
+body.theme-light .text-zinc-100,
+body.theme-light .text-slate-100 {
+  color: #0f172a !important;
+}
+
+body.theme-light .text-zinc-400,
+body.theme-light .text-zinc-500,
+body.theme-light .text-zinc-600,
+body.theme-light .text-slate-400 {
+  color: #475569 !important;
 }
 
 /* ── Mobile perf: GPU composited without jank ── */
@@ -156,15 +217,6 @@ body.theme-light .theme-light-blob4 {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     background-color: rgba(18, 18, 22, 0.95) !important;
-  }
-
-  /* Light mode mobile card background */
-  body.theme-light .glass,
-  body.theme-light .glass-card,
-  body.theme-light [class*="backdrop-blur"] {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    background-color: #ffffff !important;
   }
 
   /* Disable heavy blur divs that cause GPU overdraw every scroll frame */

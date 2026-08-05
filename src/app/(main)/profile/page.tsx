@@ -52,10 +52,16 @@ export default function ProfilePage() {
           <motion.div 
             animate={{ y: [0, -5, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="w-14 h-14 bg-black border-2 border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.8)] rounded-full flex items-center justify-center text-white text-2xl cursor-pointer"
-            style={{ fontFamily: "'Brush Script MT', 'Great Vibes', cursive" }}
+            className="w-14 h-14 bg-black border-2 border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.8)] rounded-full flex items-center justify-center overflow-hidden cursor-pointer"
           >
-            LB
+            <Image
+              src="/LisBran PNG  Logo (512px by 512px)- White.png"
+              alt="LisBran logo"
+              width={34}
+              height={34}
+              className="object-contain"
+              priority
+            />
           </motion.div>
           <div>
             <h1 className="text-white font-bold text-2xl">My Account</h1>
