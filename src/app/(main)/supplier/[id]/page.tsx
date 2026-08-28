@@ -203,7 +203,7 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
   ];
 
   return (
-    <div className="relative min-h-screen bg-[#06060a] pb-36 overflow-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <div className="relative min-h-screen bg-[#06060a] pb-36 overflow-x-clip" style={{ fontFamily: "'Inter', sans-serif" }}>
 
       {/* Animated ambient background glows */}
       <motion.div animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}

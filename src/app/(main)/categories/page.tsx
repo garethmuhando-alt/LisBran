@@ -18,7 +18,7 @@ export default function CategoriesPage() {
       {/* Top Gradient */}
       <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-purple-900/20 to-transparent pointer-events-none" />
 
-      <div className="sticky top-0 z-20 pt-2 pb-6 bg-[#0a0a0a]/90 backdrop-blur-md">
+      <div className="sticky top-12 z-20 pt-2 pb-6 bg-[#0a0a0a]/90 backdrop-blur-md">
         <SearchInput placeholder="Search services" autoFocus />
       </div>
 

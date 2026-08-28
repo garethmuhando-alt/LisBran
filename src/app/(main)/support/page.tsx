@@ -54,7 +54,7 @@ export default function AISupportPage() {
   };
 
   return (
-    <div className="relative h-screen bg-[#0a0a0a] flex flex-col font-sans overflow-hidden">
+    <div className="relative h-[calc(100dvh-3rem)] bg-[#0a0a0a] flex flex-col font-sans overflow-hidden">
       {/* Background Glow */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />

@@ -49,7 +49,7 @@ export default function LogoDesignPage() {
   };
 
   return (
-    <div className="relative p-6 pt-12 pb-32 min-h-screen bg-[#141417] overflow-hidden">
+    <div className="relative p-6 pt-12 pb-32 min-h-screen bg-[#141417] overflow-x-clip">
       {/* Background Effect */}
       <motion.div 
         animate={{ scale: [1.05, 1.15, 1.05] }}

@@ -14,12 +14,12 @@ export default function EventRadarPage() {
   ];
 
   return (
-    <div className="relative p-6 pt-12 min-h-screen pb-32 bg-[#0a0a0a] overflow-hidden">
+    <div className="relative p-6 pt-12 min-h-screen pb-32 bg-[#0a0a0a] overflow-x-clip">
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[120px] pointer-events-none" />
       
       <div className="relative z-10 max-w-2xl mx-auto">
-        <div className="flex items-center gap-4 mb-6 sticky top-0 bg-[#0a0a0a]/80 backdrop-blur-md py-4 z-50">
+        <div className="flex items-center gap-4 mb-6 sticky top-12 bg-[#0a0a0a]/80 backdrop-blur-md py-4 z-40">
           <button onClick={() => { router.back(); }} className="p-2 rounded-full hover:bg-white/10 transition-colors text-white bg-white/5 border border-white/10">
             <ArrowLeft size={20} />
           </button>

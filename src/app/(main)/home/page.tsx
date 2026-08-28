@@ -32,7 +32,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative p-6 pb-12 min-h-screen overflow-hidden text-white">
+    <div className="relative p-6 pb-12 min-h-screen overflow-x-clip text-white">
 
       <div className="relative z-10 flex flex-col gap-6 h-full">
         {/* Header */}

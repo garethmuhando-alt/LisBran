@@ -388,7 +388,7 @@ export default function SellerOnboardingPage() {
   const step2Valid = bio.trim().length > 0; // portfolio is optional
 
   return (
-    <div className="relative p-6 pt-12 min-h-screen bg-[#141417] overflow-hidden scrollbar-hide">
+    <div className="relative p-6 pt-12 min-h-screen bg-[#141417] overflow-x-clip scrollbar-hide">
       <div className="fixed inset-0 z-0 pointer-events-none opacity-20">
         <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px]" />
       </div>
@@ -474,7 +474,7 @@ export default function SellerOnboardingPage() {
       </AnimatePresence>
 
       <div className="relative z-10 flex flex-col h-full max-w-md mx-auto">
-        <div className="flex items-center mb-8 sticky top-0 bg-[#141417]/80 backdrop-blur-xl z-20 py-2">
+        <div className="flex items-center mb-8 sticky top-12 bg-[#141417]/90 backdrop-blur-xl z-20 py-2">
           <button 
             onClick={() => { step === 1 ? router.back() : setStep(step - 1); }} 
             className="p-2 bg-white/5 rounded-full border border-white/10 hover:bg-white/20 transition-colors"
@@ -492,7 +492,7 @@ export default function SellerOnboardingPage() {
           <AnimatePresence mode="wait">
             {step === 1 && (
               <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6 pb-20">
-                <div className="flex bg-black/40 p-1 rounded-2xl border border-white/10 mb-6 sticky top-[60px] z-20 backdrop-blur-lg">
+                <div className="flex bg-black/40 p-1 rounded-2xl border border-white/10 mb-6 backdrop-blur-lg">
                   <button onClick={() => { setIsLoginMode(false); }} className={`flex-1 py-2 text-sm font-bold rounded-xl transition-all ${!isLoginMode ? 'bg-purple-500 text-white shadow-lg' : 'text-zinc-500 hover:text-white'}`}>New Seller</button>
                   <button onClick={() => { setIsLoginMode(true); }} className={`flex-1 py-2 text-sm font-bold rounded-xl transition-all ${isLoginMode ? 'bg-purple-500 text-white shadow-lg' : 'text-zinc-500 hover:text-white'}`}>Existing</button>
                 </div>

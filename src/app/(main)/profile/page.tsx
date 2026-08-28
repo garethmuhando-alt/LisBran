@@ -33,7 +33,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="relative p-6 min-h-screen pb-32 bg-[#0a0a0a] overflow-hidden">
+    <div className="relative p-6 min-h-screen pb-32 bg-[#0a0a0a] overflow-x-clip">
       
       {/* Dynamic AI Background Image Wrapper */}
       <motion.div 

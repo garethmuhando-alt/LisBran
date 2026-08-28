@@ -22,7 +22,7 @@ export default function NotificationsEventsPage() {
   ];
 
   return (
-    <div className="relative p-6 min-h-screen pb-32 overflow-hidden bg-[#0a0a0a]">
+    <div className="relative p-6 min-h-screen pb-32 overflow-x-clip bg-[#0a0a0a]">
       {/* Dynamic AI Background Image Wrapper for Events */}
       <motion.div 
         animate={{ scale: [1.1, 1.2, 1.1], rotate: [0, -2, 0] }}
@@ -34,7 +34,7 @@ export default function NotificationsEventsPage() {
       </motion.div>
 
       <div className="relative z-10">
-        <div className="flex items-center gap-3 mb-8 sticky top-0 pt-2 pb-4 bg-[#0a0a0a]/60 backdrop-blur-xl z-20 border-b border-white/5">
+        <div className="flex items-center gap-3 mb-8 sticky top-12 pt-2 pb-4 bg-[#0a0a0a]/80 backdrop-blur-xl z-20 border-b border-white/5">
           <motion.div 
             animate={{ y: [0, -4, 0], rotate: [0, 10, -10, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}

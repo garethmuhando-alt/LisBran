@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function SplashPage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6 relative bg-gradient-to-b from-[#111] to-[#0a0a0a] overflow-hidden">
+    <div className="flex flex-col items-center justify-center min-h-screen p-6 relative bg-gradient-to-b from-[#111] to-[#0a0a0a] overflow-x-clip">
       
       {/* Dynamic Background Glows */}
       <div className="absolute top-1/4 -left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] pointer-events-none" />

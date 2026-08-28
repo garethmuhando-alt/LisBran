@@ -9,7 +9,7 @@ export default function SurveysPage() {
   return (
     <div className="p-6 min-h-screen bg-[#0a0a0a]">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-8 sticky top-0 pt-2 pb-4 bg-[#0a0a0a]/90 backdrop-blur-md z-20">
+      <div className="flex items-center gap-3 mb-8 sticky top-12 pt-2 pb-4 bg-[#0a0a0a]/90 backdrop-blur-md z-20">
         <Link href="/profile" className="p-2 rounded-full hover:bg-white/10 transition-colors text-white">
           <ArrowLeft size={24} />
         </Link>

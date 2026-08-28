@@ -63,7 +63,7 @@ export default function SellerDashboardPage() {
   };
 
   return (
-    <div className="relative p-6 pt-12 min-h-screen bg-[#111] overflow-hidden text-white pb-32">
+    <div className="relative p-6 pt-12 min-h-screen bg-[#111] overflow-x-clip text-white pb-32">
       {/* Background Graphic */}
       <div className="absolute top-0 right-0 w-full h-80 bg-gradient-to-b from-purple-900/30 to-transparent pointer-events-none" />
 

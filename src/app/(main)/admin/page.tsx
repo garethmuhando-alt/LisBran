@@ -73,7 +73,7 @@ export default function AdminControlRoom() {
 
   if (!isAuthenticated) {
     return (
-      <div className="relative p-6 min-h-screen bg-[#0a0a0a] overflow-hidden flex items-center justify-center font-mono">
+      <div className="relative p-6 min-h-screen bg-[#0a0a0a] overflow-x-clip flex items-center justify-center font-mono">
         <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
           <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-green-600/20 rounded-full blur-[120px]" />
         </div>
@@ -132,7 +132,7 @@ export default function AdminControlRoom() {
 
   // Dashboard Render
   return (
-    <div className="relative p-6 pt-12 min-h-screen bg-[#0a0a0a] overflow-hidden text-white pb-32 font-mono">
+    <div className="relative p-6 pt-12 min-h-screen bg-[#0a0a0a] overflow-x-clip text-white pb-32 font-mono">
       {/* Hacker/Cyberpunk Admin Background */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-20">
         <div className="absolute top-0 right-0 w-full h-[500px] bg-gradient-to-b from-green-900/20 to-transparent" />

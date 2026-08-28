@@ -48,7 +48,7 @@ export default function MarketingTrendsPage() {
   ];
 
   return (
-    <div className="relative p-6 pt-12 pb-32 min-h-screen bg-[#141417] overflow-hidden">
+    <div className="relative p-6 pt-12 pb-32 min-h-screen bg-[#141417] overflow-x-clip">
       {/* Holographic Glowing Aesthetic Background Effect */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen">
         <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 10, repeat: Infinity }} className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-pink-600/40 via-rose-500/20 to-transparent rounded-full blur-[120px]" />
@@ -58,7 +58,7 @@ export default function MarketingTrendsPage() {
 
       <div className="relative z-10 flex flex-col h-full max-w-md mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8 sticky top-0 pt-6 pb-4 bg-[#141417]/90 backdrop-blur-xl z-20 border-b border-white/5">
+        <div className="flex items-center justify-between mb-8 sticky top-12 pt-4 pb-4 bg-[#141417]/90 backdrop-blur-xl z-20 border-b border-white/5">
           <button onClick={() => { router.back(); }} className="p-2 bg-white/5 rounded-full border border-white/10 hover:bg-white/20 transition-colors">
             <ArrowLeft className="text-white" size={20} />
           </button>
