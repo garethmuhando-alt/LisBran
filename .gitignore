@@ -39,3 +39,18 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# allow the documented env template
+!.env.example
+
+# impeccable per-machine state
+.impeccable/config.local.json
+.impeccable/hook.cache.json
+.impeccable/decision/
+.impeccable/review/
+.impeccable/build/
+
+# local tooling output
+.playwright-mcp/
+.claude/
+.impeccable/questions/

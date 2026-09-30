@@ -1,0 +1,587 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-30T00:15:30.938971+00:00",
+  "title": "Design System: LisBran",
+  "extensions": {
+    "colorMeta": {
+      "concrete-ground": {
+        "role": "neutral",
+        "displayName": "Concrete Ground",
+        "canonical": "#e9e6e1",
+        "tonalRamp": [
+          "#2c2820",
+          "#4e4639",
+          "#6f6452",
+          "#91836a",
+          "#aa9f8b",
+          "#c3bbad",
+          "#dcd7cf",
+          "#f4f3f0"
+        ]
+      },
+      "concrete-surface": {
+        "role": "neutral",
+        "displayName": "Concrete Surface",
+        "canonical": "#f5f3ef",
+        "tonalRamp": [
+          "#2f291d",
+          "#534934",
+          "#77684a",
+          "#9b8761",
+          "#b2a384",
+          "#c8bda8",
+          "#dfd8cb",
+          "#f5f3ef"
+        ]
+      },
+      "concrete-surface-deep": {
+        "role": "neutral",
+        "displayName": "Concrete Surface Deep",
+        "canonical": "#dcd8d1",
+        "tonalRamp": [
+          "#2b2821",
+          "#4d463a",
+          "#6e6453",
+          "#8f826d",
+          "#a89f8d",
+          "#c2bbae",
+          "#dbd7cf",
+          "#f4f3f1"
+        ]
+      },
+      "carbon-ink": {
+        "role": "neutral",
+        "displayName": "Carbon Ink",
+        "canonical": "#141414",
+        "tonalRamp": [
+          "#262626",
+          "#434343",
+          "#616161",
+          "#7e7e7e",
+          "#9b9b9b",
+          "#b8b8b8",
+          "#d5d5d5",
+          "#f2f2f2"
+        ]
+      },
+      "ink-secondary": {
+        "role": "neutral",
+        "displayName": "Ink Secondary",
+        "canonical": "#494744",
+        "tonalRamp": [
+          "#282725",
+          "#464441",
+          "#64615d",
+          "#827f79",
+          "#9e9c97",
+          "#bab8b5",
+          "#d7d5d4",
+          "#f3f2f2"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted (Ash)",
+        "canonical": "#686560",
+        "tonalRamp": [
+          "#282725",
+          "#464441",
+          "#64625d",
+          "#837f79",
+          "#9f9c97",
+          "#bbb9b5",
+          "#d7d6d3",
+          "#f3f2f2"
+        ]
+      },
+      "rod": {
+        "role": "neutral",
+        "displayName": "Carbon Rod",
+        "canonical": "#141414",
+        "tonalRamp": [
+          "#262626",
+          "#434343",
+          "#616161",
+          "#7e7e7e",
+          "#9b9b9b",
+          "#b8b8b8",
+          "#d5d5d5",
+          "#f2f2f2"
+        ]
+      },
+      "rod-slack": {
+        "role": "neutral",
+        "displayName": "Slack Ash",
+        "canonical": "#c7c2ba",
+        "tonalRamp": [
+          "#2a2722",
+          "#4a453c",
+          "#6b6356",
+          "#8b8171",
+          "#a59d90",
+          "#bfbab1",
+          "#d9d6d1",
+          "#f4f3f1"
+        ]
+      },
+      "cord-red": {
+        "role": "primary",
+        "displayName": "Cord Red",
+        "canonical": "#d9143a",
+        "tonalRamp": [
+          "#460613",
+          "#7b0b21",
+          "#b1102f",
+          "#e6153e",
+          "#ee4868",
+          "#f37d94",
+          "#f8b2c0",
+          "#fde8ec"
+        ]
+      },
+      "cord-ink": {
+        "role": "neutral",
+        "displayName": "Cord Ink",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#262626",
+          "#434343",
+          "#616161",
+          "#7e7e7e",
+          "#9b9b9b",
+          "#b8b8b8",
+          "#d5d5d5",
+          "#f2f2f2"
+        ]
+      },
+      "verified-green": {
+        "role": "status",
+        "displayName": "Verified Green",
+        "canonical": "#1e7a45",
+        "tonalRamp": [
+          "#0f3d23",
+          "#1b6c3d",
+          "#269b58",
+          "#32ca72",
+          "#5ed792",
+          "#8de3b1",
+          "#bceed1",
+          "#ebfaf1"
+        ]
+      },
+      "night-ground": {
+        "role": "neutral",
+        "displayName": "Carbon Night Ground",
+        "canonical": "#121212",
+        "tonalRamp": [
+          "#262626",
+          "#434343",
+          "#616161",
+          "#7e7e7e",
+          "#9b9b9b",
+          "#b8b8b8",
+          "#d5d5d5",
+          "#f2f2f2"
+        ]
+      },
+      "night-surface": {
+        "role": "neutral",
+        "displayName": "Night Surface",
+        "canonical": "#1b1b1a",
+        "tonalRamp": [
+          "#272726",
+          "#454542",
+          "#62625f",
+          "#80807b",
+          "#9d9d99",
+          "#b9b9b7",
+          "#d6d6d4",
+          "#f2f2f2"
+        ]
+      },
+      "night-surface-deep": {
+        "role": "neutral",
+        "displayName": "Night Surface Deep",
+        "canonical": "#262624",
+        "tonalRamp": [
+          "#272725",
+          "#454542",
+          "#63635e",
+          "#81817a",
+          "#9e9e98",
+          "#babab6",
+          "#d6d6d4",
+          "#f3f3f2"
+        ]
+      },
+      "night-ink": {
+        "role": "neutral",
+        "displayName": "Night Ink",
+        "canonical": "#ece9e4",
+        "tonalRamp": [
+          "#2d2820",
+          "#4f4638",
+          "#716550",
+          "#948368",
+          "#ac9f89",
+          "#c4bbac",
+          "#dcd7ce",
+          "#f4f3f0"
+        ]
+      },
+      "night-ink-secondary": {
+        "role": "neutral",
+        "displayName": "Night Ink Secondary",
+        "canonical": "#b3afa8",
+        "tonalRamp": [
+          "#292724",
+          "#48453f",
+          "#67625a",
+          "#868075",
+          "#a29d94",
+          "#bdb9b3",
+          "#d8d6d2",
+          "#f3f2f1"
+        ]
+      },
+      "night-ink-muted": {
+        "role": "neutral",
+        "displayName": "Night Ink Muted",
+        "canonical": "#8f8b84",
+        "tonalRamp": [
+          "#282724",
+          "#474440",
+          "#65625c",
+          "#847f78",
+          "#a09c96",
+          "#bbb9b5",
+          "#d7d6d3",
+          "#f3f2f2"
+        ]
+      },
+      "night-rod": {
+        "role": "neutral",
+        "displayName": "Night Rod",
+        "canonical": "#d8d4cd",
+        "tonalRamp": [
+          "#2b2822",
+          "#4c463b",
+          "#6c6455",
+          "#8d826e",
+          "#a79e8e",
+          "#c1baaf",
+          "#dad7d0",
+          "#f4f3f1"
+        ]
+      },
+      "night-rod-slack": {
+        "role": "neutral",
+        "displayName": "Night Slack",
+        "canonical": "#34332f",
+        "tonalRamp": [
+          "#282724",
+          "#474540",
+          "#65635c",
+          "#848177",
+          "#a09e96",
+          "#bcbab4",
+          "#d7d6d3",
+          "#f3f3f2"
+        ]
+      },
+      "night-cord-red": {
+        "role": "primary",
+        "displayName": "Night Cord Red",
+        "canonical": "#ff3355",
+        "tonalRamp": [
+          "#4c000d",
+          "#870016",
+          "#c10020",
+          "#fb002a",
+          "#ff3758",
+          "#ff7189",
+          "#ffabb9",
+          "#ffe6ea"
+        ]
+      },
+      "night-cord-ink": {
+        "role": "neutral",
+        "displayName": "Night Cord Ink",
+        "canonical": "#141414",
+        "tonalRamp": [
+          "#262626",
+          "#434343",
+          "#616161",
+          "#7e7e7e",
+          "#9b9b9b",
+          "#b8b8b8",
+          "#d5d5d5",
+          "#f2f2f2"
+        ]
+      },
+      "night-verified-green": {
+        "role": "status",
+        "displayName": "Night Verified Green",
+        "canonical": "#4cc47a",
+        "tonalRamp": [
+          "#133a22",
+          "#21653b",
+          "#309155",
+          "#3ebd6f",
+          "#68cd8f",
+          "#94dcb0",
+          "#c0ead0",
+          "#ecf9f1"
+        ]
+      },
+      "film-edge": {
+        "role": "neutral",
+        "displayName": "Film Edge",
+        "canonical": "#13181e",
+        "tonalRamp": [
+          "#1e252f",
+          "#344253",
+          "#4b5f76",
+          "#617b9a",
+          "#8499b1",
+          "#a8b7c8",
+          "#ccd4df",
+          "#eff2f5"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Inner-page h1 on its rod; masthead h1 runs clamp(2.4rem, 4.6vw, 4.5rem). Archivo wdth 80, weight 800, balanced wrap."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section h2s, 1.875rem to 3.75rem by breakpoint."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Supplier names, service names in the index, pane heads."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Descriptions and bios, measure 48ch to 70ch."
+      },
+      "body-strong": {
+        "displayName": "Body Strong",
+        "purpose": "Nav, chips, legends, field labels, row names; buttons at 700."
+      },
+      "label": {
+        "displayName": "Mono Label",
+        "purpose": "Every compared number: KES prices, turnaround, rating, counts, phone. Tabular. Never uppercase."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-cord",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Cords morphing between taut and slack, and row reordering."
+      },
+      {
+        "name": "duration-cord",
+        "value": "550ms, 35ms stagger per row",
+        "purpose": "Tension Network cord morph."
+      },
+      {
+        "name": "duration-row-layout",
+        "value": "450ms",
+        "purpose": "Supplier rows reordering by match."
+      },
+      {
+        "name": "duration-nav-solid",
+        "value": "300ms",
+        "purpose": "Top bar changing from transparent over the film to solid."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "0.01ms",
+        "purpose": "All animation and transition collapse under prefers-reduced-motion; cords jump to state."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px",
+        "note": "Top bar carries navigation from here; bottom tab bar below."
+      },
+      {
+        "name": "wide",
+        "value": "(min-aspect-ratio: 4/3) and (min-height: 521px)",
+        "note": "Full-screen film with words on its carbon wash; otherwise 16:9 film with words stacked on film-edge."
+      }
+    ],
+    "borders": [
+      {
+        "name": "rod",
+        "value": "1.5px solid var(--rod)",
+        "purpose": "Structure: section heads, panes, outline buttons, nav edges."
+      },
+      {
+        "name": "slack",
+        "value": "1px solid var(--rod-soft)",
+        "purpose": "Row dividers, idle chip and field borders."
+      },
+      {
+        "name": "empty-slot",
+        "value": "1px dashed var(--rod-soft)",
+        "purpose": "Empty states awaiting content."
+      }
+    ],
+    "scrims": [
+      {
+        "name": "film-top",
+        "value": "linear-gradient(to bottom, rgba(18,18,18,0.7), rgba(18,18,18,0))",
+        "purpose": "Legibility under the header on the film only."
+      },
+      {
+        "name": "film-foot",
+        "value": "linear-gradient(to top, rgba(18,18,18,0.96) 40%, rgba(18,18,18,0))",
+        "purpose": "Legibility beneath masthead words in the wide layout only."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one tension action per block: cord fill, square, trailing arrow.",
+      "html": "<button class=\"ds-btn-primary\">Find a supplier <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 24px;background:var(--cord,#d9143a);color:var(--cord-ink,#fff);font-family:var(--font-archivo),'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:1rem;border:0;border-radius:0;cursor:pointer;transition:filter .15s}.ds-btn-primary:hover{filter:brightness(1.1)}.ds-btn-primary:focus-visible{outline:2px solid var(--cord,#d9143a);outline-offset:2px}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "The second action beside primary: 1.5px rod border, inverts on hover.",
+      "html": "<button class=\"ds-btn-outline\">Sell on LisBran</button>",
+      "css": ".ds-btn-outline{display:inline-flex;align-items:center;min-height:48px;padding:0 24px;background:transparent;color:var(--ink,#141414);border:1.5px solid var(--rod,#141414);border-radius:0;font-family:var(--font-archivo),'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:background-color .15s,color .15s}.ds-btn-outline:hover{background:var(--ink,#141414);color:var(--ground,#e9e6e1)}.ds-btn-outline:focus-visible{outline:2px solid var(--cord,#d9143a);outline-offset:2px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Ink fill; turns cord on hover.",
+      "html": "<button class=\"ds-btn-secondary\">Got it</button>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;min-height:44px;padding:0 20px;background:var(--ink,#141414);color:var(--ground,#e9e6e1);border:0;border-radius:0;font-family:var(--font-archivo),'Helvetica Neue',Arial,sans-serif;font-weight:700;cursor:pointer;transition:background-color .15s,color .15s}.ds-btn-secondary:hover{background:var(--cord,#d9143a);color:var(--cord-ink,#fff)}.ds-btn-secondary:focus-visible{outline:2px solid var(--cord,#d9143a);outline-offset:2px}"
+    },
+    {
+      "name": "Chip (radio)",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Square radio chips for service, urgency and budget; checked fills cord.",
+      "html": "<div class=\"ds-chips\"><label><input type=\"radio\" name=\"u\" class=\"ds-chip-input\"><span class=\"ds-chip\">Standard</span></label><label><input type=\"radio\" name=\"u\" class=\"ds-chip-input\"><span class=\"ds-chip\">24 hours</span></label><label><input type=\"radio\" name=\"u\" class=\"ds-chip-input\" checked><span class=\"ds-chip\">Overnight</span></label></div>",
+      "css": ".ds-chips{display:flex;flex-wrap:wrap;gap:8px}.ds-chips label{position:relative}.ds-chip-input{position:absolute;opacity:0;width:1px;height:1px}.ds-chip{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;font-family:var(--font-archivo),'Helvetica Neue',Arial,sans-serif;font-size:.875rem;font-weight:600;color:var(--ink,#141414);border:1.5px solid var(--rod-soft,#c7c2ba);border-radius:0;cursor:pointer;transition:background-color .15s,border-color .15s}.ds-chip:hover{border-color:var(--rod,#141414)}.ds-chip-input:checked+.ds-chip{background:var(--cord,#d9143a);border-color:var(--cord,#d9143a);color:var(--cord-ink,#fff)}.ds-chip-input:focus-visible+.ds-chip{outline:2px solid var(--cord,#d9143a);outline-offset:2px}"
+    },
+    {
+      "name": "Search Input",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "48px square search field on surface; border turns cord on focus.",
+      "html": "<form class=\"ds-search\" role=\"search\"><svg class=\"ds-search-icon\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg><input type=\"search\" class=\"ds-search-input\" placeholder=\"Search services\"></form>",
+      "css": ".ds-search{position:relative;width:100%;max-width:28rem}.ds-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--ink-3,#686560);pointer-events:none}.ds-search-input{display:block;width:100%;height:48px;padding:0 16px 0 40px;background:var(--surface,#f5f3ef);color:var(--ink,#141414);border:1.5px solid var(--rod,#141414);border-radius:0;font-family:var(--font-archivo),'Helvetica Neue',Arial,sans-serif;font-weight:500;font-size:1rem}.ds-search-input::placeholder{color:var(--ink-3,#686560);opacity:1}.ds-search-input:focus{outline:none;border-color:var(--cord,#d9143a)}"
+    },
+    {
+      "name": "Top Navigation",
+      "kind": "nav",
+      "refersTo": "nav-top",
+      "description": "Solid 56px bar on a rod; active section gets a 3px cord underline on the rod.",
+      "html": "<header class=\"ds-nav\"><span class=\"ds-nav-brand\">LisBran</span><nav class=\"ds-nav-links\"><a href=\"#\" aria-current=\"page\">Home</a><a href=\"#\">Services</a><a href=\"#\">Events</a><a href=\"#\">Trends</a><a href=\"#\">Contact</a></nav><a href=\"#\" class=\"ds-nav-sell\">Sell on LisBran</a></header>",
+      "css": ".ds-nav{display:flex;align-items:stretch;gap:24px;min-height:56px;padding:0 clamp(16px,3.2vw,112px);background:var(--ground,#e9e6e1);border-bottom:1.5px solid var(--rod,#141414);font-family:var(--font-archivo),'Helvetica Neue',Arial,sans-serif}.ds-nav-brand{display:flex;align-items:center;font-size:22px;font-weight:800;font-stretch:80%;letter-spacing:-.015em;color:var(--ink,#141414)}.ds-nav-links{display:flex;align-items:stretch;gap:4px}.ds-nav-links a{position:relative;display:flex;align-items:center;padding:0 12px;font-size:.875rem;font-weight:600;color:var(--ink-2,#494744);text-decoration:none;transition:color .15s}.ds-nav-links a:hover{color:var(--ink,#141414)}.ds-nav-links a[aria-current=page]{color:var(--ink,#141414)}.ds-nav-links a[aria-current=page]::after{content:'';position:absolute;left:12px;right:12px;bottom:-1.5px;height:3px;background:var(--cord,#d9143a)}.ds-nav-links a:focus-visible{outline:2px solid var(--cord,#d9143a);outline-offset:2px}.ds-nav-sell{margin-left:auto;align-self:center;display:inline-flex;align-items:center;min-height:36px;padding:0 16px;font-size:.875rem;font-weight:700;color:var(--ink,#141414);border:1.5px solid var(--rod,#141414);text-decoration:none}.ds-nav-sell:hover{background:var(--ink,#141414);color:var(--ground,#e9e6e1)}"
+    },
+    {
+      "name": "Supplier Row",
+      "kind": "card",
+      "refersTo": null,
+      "description": "A ruled listing row: name, service and city, mono turnaround and price, urgent turnaround in cord.",
+      "html": "<a href=\"#\" class=\"ds-row\"><span class=\"ds-row-node\"></span><span class=\"ds-row-main\"><span class=\"ds-row-name\">River Road Print Works</span><span class=\"ds-row-meta\">Branding &amp; printing · Nairobi</span></span><span class=\"ds-row-data\"><span class=\"ds-row-urgent\">Overnight</span><span class=\"ds-row-price\">from KES 2,500</span></span><span class=\"ds-row-rating\">4.7</span></a>",
+      "css": ".ds-row{position:relative;display:flex;align-items:center;gap:16px;height:4.5rem;padding:0 8px 0 16px;border-bottom:1px solid var(--rod-soft,#c7c2ba);color:var(--ink,#141414);text-decoration:none;font-family:var(--font-archivo),'Helvetica Neue',Arial,sans-serif;transition:background-color .15s}.ds-row:hover{background:var(--surface,#f5f3ef)}.ds-row:focus-visible{outline:2px solid var(--cord,#d9143a);outline-offset:2px}.ds-row-node{position:absolute;left:-4px;top:50%;width:8px;height:8px;transform:translateY(-50%);background:var(--cord,#d9143a)}.ds-row-main{flex:1;min-width:0;display:flex;flex-direction:column}.ds-row-name{font-weight:600}.ds-row-meta{font-size:.875rem;color:var(--ink-2,#494744)}.ds-row-data{display:flex;flex-direction:column;text-align:right;font-family:var(--font-geist-mono),ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:.75rem;line-height:1.25rem}.ds-row-urgent{color:var(--cord,#d9143a);font-weight:600}.ds-row-price{color:var(--ink-2,#494744)}.ds-row-rating{width:48px;text-align:right;font-family:var(--font-geist-mono),ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:.875rem}"
+    },
+    {
+      "name": "Tension Network",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Signature: the job card anchors cords to supplier rows; taut cord-red for matches, sagging ash for slack.",
+      "html": "<div class=\"ds-tn\"><div class=\"ds-tn-job\"><p class=\"ds-tn-title\">Your job</p><p class=\"ds-tn-line\">Deadline <b class=\"ds-tn-urgent\">Overnight</b></p><p class=\"ds-tn-count\"><b>3</b> of 11 sample suppliers can take it</p></div><svg class=\"ds-tn-cords\" viewBox=\"0 0 100 216\" preserveAspectRatio=\"none\"><path d=\"M 0 108 Q 50 72 100 36\" stroke=\"var(--cord,#d9143a)\" stroke-width=\"2\" fill=\"none\" vector-effect=\"non-scaling-stroke\"/><path d=\"M 0 108 Q 50 222 100 108\" stroke=\"var(--ink-3,#686560)\" stroke-width=\"1\" opacity=\".55\" fill=\"none\" vector-effect=\"non-scaling-stroke\"/><path d=\"M 0 108 Q 50 222 100 180\" stroke=\"var(--ink-3,#686560)\" stroke-width=\"1\" opacity=\".55\" fill=\"none\" vector-effect=\"non-scaling-stroke\"/></svg><ol class=\"ds-tn-rows\"><li class=\"ok\">River Road Print Works</li><li>Neon Gravity Co.</li><li>Pete &amp; Barret Designs</li></ol></div>",
+      "css": ".ds-tn{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,2fr) minmax(0,6fr);align-items:center;font-family:var(--font-archivo),'Helvetica Neue',Arial,sans-serif;color:var(--ink,#141414)}.ds-tn-job{border:1.5px solid var(--rod,#141414);background:var(--surface,#f5f3ef);padding:16px}.ds-tn-title{margin:0;font-size:1.5rem;font-weight:800;font-stretch:80%;letter-spacing:-.015em}.ds-tn-line{margin:8px 0 0;font-size:.875rem;color:var(--ink-3,#686560)}.ds-tn-urgent{color:var(--cord,#d9143a)}.ds-tn-count{margin:12px 0 0;padding-top:12px;border-top:1px solid var(--rod-soft,#c7c2ba);font-size:.875rem}.ds-tn-count b{font-family:var(--font-geist-mono),ui-monospace,monospace;font-variant-numeric:tabular-nums}.ds-tn-cords{width:100%;height:13.5rem;overflow:visible}.ds-tn-rows{list-style:none;margin:0;padding:0;border-top:1.5px solid var(--rod,#141414)}.ds-tn-rows li{position:relative;display:flex;align-items:center;height:4.5rem;padding-left:16px;border-bottom:1px solid var(--rod-soft,#c7c2ba);font-weight:600;color:var(--ink-3,#686560)}.ds-tn-rows li::before{content:'';position:absolute;left:-4px;top:50%;width:8px;height:8px;transform:translateY(-50%);background:var(--rod-soft,#c7c2ba)}.ds-tn-rows li.ok{color:var(--ink,#141414)}.ds-tn-rows li.ok::before{background:var(--cord,#d9143a)}.ds-tn-rows li:hover{background:var(--surface,#f5f3ef)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Tension Network",
+    "overview": "A buyer's job is a load, and suppliers are anchored to it by lines. Those who can take the job pull taut in one red cord; those who cannot hang slack in ash gray. Everything else on every page is structure: carbon rods of a fixed 1.5px weight drawn across a pale concrete ground by day, or light rods on carbon by night. The system is flat, square-cornered, ruled and engineering-dense. It reads like a plan drawing, not a marketplace brochure.\n\nContent runs edge to edge. There is no centred column. Only the gutter grows with the screen, and reading measure is held on the text itself (48ch to 70ch). Section heads sit on a rod. Lists are ruled rows rather than card grids. The brand film is the one full-colour, atmospheric element. It sits as a full-screen masthead, and everything laid over it switches to the night tokens so it stays legible in both themes.\n\nThe owner has confirmed these rejections: gradient heroes, decorative gradients, glows, glass, floating loops, eyebrow labels, card grids of icon tiles, emojis, and anything that reads as AI-generated.",
+    "keyCharacteristics": [
+      "One accent colour (cord red), used only to show tension: urgency, selection, primary action.",
+      "1.5px rods carry all structure. Hairline slack rules divide rows inside a section.",
+      "Square corners everywhere, and no shadows.",
+      "Archivo at 80% width and weight 800 for display. Archivo for body text. Geist Mono with tabular numerals for data.",
+      "Full-width layout with a fluid gutter. Day and night editions both work and are equal."
+    ],
+    "rules": [
+      {
+        "name": "The One Cord Rule",
+        "body": "Red means tension and nothing else. If an element is not urgent, selected, or the primary action, it is not red. Hover states may turn a link or title cord-red because hovering is a selection in progress.",
+        "section": "colors"
+      },
+      {
+        "name": "The Night-Over-Film Rule",
+        "body": "Anything laid on the brand film uses the night tokens (the on-dark scope) in both themes, and preserves the white logo mark.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Equal Editions Rule",
+        "body": "Every token has a day and a night value. A surface does not ship until it works in both.",
+        "section": "colors"
+      },
+      {
+        "name": "The Spec-Sheet Numbers Rule",
+        "body": "Every number a buyer compares (price, rating, count, turnaround, phone) is set in Geist Mono with tabular numerals. Prose never is.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Kicker Rule",
+        "body": "Headings stand on their own rod. There is no small uppercase tracked label above a heading, anywhere.",
+        "section": "typography"
+      },
+      {
+        "name": "The Drawn, Not Lifted Rule",
+        "body": "A pane is drawn with a rod, not lifted with a shadow. If something needs to stand out, give it a 1.5px rod border or a surface fill. Never give it a shadow, glow or blur.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** mark tension only in cord red: urgency, the selected option, the one primary action per block.",
+      "**Do** draw structure with 1.5px rods and divide rows with 1px rod-slack hairlines.",
+      "**Do** keep every corner square (0px) and every surface flat.",
+      "**Do** run content full width on the clamp(16px, 3.2vw, 112px) gutter, and hold measure on text with 48ch to 70ch.",
+      "**Do** set every compared number in Geist Mono with tabular numerals.",
+      "**Do** list suppliers, services and items as ruled rows. Use owner service artwork (icon-graphic.png, icon-printing.png, icon-marketing.png) only as thumbnails inside those rows, on film-edge.",
+      "**Do** use the on-dark scope for anything placed over the brand film.",
+      "**Do** ship day and night together and check WCAG 2.2 AA contrast in both.",
+      "**Do** size signature geometry in rem so it survives 200% text."
+    ],
+    "donts": [
+      "**Don't** use gradients as decoration, glows, glass or backdrop blur, or floating looping animation. The film scrims are the only gradients.",
+      "**Don't** put an eyebrow or kicker (small uppercase tracked label) above a heading.",
+      "**Don't** build card grids of icon tiles.",
+      "**Don't** use emojis anywhere, in copy or as icons.",
+      "**Don't** add shadows or rounded corners. That includes pill buttons.",
+      "**Don't** centre content in a max-width column.",
+      "**Don't** introduce a second navigation pattern, or a second accent colour. Verified green is a status mark, not an accent.",
+      "**Don't** fabricate counts, reviews or live status. Sample data is labelled as sample."
+    ]
+  }
+}

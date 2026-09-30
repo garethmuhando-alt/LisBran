@@ -1,255 +1,188 @@
 @import "tailwindcss";
 
-@theme {
-  --color-background: #0a0a0a;
-  --color-foreground: #ffffff;
-  --color-primary: #a855f7;
-  --color-secondary: #ec4899;
-  
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* The full-screen film layout: landscape screens tall enough to hold the words
+   over the film. Everything else stacks the words under the film. */
+@custom-variant wide (@media (min-aspect-ratio: 4/3) and (min-height: 521px));
+
+/* ─────────────────────────────────────────────────────────────
+   LisBran — Tension Network
+   Structure is carried by rods (solid ink lines). One cord colour
+   marks tension: urgency, the selected thing, the primary action.
+   Everything else is ink on concrete (day) or concrete on carbon (night).
+   ───────────────────────────────────────────────────────────── */
 
 :root {
   color-scheme: dark;
+  /* Night edition (default before the pre-paint script runs) */
+  --ground: #121212;
+  --surface: #1b1b1a;
+  --surface-2: #262624;
+  --ink: #ece9e4;
+  --ink-2: #b3afa8;
+  --ink-3: #8f8b84;
+  --rod: #d8d4cd;
+  --rod-soft: #34332f;
+  --cord: #ff3355;
+  --cord-ink: #141414;
+  --ok: #4cc47a;
+}
+
+:root.theme-light {
+  color-scheme: light;
+  /* Day edition */
+  --ground: #e9e6e1;
+  --surface: #f5f3ef;
+  --surface-2: #dcd8d1;
+  --ink: #141414;
+  --ink-2: #494744;
+  --ink-3: #686560;
+  --rod: #141414;
+  --rod-soft: #c7c2ba;
+  --cord: #d9143a;
+  --cord-ink: #ffffff;
+  --ok: #1e7a45;
+}
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-rod: var(--rod);
+  --color-rod-soft: var(--rod-soft);
+  --color-cord: var(--cord);
+  --color-cord-ink: var(--cord-ink);
+  --color-ok: var(--ok);
+
+  --font-sans: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 html {
-  text-rendering: optimizeSpeed;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
+  background: var(--ground);
 }
 
 body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  background-color: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-sans);
   margin: 0;
-  padding: 0;
   min-height: 100%;
   overflow-x: hidden;
+  caret-color: var(--cord);
+  accent-color: var(--cord);
+  /* Long emails, links and env names wrap instead of pushing the page wide
+     when a visitor enlarges text (Android font scale, browser text size). */
+  overflow-wrap: break-word;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
+.break-anywhere { overflow-wrap: anywhere; }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-.scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
+/* Fieldsets default to min-inline-size: min-content, which stops their chips
+   wrapping and pushes the page wide under enlarged text. */
+fieldset { min-inline-size: 0; min-width: 0; }
 
-/* Remove tap flash on Android */
+/* Links and buttons never outgrow their container; their labels wrap instead. */
+a, button { max-width: 100%; }
+
 * {
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
 }
 
-/* Glassmorphism Utilities */
-.glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+::selection {
+  background: var(--cord);
+  color: var(--cord-ink);
 }
 
-.glass-card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
+:focus-visible {
+  outline: 2px solid var(--cord);
+  outline-offset: 2px;
 }
 
-/* Premium Gradients */
-.bg-gradient-premium {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+a { text-underline-offset: 3px; text-decoration-thickness: 1px; }
+::placeholder { color: var(--ink-3); opacity: 1; }
+
+/* Browser chrome carries the palette too */
+html { scrollbar-color: var(--ink-3) var(--ground); scrollbar-width: thin; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--ground); }
+::-webkit-scrollbar-thumb { background: var(--ink-3); border: 3px solid var(--ground); }
+
+/* Display voice: Archivo pulled toward its condensed engineering cut */
+.font-display {
+  font-stretch: 80%;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 0.98;
+  text-wrap: balance;
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
-.text-gradient {
-  background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* Numerals in data are tabular everywhere */
+.tabular, .font-mono { font-variant-numeric: tabular-nums; }
+
+/* Full-bleed ground, content on a wide grid */
+/* Content runs edge to edge on every screen; only the gutter grows.
+   Reading measure is held by max-w-[..ch] on text, not by a centred column. */
+.wrap {
+  width: 100%;
+  padding-inline: clamp(16px, 3.2vw, 112px);
 }
 
-/* CSS-only background breathe — replaces framer-motion infinite animation */
-@keyframes bg-breathe {
-  0%, 100% { transform: scale(1.05) rotate(0deg) translateZ(0); }
-  50%       { transform: scale(1.12) rotate(-0.5deg) translateZ(0); }
-}
-.anim-bg-breathe {
-  animation: bg-breathe 40s ease-in-out infinite;
-  will-change: transform;
-  contain: layout style;
-}
+/* Rods: the structural line. Section heads sit on one. */
+.rod-top { border-top: 1.5px solid var(--rod); }
+.rod-bottom { border-bottom: 1.5px solid var(--rod); }
 
-/* GPU-composited float animations — replace framer-motion y:[0,-N,0] infinite */
-@keyframes float-lg {
-  0%, 100% { transform: translateY(0) translateZ(0); }
-  50%       { transform: translateY(-6px) translateZ(0); }
-}
-@keyframes float-md {
-  0%, 100% { transform: translateY(0) translateZ(0); }
-  50%       { transform: translateY(-4px) translateZ(0); }
-}
-@keyframes float-sm {
-  0%, 100% { transform: translateY(0) translateZ(0); }
-  50%       { transform: translateY(-3px) translateZ(0); }
+/* Anything laid over the brand film uses the night tokens in both themes,
+   so nav, type and controls stay legible on the dark video. */
+.on-dark {
+  --ground: #121212;
+  --surface: #1b1b1a;
+  --surface-2: #262624;
+  --ink: #f2efea;
+  --ink-2: #cfcbc4;
+  --ink-3: #a19d96;
+  --rod: #f2efea;
+  --rod-soft: rgba(242, 239, 234, 0.28);
+  --cord: #ff3355;
+  --cord-ink: #141414;
+  color: var(--ink);
 }
 
-.anim-float    { animation: float-lg 3.5s ease-in-out infinite; will-change: transform; }
-.anim-float-sm { animation: float-md 4.5s ease-in-out infinite; will-change: transform; }
-.anim-float-pin{ animation: float-sm 2s ease-in-out infinite;   will-change: transform; }
-/* Staggered delays for service icons */
-.anim-float-1  { animation: float-md 5s ease-in-out infinite;        will-change: transform; }
-.anim-float-2  { animation: float-md 6s ease-in-out infinite 0.4s;   will-change: transform; }
-.anim-float-3  { animation: float-md 7s ease-in-out infinite 0.8s;   will-change: transform; }
+/* Theme-aware logo: white mark on dark grounds, black mark on light ones. */
+.logo-on-light { display: none; }
+.theme-light .logo-on-light { display: block; }
+.theme-light .logo-on-dark { display: none; }
+.theme-preserve .logo-on-dark { display: block !important; }
+.theme-preserve .logo-on-light { display: none !important; }
 
-/* Scroll containers — smooth momentum on Android */
-.scroll-x {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  touch-action: pan-x;
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0.75rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--ink);
+  color: var(--ground);
+  font-weight: 700;
+  font-size: 0.875rem;
 }
+.skip-link:focus { left: 0.75rem; }
 
-/* Vertical scroll — the main page container */
-.scroll-y {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: none;
-  touch-action: pan-y;
-}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* ── System-Style Light Canvas ── */
-/* Only change the root page background canvas and invert text color for readability.
-   Do NOT alter card/panel backgrounds or component styles here. */
-body.theme-light,
-body.theme-light > main,
-body.theme-light .theme-light-bg {
-  background-color: #f8fafc !important;
-  color-scheme: light;
-}
-
-body.theme-light .theme-light-gradient {
-  background-image: linear-gradient(to top, #f8fafc, rgba(248,250,252,0.75)) !important;
-}
-
-body.theme-light .theme-light-blob1 {
-  background-color: rgba(236, 72, 153, 0.12) !important;
-}
-
-body.theme-light .theme-light-blob2 {
-  background-color: rgba(59, 130, 246, 0.12) !important;
-}
-
-body.theme-light .theme-light-blob3 {
-  background-color: rgba(168, 85, 247, 0.12) !important;
-}
-
-body.theme-light .theme-light-blob4 {
-  background-color: rgba(251, 191, 36, 0.12) !important;
-}
-
-body.theme-light [class*="bg-[#0a0a0a]"],
-body.theme-light [class*="bg-[#141417]"],
-body.theme-light [class*="bg-[#111]"],
-body.theme-light [class*="bg-[#0d0d1a]"],
-body.theme-light [class*="bg-[#0b0b0f]"],
-body.theme-light [class*="bg-[#06060a]"] {
-  background-color: #f8fafc !important;
-  background-image: none !important;
-}
-
-body.theme-light .glass,
-body.theme-light .glass-card,
-body.theme-light [class*="bg-black/"] {
-  background: rgba(255, 255, 255, 0.88) !important;
-  border-color: rgba(148, 163, 184, 0.22) !important;
-  color: #0f172a !important;
-}
-
-body.theme-light .glass-card {
-  background: rgba(255, 255, 255, 0.92) !important;
-  border-color: rgba(148, 163, 184, 0.18) !important;
-}
-
-body.theme-light .bg-white\/5 {
-  background-color: rgba(255, 255, 255, 0.88) !important;
-}
-
-body.theme-light .bg-white\/10 {
-  background-color: rgba(255, 255, 255, 0.82) !important;
-}
-
-body.theme-light .bg-zinc-900\/95,
-body.theme-light .bg-zinc-900\/60,
-body.theme-light .bg-zinc-900 {
-  background-color: rgba(255, 255, 255, 0.92) !important;
-}
-
-body.theme-light .text-white,
-body.theme-light .text-slate-50,
-body.theme-light .text-zinc-100,
-body.theme-light .text-slate-100 {
-  color: #0f172a !important;
-}
-
-body.theme-light .text-zinc-400,
-body.theme-light .text-zinc-500,
-body.theme-light .text-zinc-600,
-body.theme-light .text-slate-400 {
-  color: #475569 !important;
-}
-
-/* ── Mobile perf: GPU composited without jank ── */
-@media (max-width: 768px) {
-  /* Dark mode mobile card background */
-  body:not(.theme-light) .glass,
-  body:not(.theme-light) .glass-card,
-  body:not(.theme-light) [class*="backdrop-blur"] {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    background-color: rgba(18, 18, 22, 0.95) !important;
-  }
-
-  /* Disable heavy blur divs that cause GPU overdraw every scroll frame */
-  [class*="blur-["] {
-    filter: none !important;
-  }
-
-  /* Reduce transition cost during scroll */
-  .transition-transform {
-    transition-duration: 150ms !important;
-  }
-  .transition-colors {
-    transition-duration: 100ms !important;
-  }
-  /* Disable slow duration-500+ transitions entirely on mobile */
-  .duration-500, .duration-700, .duration-1000 {
-    transition-duration: 150ms !important;
-    animation-duration: 150ms !important;
-  }
-
-  /* Stop infinite float animations on mobile — saves ~3ms/frame */
-  .anim-float, .anim-float-sm, .anim-float-pin,
-  .anim-float-1, .anim-float-2, .anim-float-3 {
-    animation: none !important;
-    will-change: auto !important;
-  }
-
-  /* Slow down bg-breathe so it doesn't compete with scroll */
-  .anim-bg-breathe {
-    animation-duration: 80s !important;
-  }
-
-  /* content-visibility: auto lets the browser skip off-screen rendering */
-  .glass-card {
-    content-visibility: auto;
-    contain-intrinsic-size: 0 200px;
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

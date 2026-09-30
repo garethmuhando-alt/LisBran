@@ -1,36 +1,33 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
-interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  onSubmitQuery?: (query: string) => void;
-}
+type SearchInputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
-export function SearchInput({ className, onSubmitQuery, ...props }: SearchInputProps) {
+export function SearchInput({ className, ...props }: SearchInputProps) {
   const router = useRouter();
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const query = formData.get("q")?.toString() || "";
-    if (query) {
-       router.push(`/search/${query.toLowerCase().replace(/\\s+/g, '-')}`);
-    }
+    const query = new FormData(e.currentTarget).get("q")?.toString().trim() || "";
+    if (query) router.push(`/search/${encodeURIComponent(query.toLowerCase().replace(/\s+/g, "-"))}`);
   };
 
   return (
-    <form onSubmit={handleSearch} className={cn("relative group w-full", className)}>
-      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-400 group-focus-within:text-purple-400 transition-colors">
-        <Search size={20} />
-      </div>
+    <search className={cn("block relative w-full", className)}>
+    <form onSubmit={handleSearch} className="relative w-full">
+      <label htmlFor="site-search" className="sr-only">Search services</label>
+      <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-3 pointer-events-none" aria-hidden />
       <input
-        type="text"
+        id="site-search"
+        type="search"
         name="q"
-        className="block w-full pl-12 pr-4 py-3.5 bg-zinc-800/50 backdrop-blur-md border border-white/10 rounded-full text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all font-medium"
+        className="block w-full h-12 pl-10 pr-4 bg-surface border-[1.5px] border-rod text-ink font-medium focus:outline-none focus:border-cord"
         {...props}
       />
     </form>
+    </search>
   );
 }
