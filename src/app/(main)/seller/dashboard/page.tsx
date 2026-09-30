@@ -1,242 +1,149 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Settings, MessageSquare, TrendingUp, Star, MapPin, Eye, Bell, CalendarCheck, Users, ChevronRight } from "lucide-react";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { ArrowRight, BadgeCheck, Clock, Eye, MessageCircle } from "lucide-react";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { budgetLabel, serviceBySlug, urgencyLabel, type Budget, type Urgency } from "@/lib/catalog";
+import { supabase } from "@/lib/supabase";
+
+type Enquiry = { id: number; name: string; service: string; time: string; via: string };
+type Seller = {
+  name: string; slug: string; service: string; city: string; verified: boolean;
+  turnaround: Urgency; budget: Budget; priceFrom: number; portfolio: number;
+};
 
 export default function SellerDashboardPage() {
-  const router = useRouter();
-  const [vendorName, setVendorName] = useState("Neon Gravity Co.");
-  const [vendorInitials, setVendorInitials] = useState("NG");
-  const [portfolio, setPortfolio] = useState<{url: string, type: string}[]>([]);
-  const [isVerified, setIsVerified] = useState(true);
-  const [profileViews, setProfileViews] = useState(0);
-  const [bookings, setBookings] = useState<unknown[]>([]);
-  const [showNotifs, setShowNotifs] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [seller, setSeller] = useState<Seller | null | undefined>(undefined);
+  const [views, setViews] = useState(0);
+  const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
 
   useEffect(() => {
-    const savedName = localStorage.getItem('seller_name');
-    const verifiedStatus = localStorage.getItem('seller_verified');
-    const savedPortfolio = localStorage.getItem('seller_portfolio');
-    
-    Promise.resolve().then(() => {
-      if (verifiedStatus === 'false') {
-         setIsVerified(false);
-      } else {
-         setIsVerified(true);
+    let next: Seller | null = null;
+    let v = 0;
+    let e: Enquiry[] = [];
+    try {
+      const name = localStorage.getItem("seller_name");
+      if (name) {
+        const slug = name.toLowerCase().replace(/\s+/g, "-");
+        const images = JSON.parse(localStorage.getItem("seller_portfolio_images") || "[]") as string[];
+        const videos = JSON.parse(localStorage.getItem("seller_portfolio_videos") || "[]") as string[];
+        next = {
+          name, slug,
+          service: localStorage.getItem("seller_category") || "",
+          city: localStorage.getItem("seller_location") || "Nairobi",
+          verified: localStorage.getItem("seller_verified") === "true",
+          turnaround: (localStorage.getItem("seller_turnaround") as Urgency) || "standard",
+          budget: (localStorage.getItem("seller_budget") as Budget) || "mid",
+          priceFrom: Number(localStorage.getItem("seller_price_from")) || 0,
+          portfolio: images.length + videos.length,
+        };
+        v = parseInt(localStorage.getItem(`profile_views_${slug}`) || "0", 10);
+        e = JSON.parse(localStorage.getItem(`seller_bookings_${slug}`) || "[]");
       }
-
-      if (savedName) {
-        setVendorName(savedName);
-        setVendorInitials(savedName.substring(0, 2).toUpperCase());
-
-        // Load profile views & bookings
-        const sellerId = savedName.toLowerCase().replace(/\s+/g, '-');
-        const views = parseInt(localStorage.getItem(`profile_views_${sellerId}`) || '0', 10);
-        setProfileViews(views);
-        const bks = JSON.parse(localStorage.getItem(`seller_bookings_${sellerId}`) || '[]');
-        setBookings(bks);
-      }
-
-      if (savedPortfolio) {
-        setPortfolio(JSON.parse(savedPortfolio));
-      }
-    });
+    } catch {}
+    const id = requestAnimationFrame(() => { setSeller(next); setViews(v); setEnquiries(e); });
+    return () => cancelAnimationFrame(id);
   }, []);
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const newItems = Array.from(e.target.files).map(file => ({
-        url: URL.createObjectURL(file),
-        type: file.type.startsWith('video/') ? 'video' : 'image'
-      }));
-      setPortfolio(prev => {
-        const updated = [...newItems, ...prev];
-        localStorage.setItem('seller_portfolio', JSON.stringify(updated));
-        return updated;
-      });
-    }
-  };
+  // Refresh verification status from Supabase when connected.
+  useEffect(() => {
+    const id = typeof window !== "undefined" ? localStorage.getItem("seller_supabase_id") : null;
+    if (!supabase || !id) return;
+    supabase.from("vendors").select("verified").eq("id", id).maybeSingle().then(({ data }) => {
+      if (data && typeof data.verified === "boolean") {
+        localStorage.setItem("seller_verified", data.verified ? "true" : "false");
+        setSeller((s) => (s ? { ...s, verified: data.verified } : s));
+      }
+    });
+  }, [seller?.slug]);
+
+  if (seller === undefined) return <div className="wrap py-16 text-ink-3">Loading…</div>;
+
+  if (seller === null) {
+    return (
+      <div>
+        <PageHeader title="Seller dashboard" parent={{ href: "/profile", label: "Account" }} />
+        <div className="wrap pb-16">
+          <div className="border-[1.5px] border-dashed border-rod-soft p-8 max-w-xl">
+            <p className="font-display text-2xl">You don&apos;t have a listing yet</p>
+            <p className="mt-2 text-ink-2">Create one in three steps, or sign in if you&apos;ve already listed.</p>
+            <Link href="/seller/onboarding" className="mt-5 inline-flex min-h-11 items-center gap-2 px-5 bg-cord text-cord-ink font-bold hover:brightness-110">
+              Sell on LisBran <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const checklist = [
+    { done: true, label: "Business details" },
+    { done: seller.portfolio >= 3, label: "Three or more portfolio items" },
+    { done: seller.priceFrom > 0, label: "A starting price" },
+    { done: seller.verified, label: "Verified by the LisBran team" },
+  ];
 
   return (
-    <div className="relative p-6 pt-12 min-h-screen bg-[#111] overflow-x-clip text-white pb-32">
-      {/* Background Graphic */}
-      <div className="absolute top-0 right-0 w-full h-80 bg-gradient-to-b from-purple-900/30 to-transparent pointer-events-none" />
+    <div>
+      <PageHeader title={seller.name} parent={{ href: "/profile", label: "Account" }} description={`${serviceBySlug(seller.service)?.name ?? seller.service} · ${seller.city}`}>
+        <Link href={`/supplier/${seller.slug}`} className="inline-flex min-h-11 items-center gap-2 px-5 border-[1.5px] border-rod font-bold hover:bg-ink hover:text-ground transition-colors">
+          View and edit your profile <ArrowRight size={16} />
+        </Link>
+      </PageHeader>
 
-      <div className="relative z-10 flex flex-col h-full max-w-md mx-auto">
-        {/* Header Action Bar */}
-        <div className="flex items-center justify-between mb-8">
-          <Link href="/home" className="text-xs font-bold text-purple-400 bg-purple-500/10 px-3 py-1.5 rounded-full border border-purple-500/20">
-            Exit to Marketplace
-          </Link>
-          <div className="flex gap-3 text-zinc-400 items-center">
-            <button
-              onClick={() => { setShowNotifs(v => !v); }}
-              className="relative"
-            >
-              <Bell size={22} className={`transition-colors ${showNotifs ? 'text-white' : 'hover:text-white'}`} />
-              {(bookings.length > 0 || profileViews > 0) && (
-                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#111] animate-pulse" />
-              )}
-            </button>
-            <Settings size={22} className="hover:text-white transition-colors cursor-pointer" />
-          </div>
-        </div>
-
-        {/* Profile Card */}
-        <div className="glass-card p-6 border border-white/10 rounded-3xl flex flex-col items-center mb-8 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-transparent pointer-events-none" />
-          
-          <div className="relative z-10 flex flex-col items-center">
-            <div className="w-24 h-24 rounded-full bg-purple-600 text-white font-black text-3xl flex items-center justify-center border-4 border-[#111] shadow-[0_0_30px_rgba(168,85,247,0.4)] mb-4">
-              {vendorInitials}
-            </div>
-            <h1 className="text-2xl font-black tracking-tight mb-1">{vendorName}</h1>
-            <p className="text-zinc-400 text-sm font-medium flex items-center gap-1 mb-3">
-              <MapPin size={14} /> Nairobi, Kenya
-            </p>
-            <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full">
-              <Star size={14} className="fill-yellow-500 text-yellow-500" />
-              <span className="font-bold text-sm">4.9</span>
-              <span className="text-zinc-500 text-xs">(81 reviews)</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 gap-4 mb-8">
-          <div className="bg-white/5 border border-white/10 p-5 rounded-3xl flex flex-col gap-2">
-            <div className="flex items-center justify-between text-zinc-400 mb-2">
-              <Eye size={18} />
-              <span className="text-xs text-green-400 flex items-center gap-1"><TrendingUp size={12} /> +12%</span>
-            </div>
-            <span className="text-3xl font-black text-white">{profileViews > 0 ? profileViews.toLocaleString() : '1.4k'}</span>
-            <span className="text-xs font-bold text-zinc-500">PROFILE VIEWS (30D)</span>
-          </div>
-
-          <div className="bg-white/5 border border-white/10 p-5 rounded-3xl flex flex-col gap-2">
-            <div className="flex items-center justify-between text-zinc-400 mb-2">
-              <MessageSquare size={18} />
-            </div>
-            <span className="text-3xl font-black text-white">{bookings.length > 0 ? bookings.length : 24}</span>
-            <span className="text-xs font-bold text-zinc-500">ACTIVE LEADS</span>
-          </div>
-        </div>
-
-        {/* Notifications Panel */}
-        {showNotifs && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8 bg-white/5 border border-white/10 rounded-3xl overflow-hidden"
-          >
-            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
-              <h2 className="font-bold text-white flex items-center gap-2 text-sm">
-                <Bell size={15} className="text-purple-400" /> Notifications
-              </h2>
-              <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
-                {bookings.length + (profileViews > 0 ? 1 : 0)} items
-              </span>
-            </div>
-
-            {/* Profile views row */}
-            {profileViews > 0 && (
-              <div className="flex items-center gap-3 px-5 py-4 border-b border-white/5 bg-blue-500/5">
-                <div className="w-9 h-9 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                  <Users size={16} className="text-blue-400" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-white">{profileViews} people viewed your profile</p>
-                  <p className="text-[11px] text-zinc-500">Keep your portfolio updated to convert more views</p>
-                </div>
-                <Eye size={14} className="text-zinc-600" />
-              </div>
-            )}
-
-            {/* Booking notifications */}
-            {bookings.length > 0 ? bookings.map((b: any) => (
-              <div key={b.id} className="flex items-center gap-3 px-5 py-4 border-b border-white/5 hover:bg-white/5 transition-colors">
-                <div className="w-9 h-9 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
-                  <CalendarCheck size={16} className="text-green-400" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-white">{b.name} wants to book</p>
-                  <p className="text-[11px] text-zinc-500">{b.service} · via {b.via} · {b.time}</p>
-                </div>
-                <ChevronRight size={14} className="text-zinc-600" />
-              </div>
-            )) : (
-              <div className="px-5 py-6 text-center">
-                <p className="text-zinc-600 text-xs">No booking requests yet. Share your profile to get leads!</p>
-              </div>
-            )}
-          </motion.div>
-        )}
-
-        {/* Portfolio Section */}
-        <div className="mb-8 relative">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="font-bold text-lg">Your Portfolio</h2>
-            <input type="file" accept="image/*,video/*" multiple className="hidden" ref={fileInputRef} onChange={handleFileUpload} />
-            <button 
-              onClick={() => isVerified && fileInputRef.current?.click()} 
-              disabled={!isVerified} 
-              className={`text-sm font-bold transition-colors px-3 py-1 rounded-full ${isVerified ? "text-purple-400 bg-purple-500/10 hover:bg-purple-500/20" : "text-zinc-500 bg-white/5 opacity-50 cursor-not-allowed"}`}
-            >
-              + Add Item
-            </button>
-          </div>
-
-          <div className={`flex gap-4 overflow-x-auto pb-4 scrollbar-hide ${!isVerified && 'opacity-40 grayscale blur-[2px]'}`}>
-            {portfolio.map((media, idx) => (
-              <div key={`new-${idx}`} className="min-w-[140px] h-40 bg-black rounded-2xl relative overflow-hidden border border-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.2)] flex-shrink-0 group">
-                {media.type === 'video' ? (
-                  <video src={media.url} className="w-full h-full object-cover group-hover:scale-105 transition-transform" autoPlay loop muted playsInline />
-                ) : (
-                  <img src={media.url} alt="New upload" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                )}
-              </div>
-            ))}
-            {[1, 2, 3].map((item) => (
-              <div key={`mock-${item}`} className="min-w-[140px] h-40 bg-zinc-800 rounded-2xl relative overflow-hidden border border-white/10 flex-shrink-0">
-                <Image src="/bg-events.png" alt="Portfolio item" fill className="object-cover opacity-60 mix-blend-screen" />
-              </div>
-            ))}
-          </div>
-
-          {!isVerified && (
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 bg-black/80 border border-orange-500/50 backdrop-blur-sm shadow-[0_0_40px_rgba(249,115,22,0.2)] p-4 rounded-xl flex flex-col items-center text-center">
-              <Star className="text-orange-500 mb-2" size={24} />
-              <h3 className="font-black text-white text-sm mb-1 tracking-widest uppercase">Content Locked</h3>
-              <p className="text-[10px] text-zinc-400 font-medium">Your portfolio additions are frozen pending clearance from LisBran System Adminstrators.</p>
-            </div>
+      <div className="wrap pb-16 grid grid-cols-12 gap-y-10 lg:gap-x-[2.5vw]">
+        <section className="col-span-12" aria-label="Status">
+          {seller.verified ? (
+            <p className="inline-flex items-center gap-2 border-[1.5px] border-ok text-ok px-3 py-2 font-semibold"><BadgeCheck size={18} /> Verified: your listing is live</p>
+          ) : (
+            <p className="inline-flex items-center gap-2 border-[1.5px] border-cord text-cord px-3 py-2 font-semibold"><Clock size={18} /> Waiting for review by the LisBran team</p>
           )}
-        </div>
+        </section>
 
-        {/* Admin Callout */}
-        {isVerified ? (
-          <div className="bg-gradient-to-r from-blue-900/40 to-blue-500/10 border border-blue-500/30 p-5 rounded-2xl flex items-center justify-between">
-            <div>
-              <h3 className="font-bold text-blue-100 mb-1">Admin Verification</h3>
-              <p className="text-xs text-blue-300 font-medium">Your account is active and verified.</p>
-            </div>
-            <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400">
-              <Star size={20} className="fill-current" />
-            </div>
+        <section className="col-span-12 lg:col-span-7" aria-labelledby="enquiries">
+          <div className="flex items-baseline justify-between rod-top pt-3 mb-2">
+            <h2 id="enquiries" className="font-display text-2xl">Enquiries</h2>
+            <p className="text-sm text-ink-3 inline-flex items-center gap-1.5"><Eye size={14} /> <span className="font-mono tabular">{views}</span> profile views on this device</p>
           </div>
-        ) : (
-          <div className="bg-gradient-to-r from-orange-900/40 to-orange-500/10 border border-orange-500/30 p-5 rounded-2xl flex items-center justify-between animate-pulse">
-            <div>
-              <h3 className="font-bold text-orange-100 mb-1 tracking-widest text-sm">PENDING APPROVAL</h3>
-              <p className="text-[10px] text-orange-300 font-medium">An approval push was sent to: <strong>lisbran@gmail.com, lisa@lisbran.co.ke, garethmuhando@gmail.com</strong></p>
-            </div>
-          </div>
-        )}
+          {enquiries.length === 0 ? (
+            <p className="py-6 text-ink-2">No enquiries yet. Buyers who tap &ldquo;Get a quote&rdquo; on your profile appear here.</p>
+          ) : (
+            <ul>
+              {enquiries.map((q) => (
+                <li key={q.id} className="border-b border-rod-soft py-3 grid grid-cols-[auto_1fr_auto] gap-x-3 items-center">
+                  <MessageCircle size={16} className="text-ink-3" />
+                  <span><span className="font-semibold">{q.name}</span> <span className="text-ink-2">asked about {q.service}</span></span>
+                  <span className="font-mono tabular text-xs text-ink-3">{q.time}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
 
+        <aside className="col-span-12 lg:col-span-5 flex flex-col gap-8">
+          <section aria-labelledby="listing">
+            <h2 id="listing" className="font-display text-2xl rod-top pt-3 mb-2">Your listing</h2>
+            <dl className="grid grid-cols-2 text-sm">
+              <dt className="py-2 border-b border-rod-soft text-ink-3">Turnaround</dt><dd className="py-2 border-b border-rod-soft font-semibold text-right">{urgencyLabel[seller.turnaround]}</dd>
+              <dt className="py-2 border-b border-rod-soft text-ink-3">Price tier</dt><dd className="py-2 border-b border-rod-soft font-semibold text-right">{budgetLabel[seller.budget]}</dd>
+              <dt className="py-2 border-b border-rod-soft text-ink-3">Prices from</dt><dd className="py-2 border-b border-rod-soft font-mono tabular font-semibold text-right">{seller.priceFrom ? `KES ${seller.priceFrom.toLocaleString("en-KE")}` : "Not set"}</dd>
+              <dt className="py-2 border-b border-rod-soft text-ink-3">Portfolio</dt><dd className="py-2 border-b border-rod-soft font-mono tabular font-semibold text-right">{seller.portfolio}</dd>
+            </dl>
+          </section>
+          <section aria-labelledby="checklist">
+            <h2 id="checklist" className="font-display text-2xl rod-top pt-3 mb-2">Get more enquiries</h2>
+            <ul className="text-sm">
+              {checklist.map((c) => (
+                <li key={c.label} className="flex items-center gap-3 py-2 border-b border-rod-soft">
+                  <span aria-hidden className={`w-4 h-4 border-[1.5px] ${c.done ? "bg-ink border-ink" : "border-rod"}`} />
+                  <span className={c.done ? "text-ink-3 line-through" : ""}>{c.label}</span>
+                  <span className="sr-only">{c.done ? "done" : "to do"}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </aside>
       </div>
     </div>
   );

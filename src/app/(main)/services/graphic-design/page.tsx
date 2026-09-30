@@ -1,90 +1,64 @@
-"use client";
-
-import { ChevronRight, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { SupplierCard } from "@/components/ui/SupplierCard";
+import { suppliers } from "@/lib/catalog";
+
+const sections = [
+  { title: "Logo and brand identity", items: [
+    { name: "Logo design", href: "/services/logo-design" },
+    { name: "Brand style guides", href: "/search/brand-style-guides" },
+    { name: "Business cards and stationery", href: "/search/business-cards" },
+    { name: "Brand identity", href: "/search/brand-identity" },
+  ] },
+  { title: "Marketing design", items: [
+    { name: "Social media design", href: "/search/social-media-design" },
+    { name: "Email design", href: "/search/email-design" },
+  ] },
+  { title: "Web and app design", items: [
+    { name: "Website design", href: "/search/website-design" },
+    { name: "App design", href: "/search/app-design" },
+    { name: "UI/UX design", href: "/search/ui-ux-design" },
+    { name: "Landing page design", href: "/search/landing-page-design" },
+  ] },
+];
 
 export default function GraphicDesignServices() {
-  const router = useRouter();
-  
-  const sections = [
-    {
-      title: "LOGO & BRAND IDENTITY",
-      items: [
-        { name: "Logo Design", href: "/search/logo-design" },
-        { name: "Brand Style Guides", href: "/search/brand-style-guides" },
-        { name: "Business cards and stationery", href: "/search/business-cards-stationery" },
-        { name: "Brand identity", href: "/search/brand-identity" }
-      ]
-    },
-    {
-      title: "MARKETING DESIGN",
-      items: [
-        { name: "Social Media Design", href: "/search/social-media-design" },
-        { name: "Email Design", href: "/search/email-design" }
-      ]
-    },
-    {
-      title: "WEB AND APP DESIGN",
-      items: [
-        { name: "Website Design", href: "/search/website-design" },
-        { name: "App Design", href: "/search/app-design" },
-        { name: "UI/UX Design", href: "/search/ui-ux-design" },
-        { name: "Landing Page Design", href: "/search/landing-page-design" }
-      ]
-    }
-  ];
-
+  const designers = suppliers.filter((s) => s.service === "graphic-design");
   return (
-    <div className="relative p-6 pt-12 pb-32 min-h-screen overflow-x-clip text-white">
-      <div className="relative z-10 flex flex-col h-full max-w-md mx-auto">
-        {/* Top Header */}
-        <div className="flex items-center mb-8">
-          <button onClick={() => { router.push('/home'); }} className="p-2 bg-white/5 rounded-full backdrop-blur-md border border-white/10 hover:bg-white/20 transition-colors">
-            <ArrowLeft className="text-white" size={22} />
-          </button>
+    <div>
+      <PageHeader title="Graphic design" parent={{ href: "/categories", label: "Services" }} description="Logos, brand identity, social and print artwork from Kenyan designers.">
+        <div className="theme-preserve relative w-24 h-24 md:w-32 md:h-32 border-[1.5px] border-rod bg-[#0d0d0f] overflow-hidden">
+          <Image src="/icon-graphic.png" alt="" fill sizes="128px" className="object-cover" priority />
         </div>
+      </PageHeader>
 
-        {/* Hero Icon Component */}
-        <div className="flex flex-col items-center mb-10">
-          <motion.div 
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="p-1 rounded-full bg-black/40 shadow-[0_10px_30px_rgba(236,72,153,0.3)] border border-pink-500/30 mb-6"
-          >
-            <div className="relative w-28 h-28 rounded-full overflow-hidden bg-black flex items-center justify-center">
-              <Image src="/icon-graphic.png" alt="Graphic Design" fill className="object-cover mix-blend-screen scale-110" />
-            </div>
-          </motion.div>
-          <h1 className="text-2xl font-black text-white drop-shadow-xl tracking-wide">Graphic Design Services</h1>
-        </div>
-
-        {/* Dynamic List Sections */}
-        <div className="space-y-8">
-          {sections.map((section, sIdx) => (
-            <div key={sIdx} className="w-full">
-              <h2 className="text-xs font-bold text-zinc-500 tracking-widest mb-4 uppercase pl-2">
-                {section.title}
-              </h2>
-              <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-md shadow-2xl flex flex-col">
-                {section.items.map((item, iIdx) => (
-                  <Link 
-                    href={item.href} 
-                    key={iIdx}
-                    className={`flex items-center justify-between p-5 group hover:bg-white/10 transition-colors ${iIdx !== section.items.length - 1 ? 'border-b border-white/5' : ''}`}
-                  >
-                    <span className="text-zinc-200 font-bold group-hover:text-white transition-colors">{item.name}</span>
-                    <motion.div whileHover={{ x: 5 }} transition={{ type: "spring", stiffness: 400 }}>
-                      <ChevronRight className="text-zinc-500 group-hover:text-pink-400 transition-colors" size={20} />
-                    </motion.div>
-                  </Link>
+      <div className="wrap pb-16 grid grid-cols-12 gap-y-10 lg:gap-x-[2.5vw]">
+        <div className="col-span-12 lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-8">
+          {sections.map((sec) => (
+            <nav key={sec.title} aria-label={sec.title}>
+              <h2 className="font-semibold mb-2">{sec.title}</h2>
+              <ul className="rod-top">
+                {sec.items.map((item) => (
+                  <li key={item.href} className="border-b border-rod-soft">
+                    <Link href={item.href} className="group flex items-center justify-between py-3 text-ink-2 hover:text-ink">
+                      {item.name} <ArrowRight size={14} className="group-hover:text-cord" />
+                    </Link>
+                  </li>
                 ))}
-              </div>
-            </div>
+              </ul>
+            </nav>
           ))}
         </div>
+        <section className="col-span-12 lg:col-span-5" aria-labelledby="designers">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 mb-2">
+            <h2 id="designers" className="font-display text-2xl">Designers</h2>
+            <Link href="/search/graphic-design" className="inline-flex min-h-8 items-center text-sm font-semibold hover:text-cord">Compare all</Link>
+          </div>
+          <div className="rod-top">{designers.map((s) => <SupplierCard key={s.id} s={s} />)}</div>
+          <p className="mt-3 text-xs text-ink-3">Sample listings.</p>
+        </section>
       </div>
     </div>
   );

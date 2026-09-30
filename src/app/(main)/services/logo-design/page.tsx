@@ -1,252 +1,135 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, Check, Palette, Type, Sparkles, Wand2, ArrowRight } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { PageHeader } from "@/components/ui/PageHeader";
 
-type Step = 1 | 2 | 3 | 4;
+const styles = [
+  { id: "minimalist", name: "Minimalist", note: "Clean marks, lots of space" },
+  { id: "3d", name: "3D", note: "Depth, light and material" },
+  { id: "vintage", name: "Vintage", note: "Badges, crests and old type" },
+  { id: "signature", name: "Signature", note: "Hand-lettered wordmarks" },
+];
+
+const palettes = [
+  { id: "monochrome", name: "Monochrome", swatch: ["#111111", "#6b6b6b", "#f2f2f2"] },
+  { id: "warm", name: "Warm", swatch: ["#b3261e", "#e8772e", "#f6c453"] },
+  { id: "cool", name: "Cool", swatch: ["#0b3d91", "#1f8a9e", "#b8d8e8"] },
+  { id: "vibrant", name: "Vibrant", swatch: ["#e6007e", "#ffd400", "#00a3e0"] },
+  { id: "earthy", name: "Earthy", swatch: ["#5b3a1e", "#8a9a3b", "#d9c49b"] },
+];
+
+const steps = ["Style", "Name", "Colours"] as const;
 
 export default function LogoDesignPage() {
   const router = useRouter();
-  const [step, setStep] = useState<Step>(1);
-
-  // Form State
-  const [selectedStyle, setSelectedStyle] = useState<string>("");
-  const [brandName, setBrandName] = useState("");
+  const [step, setStep] = useState(0);
+  const [style, setStyle] = useState("");
+  const [brand, setBrand] = useState("");
   const [slogan, setSlogan] = useState("");
-  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [colours, setColours] = useState<string[]>([]);
 
-  const styles = [
-    { id: "minimalist", name: "Minimalist", icon: <Wand2 size={24} /> },
-    { id: "3d", name: "3D App Logo", icon: <Image src="/icon-graphic.png" alt="3d" width={24} height={24} className="mix-blend-screen" /> },
-    { id: "vintage", name: "Vintage", icon: <Sparkles size={24} /> },
-    { id: "signature", name: "Signature", icon: <Type size={24} /> },
-  ];
+  const valid = step === 0 ? !!style : step === 1 ? brand.trim().length > 0 : colours.length > 0;
+  const toggleColour = (id: string) =>
+    setColours((c) => (c.includes(id) ? c.filter((x) => x !== id) : c.length < 2 ? [...c, id] : c));
 
-  const colors = [
-    { id: "monochrome", name: "Monochrome", hex: "bg-zinc-500" },
-    { id: "warm", name: "Warm", hex: "bg-orange-500" },
-    { id: "cool", name: "Cool", hex: "bg-blue-500" },
-    { id: "vibrant", name: "Vibrant", hex: "bg-pink-500" },
-    { id: "earthy", name: "Earthy", hex: "bg-emerald-500" }
-  ];
-
-  const handleNext = () => {
-    if (step < 4) setStep((prev) => (prev + 1) as Step);
-    else {
-      // Find Designers logic -> Route to search with params
-      router.push(`/search/logo-design?style=${selectedStyle}&colors=${selectedColors.join(",")}`);
-    }
-  };
-
-  const isStepValid = () => {
-    if (step === 1) return selectedStyle !== "";
-    if (step === 2) return brandName.trim() !== "";
-    if (step === 3) return selectedColors.length > 0;
-    return true;
+  const next = () => {
+    if (!valid) return;
+    if (step < steps.length - 1) setStep(step + 1);
+    else router.push(`/search/graphic-design?style=${style}&colors=${colours.join(",")}`);
   };
 
   return (
-    <div className="relative p-6 pt-12 pb-32 min-h-screen bg-[#141417] overflow-x-clip">
-      {/* Background Effect */}
-      <motion.div 
-        animate={{ scale: [1.05, 1.15, 1.05] }}
-        transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-        className="fixed inset-0 z-0 pointer-events-none opacity-10"
-      >
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-pink-600/20 rounded-full blur-[100px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px]" />
-      </motion.div>
+    <div>
+      <PageHeader
+        title="Logo design"
+        parent={{ href: "/services/graphic-design", label: "Graphic design" }}
+        description="Three quick choices and we'll show designers who work in that style."
+      />
 
-      <div className="relative z-10 flex flex-col h-full max-w-md mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <button 
-            onClick={() => { step === 1 ? router.back() : setStep((prev) => (prev - 1) as Step); }} 
-            className="p-2 bg-white/5 rounded-full backdrop-blur-md border border-white/10 hover:bg-white/20 transition-colors"
-          >
-            <ArrowLeft className="text-white" size={22} />
-          </button>
-          <div className="flex gap-2">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i <= step ? "w-8 bg-pink-500" : "w-4 bg-white/20"}`} />
-            ))}
+      <div className="wrap pb-16 grid grid-cols-12 gap-y-8 lg:gap-x-[2.5vw]">
+        <ol className="col-span-12 lg:col-span-3 flex flex-wrap lg:flex-col gap-x-4 lg:gap-0" aria-label="Steps">
+          {steps.map((label, i) => (
+            <li key={label} className="flex-1 min-w-[6rem] lg:border-b lg:border-rod-soft">
+              <button
+                type="button"
+                disabled={i > step}
+                onClick={() => setStep(i)}
+                aria-current={i === step ? "step" : undefined}
+                className={`w-full flex items-center gap-3 py-2 lg:py-3 text-left text-sm font-semibold border-t-[1.5px] disabled:opacity-50 ${i <= step ? "border-rod" : "border-rod-soft text-ink-3"}`}
+              >
+                <span aria-hidden className={`w-2.5 h-2.5 shrink-0 ${i === step ? "bg-cord" : i < step ? "bg-ink" : "border-[1.5px] border-rod-soft"}`} />
+                  <span className="font-mono tabular text-ink-3">{i + 1}</span> {label}
+                {i < step && <Check size={14} className="ml-auto" aria-label="done" />}
+              </button>
+            </li>
+          ))}
+        </ol>
+
+        <div className="col-span-12 lg:col-span-9 max-w-3xl">
+          {step === 0 && (
+            <fieldset>
+              <legend className="font-display text-3xl mb-4">Which style fits your brand?</legend>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-rod border-[1.5px] border-rod">
+                {styles.map((s) => (
+                  <label key={s.id} className="relative bg-ground cursor-pointer">
+                    <input type="radio" name="style" value={s.id} checked={style === s.id} onChange={() => setStyle(s.id)} className="peer sr-only" />
+                    <span className="block p-5 peer-checked:bg-cord peer-checked:text-cord-ink peer-focus-visible:outline-2 peer-focus-visible:outline-cord">
+                      <span className="block font-display text-2xl">{s.name}</span>
+                      <span className="block text-sm opacity-80 mt-1">{s.note}</span>
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          )}
+
+          {step === 1 && (
+            <div className="flex flex-col gap-5">
+              <h2 className="font-display text-3xl">What should the logo say?</h2>
+              <div>
+                <label htmlFor="brand" className="block text-sm font-semibold text-ink-2 mb-1.5">Brand name</label>
+                <input id="brand" value={brand} onChange={(e) => setBrand(e.target.value)} autoComplete="organization" className="min-h-12 w-full bg-surface border-[1.5px] border-rod px-3 text-lg focus:outline-none focus:border-cord" />
+              </div>
+              <div>
+                <label htmlFor="slogan" className="block text-sm font-semibold text-ink-2 mb-1.5">Slogan <span className="font-normal text-ink-3">(optional)</span></label>
+                <input id="slogan" value={slogan} onChange={(e) => setSlogan(e.target.value)} className="min-h-12 w-full bg-surface border-[1.5px] border-rod px-3 focus:outline-none focus:border-cord" />
+              </div>
+            </div>
+          )}
+
+          {step === 2 && (
+            <fieldset>
+              <legend className="font-display text-3xl mb-1">Pick up to two palettes</legend>
+              <p className="text-ink-2 mb-4"><span className="font-mono tabular">{colours.length}</span> of 2 chosen</p>
+              <div className="flex flex-col rod-top">
+                {palettes.map((p) => {
+                  const on = colours.includes(p.id);
+                  return (
+                    <label key={p.id} className="flex items-center gap-4 py-3 border-b border-rod-soft cursor-pointer">
+                      <input type="checkbox" checked={on} onChange={() => toggleColour(p.id)} disabled={!on && colours.length >= 2} className="w-5 h-5" />
+                      <span className="flex h-8 border-[1.5px] border-rod" aria-hidden>
+                        {p.swatch.map((c) => <span key={c} className="w-8 h-full" style={{ background: c }} />)}
+                      </span>
+                      <span className="font-semibold">{p.name}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </fieldset>
+          )}
+
+          <div className="mt-8 flex items-center gap-3">
+            {step > 0 && (
+              <button type="button" onClick={() => setStep(step - 1)} className="min-h-12 px-5 inline-flex items-center gap-2 border-[1.5px] border-rod font-bold hover:bg-ink hover:text-ground">
+                <ArrowLeft size={18} /> Back
+              </button>
+            )}
+            <button type="button" onClick={next} disabled={!valid} className="min-h-12 px-6 inline-flex items-center gap-2 bg-cord text-cord-ink font-bold hover:brightness-110 disabled:opacity-40 disabled:pointer-events-none">
+              {step < steps.length - 1 ? "Continue" : "Show designers"} <ArrowRight size={18} />
+            </button>
           </div>
-        </div>
-
-        {/* Wizard Content */}
-        <div className="flex-1 mt-4">
-          <AnimatePresence mode="wait">
-            {step === 1 && (
-              <motion.div
-                key="step1"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="space-y-6"
-              >
-                <div>
-                  <h1 className="text-3xl font-black text-white mb-2 tracking-tight">Logo Style</h1>
-                  <p className="text-zinc-400">Select the visual direction that fits your brand.</p>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  {styles.map((style) => (
-                    <button
-                      key={style.id}
-                      onClick={() => { setSelectedStyle(style.id); }}
-                      className={`relative p-6 rounded-3xl flex flex-col items-center justify-center gap-4 transition-all duration-300 border ${
-                        selectedStyle === style.id 
-                          ? "bg-pink-500/20 border-pink-500 text-white shadow-[0_0_20px_rgba(236,72,153,0.3)]" 
-                          : "bg-white/5 border-white/10 text-zinc-400 hover:bg-white/10"
-                      }`}
-                    >
-                      {selectedStyle === style.id && (
-                        <div className="absolute top-3 right-3 text-pink-500">
-                          <Check size={16} />
-                        </div>
-                      )}
-                      <div className={`p-3 rounded-2xl ${selectedStyle === style.id ? 'bg-pink-500/20' : 'bg-white/5'}`}>
-                        {style.icon}
-                      </div>
-                      <span className="font-bold text-sm text-center">{style.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {step === 2 && (
-              <motion.div
-                key="step2"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="space-y-6"
-              >
-                <div>
-                  <h1 className="text-3xl font-black text-white mb-2 tracking-tight">Brand Details</h1>
-                  <p className="text-zinc-400">Tell us what text will appear on your logo.</p>
-                </div>
-
-                <div className="space-y-5">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest pl-2">Brand Name</label>
-                    <input 
-                      type="text"
-                      value={brandName}
-                      onChange={(e) => { setBrandName(e.target.value); }}
-                      placeholder="e.g. LisBran Marketplace"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-pink-500 focus:bg-pink-500/5 transition-all"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest pl-2">Slogan (Optional)</label>
-                    <input 
-                      type="text"
-                      value={slogan}
-                      onChange={(e) => { setSlogan(e.target.value); }}
-                      placeholder="e.g. Elevating Brands"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-pink-500 focus:bg-pink-500/5 transition-all"
-                    />
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {step === 3 && (
-              <motion.div
-                key="step3"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="space-y-6"
-              >
-                <div>
-                  <h1 className="text-3xl font-black text-white mb-2 tracking-tight">Color Palette</h1>
-                  <p className="text-zinc-400">Select up to 2 color palettes you prefer.</p>
-                </div>
-
-                <div className="space-y-3">
-                  {colors.map((color) => {
-                    const isSelected = selectedColors.includes(color.id);
-                    return (
-                      <button
-                        key={color.id}
-                        onClick={() => {
-                          if (isSelected) {
-                            setSelectedColors(prev => prev.filter(c => c !== color.id));
-                          } else if (selectedColors.length < 2) {
-                            setSelectedColors(prev => [...prev, color.id]);
-                          }
-                        }}
-                        className={`w-full flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 ${
-                          isSelected 
-                            ? "bg-pink-500/10 border-pink-500 text-white" 
-                            : "bg-white/5 border-white/10 text-zinc-400 hover:bg-white/10 hover:text-white"
-                        }`}
-                      >
-                        <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 rounded-full shadow-inner ${color.hex}`} />
-                          <span className="font-bold">{color.name}</span>
-                        </div>
-                        {isSelected && <Check className="text-pink-500" size={20} />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </motion.div>
-            )}
-
-            {step === 4 && (
-              <motion.div
-                key="step4"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="space-y-8 flex flex-col items-center justify-center text-center mt-12"
-              >
-                <div className="relative w-32 h-32">
-                  <motion.div 
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                    className="absolute inset-0 rounded-full border-2 border-dashed border-pink-500/50"
-                  />
-                  <div className="absolute inset-2 bg-gradient-to-tr from-pink-500 to-purple-500 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(236,72,153,0.5)]">
-                    <Palette size={40} className="text-white drop-shadow-lg" />
-                  </div>
-                </div>
-
-                <div>
-                  <h1 className="text-3xl font-black text-white mb-3">Brief Ready!</h1>
-                  <p className="text-zinc-400 max-w-xs mx-auto">
-                    We&apos;ll match your <span className="text-white font-bold">{styles.find(s => s.id === selectedStyle)?.name}</span> logo brief for <span className="text-white font-bold">&ldquo;{brandName}&rdquo;</span> with top-tier LisBran designers.
-                  </p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Action Button */}
-        <div className="mt-8">
-          <button 
-            onClick={handleNext}
-            disabled={!isStepValid()}
-            className="group relative w-full flex items-center justify-center gap-3 bg-white text-black py-4 rounded-2xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-200 transition-all overflow-hidden"
-          >
-            <span className="relative z-10">{step === 4 ? "Find Designers" : "Continue"}</span>
-            {step < 4 && (
-              <motion.div 
-                className="relative z-10"
-                whileHover={{ x: 5 }}
-              >
-                <ArrowRight size={20} />
-              </motion.div>
-            )}
-          </button>
         </div>
       </div>
     </div>

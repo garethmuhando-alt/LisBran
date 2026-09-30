@@ -1,42 +1,30 @@
 "use client";
 
-import { motion } from "framer-motion";
+import Link from "next/link";
 import { SupplierCard } from "@/components/ui/SupplierCard";
-import { Bookmark } from "lucide-react";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { supplierById } from "@/lib/catalog";
+import { useSaved } from "@/lib/saved";
 
 export default function SavedPage() {
-  return (
-    <div className="p-6 min-h-screen">
-      <div className="flex items-center gap-3 mb-8 sticky top-12 pt-2 pb-4 bg-[#0a0a0a]/90 backdrop-blur-md z-20">
-        <motion.div 
-          animate={{ y: [0, -4, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          className="p-3 bg-zinc-900 rounded-full border border-white/10"
-        >
-          <Bookmark className="text-purple-400" size={24} />
-        </motion.div>
-        <h1 className="text-white font-bold text-2xl">Saved Services</h1>
-      </div>
+  const { ids } = useSaved();
+  const saved = ids.map(supplierById).filter((s) => s !== undefined);
 
-      <div className="flex flex-col gap-4">
-        <SupplierCard
-          id="sps"
-          name="SP Design Services"
-          initials="SPS"
-          rating={3.9}
-          reviews={157}
-          description="Available anytime to meet your branding needs. We specialize in creating unique logos with quick turnaround times."
-          glowColor="blue"
-        />
-        <SupplierCard
-          id="h-t"
-          name="H&T Marketing"
-          initials="HT"
-          rating={4.9}
-          reviews={210}
-          description="Top-tier influencer marketing packages tailored to your brand constraints."
-          glowColor="purple"
-        />
+  return (
+    <div>
+      <PageHeader title="Saved" description="Suppliers you've bookmarked on this device." />
+      <div className="wrap pb-16">
+        {saved.length === 0 ? (
+          <div className="border-[1.5px] border-dashed border-rod-soft p-8 max-w-xl">
+            <p className="font-display text-2xl">Nothing saved yet</p>
+            <p className="mt-2 text-ink-2">Tap the bookmark on any supplier profile to keep it here for later.</p>
+            <Link href="/categories" className="mt-5 inline-flex min-h-11 items-center px-5 bg-ink text-ground font-bold hover:bg-cord hover:text-cord-ink transition-colors">
+              Browse services
+            </Link>
+          </div>
+        ) : (
+          <div className="max-w-4xl rod-top">{saved.map((s) => <SupplierCard key={s.id} s={s} />)}</div>
+        )}
       </div>
     </div>
   );

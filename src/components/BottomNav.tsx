@@ -1,47 +1,38 @@
 "use client";
 
-import { Home, Bookmark, Bell, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { isActive, tabNav } from "@/lib/nav";
 
+// Phones and tablets. From 1024px wide the top bar carries every link.
 export default function BottomNav() {
   const pathname = usePathname();
 
-  const navItems = [
-    { icon: Home, href: "/home" },
-    { icon: Bookmark, href: "/saved" },
-    { 
-      icon: Bell, 
-      href: "/notifications",
-      badge: true // Example for the red dot
-    },
-    { icon: User, href: "/profile" },
-  ];
-
   return (
-    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md md:max-w-3xl lg:max-w-5xl xl:max-w-screen-xl bg-zinc-900 border-t border-white/10 px-6 py-4 pb-8 z-50 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
-      <div className="flex justify-between items-center">
-        {navItems.map((item, index) => {
-          const isActive = pathname === item.href;
-          const Icon = item.icon;
+    <nav
+      aria-label="Tabs"
+      className="lg:hidden fixed inset-x-0 bottom-0 z-50 bg-ground rod-top pb-[env(safe-area-inset-bottom)]"
+    >
+      <ul className="grid grid-cols-5">
+        {tabNav.map(({ href, label, icon: Icon, match }) => {
+          const active = isActive(pathname, match);
           return (
-            <Link key={index} href={item.href} prefetch={true} className="relative group">
-              <div
-                className={cn(
-                  "p-2 rounded-full transition-all duration-300",
-                  isActive ? "bg-white/10 text-white" : "text-zinc-500 hover:text-zinc-300"
-                )}
+            <li key={href}>
+              <Link
+                href={href}
+                aria-current={active ? "page" : undefined}
+                className={`relative flex h-16 flex-col items-center justify-center gap-1 text-[11px] font-semibold ${
+                  active ? "text-ink" : "text-ink-3"
+                }`}
               >
-                <Icon size={24} className={isActive ? "fill-white" : ""} strokeWidth={isActive ? 2.5 : 2} />
-                {item.badge && (
-                  <div className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-zinc-900" />
-                )}
-              </div>
-            </Link>
+                {active && <span aria-hidden className="absolute inset-x-4 top-0 h-[3px] bg-cord" />}
+                <Icon size={20} strokeWidth={active ? 2.25 : 1.75} />
+                {label}
+              </Link>
+            </li>
           );
         })}
-      </div>
-    </div>
+      </ul>
+    </nav>
   );
 }

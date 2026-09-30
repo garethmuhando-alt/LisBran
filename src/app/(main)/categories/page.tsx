@@ -1,41 +1,41 @@
-"use client";
-
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { SearchInput } from "@/components/ui/SearchInput";
-import { CategoryTile } from "@/components/ui/CategoryTile";
-import { PenTool, Mic2, Megaphone, Ticket, Printer } from "lucide-react";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { services, suppliers } from "@/lib/catalog";
 
 export default function CategoriesPage() {
-  const categories = [
-    { title: "Graphic Design Services", icon: PenTool, href: "/services/graphic-design" },
-    { title: "Influencer Marketing Services", icon: Mic2, href: "/search/influencer" },
-    { title: "Influencer and Promotion Services", icon: Megaphone, href: "/search/promotion" },
-    { title: "Event and Activation Services", icon: Ticket, href: "/search/events" },
-    { title: "Printing Services", icon: Printer, href: "/search/printing" },
-  ];
-
   return (
-    <div className="p-6 relative min-h-screen">
-      {/* Top Gradient */}
-      <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-purple-900/20 to-transparent pointer-events-none" />
+    <div>
+      <PageHeader title="Services" description="Everything a marketing team buys, from overnight printing to dancers for a launch.">
+        <div className="w-full md:w-96"><SearchInput placeholder="Search services, e.g. banners" /></div>
+      </PageHeader>
 
-      <div className="sticky top-12 z-20 pt-2 pb-6 bg-[#0a0a0a]/90 backdrop-blur-md">
-        <SearchInput placeholder="Search services" autoFocus />
-      </div>
-
-      <div className="mt-4 relative z-10">
-        <h2 className="text-white font-bold text-xl mb-6">Categories</h2>
-        
-        <div className="flex flex-col gap-2">
-          {categories.map((cat, idx) => (
-            <CategoryTile 
-              key={idx}
-              title={cat.title}
-              icon={cat.icon}
-              href={cat.href}
-            />
-          ))}
-        </div>
-      </div>
+      <ul className="wrap pb-16">
+        {services.map((s) => {
+          const count = suppliers.filter((x) => x.service === s.slug).length;
+          return (
+            <li key={s.slug} className="border-b border-rod-soft">
+              <Link href={s.href} className="group grid grid-cols-[56px_minmax(0,1fr)_auto] md:grid-cols-[72px_minmax(0,1fr)_minmax(0,2fr)_auto_auto] items-center gap-x-4 md:gap-x-8 py-4">
+                {s.art ? (
+                  <span className="theme-preserve relative w-14 h-14 md:w-[72px] md:h-[72px] bg-[#13181e] border-[1.5px] border-rod overflow-hidden">
+                    <Image src={s.art} alt="" fill sizes="72px" className="object-cover" />
+                  </span>
+                ) : (
+                  <span aria-hidden className="w-14 md:w-[72px] flex justify-center">
+                    <span className="w-2.5 h-2.5 border-[1.5px] border-rod" />
+                  </span>
+                )}
+                <span className="font-display text-2xl md:text-3xl group-hover:text-cord transition-colors">{s.name}</span>
+                <span className="hidden md:block text-ink-2">{s.blurb}</span>
+                <span className="hidden md:block font-mono tabular text-sm text-ink-3">{count} {count === 1 ? "supplier" : "suppliers"}</span>
+                <ArrowRight size={20} className="group-hover:text-cord transition-colors" />
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

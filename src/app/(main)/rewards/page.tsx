@@ -1,95 +1,54 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { ArrowLeft, Gift, Ticket, PlayCircle, LogIn, CheckCircle } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { PageHeader } from "@/components/ui/PageHeader";
+
+const earn = [
+  { action: "Complete your profile", tokens: 500 },
+  { action: "Answer a feedback survey", tokens: "50–150" },
+  { action: "Rate a supplier after a job", tokens: 100 },
+  { action: "Sign in on consecutive days", tokens: 50 },
+];
+
+const redeem = [
+  { item: "KES 500 shopping voucher", cost: "2,000" },
+  { item: "LisBran key holder", cost: "1,000" },
+  { item: "LisBran T-shirt", cost: "5,000" },
+];
 
 export default function RewardsPage() {
   return (
-    <div className="p-6 min-h-screen pb-32 bg-[#0a0a0a]">
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-8 sticky top-12 pt-2 pb-4 bg-[#0a0a0a]/90 backdrop-blur-md z-20">
-        <Link href="/profile" className="p-2 rounded-full hover:bg-white/10 transition-colors text-white">
-          <ArrowLeft size={24} />
-        </Link>
-        <h1 className="text-white font-bold text-xl">Rewards & Inventory</h1>
-      </div>
-
-      {/* Token Balance */}
-      <motion.div 
-        animate={{ y: [0, -5, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="w-full glass-card border border-yellow-500/30 bg-gradient-to-b from-yellow-600/20 to-orange-600/10 p-8 flex flex-col items-center shadow-[0_20px_50px_rgba(234,179,8,0.2)] mb-10 overflow-hidden relative"
-      >
-        <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/30 rounded-full blur-[60px]" />
-        <p className="text-yellow-100 font-medium mb-1 relative z-10 text-sm tracking-widest uppercase">My Tokens</p>
-        <h2 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-tr from-yellow-300 to-yellow-600 relative z-10 drop-shadow-2xl">
-          4,850
-        </h2>
-        <div className="mt-4 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-yellow-500/80 text-xs font-bold font-mono">
-          Top 5% Earner in Nairobi
+    <div>
+      <PageHeader title="Rewards" parent={{ href: "/profile", label: "Account" }} description="Earn tokens for helping the marketplace work, then swap them for vouchers and merchandise." />
+      <div className="wrap pb-16">
+        <p className="mb-8 inline-block border-[1.5px] border-cord text-cord px-3 py-1.5 text-sm font-semibold">Coming soon. Tokens start counting when accounts open.</p>
+        <div className="grid grid-cols-12 gap-y-10 lg:gap-x-[2.5vw]">
+          <section className="col-span-12 lg:col-span-6" aria-labelledby="earn">
+            <h2 id="earn" className="font-display text-2xl mb-2">How you&apos;ll earn</h2>
+            <table className="w-full text-left rod-top">
+              <tbody>
+                {earn.map((e) => (
+                  <tr key={e.action} className="border-b border-rod-soft">
+                    <td className="py-3">{e.action}</td>
+                    <td className="py-3 text-right font-mono tabular">+{e.tokens}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+          <section className="col-span-12 lg:col-span-6" aria-labelledby="redeem">
+            <h2 id="redeem" className="font-display text-2xl mb-2">What you&apos;ll redeem</h2>
+            <table className="w-full text-left rod-top">
+              <tbody>
+                {redeem.map((r) => (
+                  <tr key={r.item} className="border-b border-rod-soft">
+                    <td className="py-3">{r.item}</td>
+                    <td className="py-3 text-right font-mono tabular">{r.cost} tokens</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
         </div>
-      </motion.div>
-
-      {/* Earn More Tokens */}
-      <h3 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
-        <PlayCircle className="text-indigo-400" size={20} />
-        Earn More Tokens
-      </h3>
-      <div className="grid grid-cols-2 gap-4 mb-10">
-        <div className="bg-[#111] border border-white/5 rounded-2xl p-4 flex flex-col justify-between shadow-xl">
-          <div className="text-indigo-400 mb-2"><LogIn size={20} /></div>
-          <div>
-            <p className="text-white font-bold text-sm">Daily Login</p>
-            <p className="text-indigo-400 text-xs font-bold">+50 Tokens</p>
-          </div>
-        </div>
-        <div className="bg-[#111] border border-white/5 rounded-2xl p-4 flex flex-col justify-between shadow-xl">
-          <div className="text-emerald-400 mb-2"><CheckCircle size={20} /></div>
-          <div>
-            <p className="text-white font-bold text-sm">Complete Profile</p>
-            <p className="text-emerald-400 text-xs font-bold">+500 Tokens</p>
-          </div>
-        </div>
-        <div className="col-span-2 bg-[#111] border border-white/5 rounded-2xl p-4 flex items-center justify-between shadow-xl border-purple-500/30">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-500/20 rounded-xl text-purple-400">
-              <Gift size={24} />
-            </div>
-            <div>
-              <p className="text-white font-bold text-sm">Play Games to Earn</p>
-              <p className="text-zinc-400 text-xs font-medium">Spin the wheel or trivia</p>
-            </div>
-          </div>
-          <Button variant="outline" className="text-xs py-2 px-3">Play</Button>
-        </div>
-      </div>
-
-      {/* Redemption Inventory */}
-      <h3 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
-        <Ticket className="text-pink-400" size={20} />
-        Redeem Inventory
-      </h3>
-      <div className="flex flex-col gap-4">
-        {[
-          { name: "LisBran Branded T-Shirt", cost: "5,000 Tokens", type: "Merchandise", color: "pink" },
-          { name: "KES 500 Shopping Voucher", cost: "2,000 Tokens", type: "Rewards", color: "blue" },
-          { name: "Premium Key Holder", cost: "1,000 Tokens", type: "Merchandise", color: "purple" }
-        ].map((item, i) => (
-          <div key={i} className="flex items-center justify-between p-4 bg-zinc-900 border border-white/5 rounded-2xl">
-            <div>
-              <h4 className="text-white font-bold text-sm">{item.name}</h4>
-              <p className="text-zinc-500 text-xs font-medium mt-0.5">{item.type}</p>
-            </div>
-            <div className="flex flex-col items-end">
-              <span className={`text-${item.color}-400 font-bold text-sm`}>{item.cost}</span>
-              <button className="mt-2 text-xs text-white font-semibold bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors">
-                Redeem
-              </button>
-            </div>
-          </div>
-        ))}
+        <p className="mt-10 text-ink-2">Want to start early? <Link href="/surveys" className="underline text-ink hover:text-cord">Answer a survey</Link> and we&apos;ll credit you when accounts open.</p>
       </div>
     </div>
   );
