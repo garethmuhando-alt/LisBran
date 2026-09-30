@@ -23,7 +23,10 @@ type Vendor = {
   sample: boolean;
 };
 
-type Media = { src: string; type: "image" | "video" };
+type Item = { id: string; src: string };
+type Media = Item & { type: "image" | "video" };
+
+const withIds = (srcs: string[]): Item[] => srcs.map((src) => ({ id: crypto.randomUUID(), src }));
 
 const initials = (name: string) =>
   name.split(/[\s&]+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
@@ -32,8 +35,8 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
   const { id } = use(params);
   const { has, toggle } = useSaved();
   const [vendor, setVendor] = useState<Vendor | null | undefined>(undefined);
-  const [images, setImages] = useState<string[]>([]);
-  const [videos, setVideos] = useState<string[]>([]);
+  const [images, setImages] = useState<Item[]>([]);
+  const [videos, setVideos] = useState<Item[]>([]);
   const [isOwner, setIsOwner] = useState(false);
   const [editing, setEditing] = useState<"bio" | "location" | null>(null);
   const [draft, setDraft] = useState({ bio: "", location: "" });
@@ -88,20 +91,27 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
     }
     const frame = requestAnimationFrame(() => {
       setIsOwner(owner);
-      setImages(imgs);
-      setVideos(vids);
+      setImages(withIds(imgs));
+      setVideos(withIds(vids));
       setProfilePic(pic);
       setVendor(data);
       if (data) setDraft({ bio: data.bio, location: data.location });
     });
-    return () => cancelAnimationFrame(frame);
+    return () => { cancelAnimationFrame(frame); };
   }, [id]);
 
+  // Move focus into an edit field once the owner opens it.
+  useEffect(() => {
+    if (editing) document.getElementById(`edit-${editing}`)?.focus();
+  }, [editing]);
+
+  const closeRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (!lightbox) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setLightbox(null);
+    closeRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setLightbox(null); };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => { window.removeEventListener("keydown", onKey); };
   }, [lightbox]);
 
   if (vendor === undefined) return <div className="wrap py-16 text-ink-3">Loading profile…</div>;
@@ -136,22 +146,22 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
   const readFiles = (files: FileList | null, onEach: (dataUrl: string) => void) => {
     Array.from(files ?? []).forEach((file) => {
       const reader = new FileReader();
-      reader.onload = (ev) => onEach(ev.target?.result as string);
+      reader.onload = (ev) => { onEach(ev.target?.result as string); };
       reader.readAsDataURL(file);
     });
   };
 
   const addMedia = (type: "image" | "video") => (e: React.ChangeEvent<HTMLInputElement>) =>
-    readFiles(e.target.files, (src) => {
+    { readFiles(e.target.files, (src) => {
       const set = type === "image" ? setImages : setVideos;
       set((prev) => {
-        const next = [...prev, src];
-        try { localStorage.setItem(type === "image" ? "seller_portfolio_images" : "seller_portfolio_videos", JSON.stringify(next)); } catch {}
+        const next = [...prev, { id: crypto.randomUUID(), src }];
+        try { localStorage.setItem(type === "image" ? "seller_portfolio_images" : "seller_portfolio_videos", JSON.stringify(next.map((i) => i.src))); } catch {}
         return next;
       });
-    });
+    }); };
 
-  const media: Media[] = [...images.map((src) => ({ src, type: "image" as const })), ...videos.map((src) => ({ src, type: "video" as const }))];
+  const media: Media[] = [...images.map((i) => ({ ...i, type: "image" as const })), ...videos.map((i) => ({ ...i, type: "video" as const }))];
   const saved = has(id);
   const serviceHref = vendor.service ? serviceBySlug(vendor.service)?.href : undefined;
 
@@ -173,7 +183,7 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
             )}
             {isOwner && (
               <>
-                <input type="file" accept="image/*" className="sr-only" ref={picRef} onChange={(e) => readFiles(e.target.files, (src) => { setProfilePic(src); try { localStorage.setItem("seller_profile_pic", src); } catch {} })} />
+                <input type="file" accept="image/*" className="sr-only" ref={picRef} onChange={(e) => { readFiles(e.target.files, (src) => { setProfilePic(src); try { localStorage.setItem("seller_profile_pic", src); } catch {} }); }} />
                 <button type="button" onClick={() => picRef.current?.click()} aria-label="Change profile photo" className="absolute bottom-0 right-0 w-7 h-7 bg-ink text-ground flex items-center justify-center">
                   <Camera size={14} />
                 </button>
@@ -190,13 +200,13 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
               {editing === "location" ? (
                 <span className="inline-flex items-center gap-1">
                   <label htmlFor="edit-location" className="sr-only">Location</label>
-                  <input id="edit-location" autoFocus value={draft.location} onChange={(e) => setDraft({ ...draft, location: e.target.value })} className="min-h-8 w-36 bg-surface border-[1.5px] border-rod px-2 text-ink" />
-                  <button type="button" onClick={() => saveEdit("location")} aria-label="Save location" className="w-8 min-h-8 inline-flex items-center justify-center bg-ink text-ground"><Check size={14} /></button>
+                  <input id="edit-location" value={draft.location} onChange={(e) => { setDraft({ ...draft, location: e.target.value }); }} className="min-h-8 w-36 bg-surface border-[1.5px] border-rod px-2 text-ink" />
+                  <button type="button" onClick={() => { saveEdit("location"); }} aria-label="Save location" className="w-8 min-h-8 inline-flex items-center justify-center bg-ink text-ground"><Check size={14} /></button>
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1.5">
                   {vendor.location}
-                  {isOwner && <button type="button" onClick={() => setEditing("location")} aria-label="Edit location" className="text-ink-3 hover:text-ink"><Pencil size={13} /></button>}
+                  {isOwner && <button type="button" onClick={() => { setEditing("location"); }} aria-label="Edit location" className="text-ink-3 hover:text-ink"><Pencil size={13} /></button>}
                 </span>
               )}
               <span className="inline-flex max-w-full flex-wrap items-center gap-1"><Star size={12} className="fill-current" aria-hidden /><span className="font-mono tabular">{vendor.rating.toFixed(1)}</span> <span className="text-ink-3">(<span className="font-mono tabular">{vendor.reviews}</span> reviews)</span></span>
@@ -212,14 +222,14 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
             <div className="flex items-baseline justify-between rod-top pt-3 mb-3">
               <h2 id="about" className="font-display text-2xl">About</h2>
               {isOwner && editing !== "bio" && (
-                <button type="button" onClick={() => setEditing("bio")} className="text-sm font-semibold inline-flex items-center gap-1 hover:text-cord"><Pencil size={13} /> Edit</button>
+                <button type="button" onClick={() => { setEditing("bio"); }} className="text-sm font-semibold inline-flex items-center gap-1 hover:text-cord"><Pencil size={13} /> Edit</button>
               )}
             </div>
             {editing === "bio" ? (
               <div className="flex flex-col gap-3 max-w-[70ch]">
                 <label htmlFor="edit-bio" className="sr-only">About your business</label>
-                <textarea id="edit-bio" autoFocus value={draft.bio} onChange={(e) => setDraft({ ...draft, bio: e.target.value })} className="min-h-36 bg-surface border-[1.5px] border-rod p-3 text-ink leading-relaxed" />
-                <button type="button" onClick={() => saveEdit("bio")} className="self-start min-h-11 px-5 bg-ink text-ground font-bold hover:bg-cord hover:text-cord-ink transition-colors">Save</button>
+                <textarea id="edit-bio" value={draft.bio} onChange={(e) => { setDraft({ ...draft, bio: e.target.value }); }} className="min-h-36 bg-surface border-[1.5px] border-rod p-3 text-ink leading-relaxed" />
+                <button type="button" onClick={() => { saveEdit("bio"); }} className="self-start min-h-11 px-5 bg-ink text-ground font-bold hover:bg-cord hover:text-cord-ink transition-colors">Save</button>
               </div>
             ) : (
               <p className="text-lg leading-relaxed max-w-[65ch]">{vendor.bio}</p>
@@ -241,8 +251,8 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
             {media.length > 0 ? (
               <ul className="grid grid-cols-2 md:grid-cols-3 gap-px bg-rod border-[1.5px] border-rod">
                 {media.map((m, i) => (
-                  <li key={i} className="bg-ground">
-                    <button type="button" onClick={() => setLightbox(m)} aria-label={`Open ${m.type} ${i + 1}`} className="group relative block w-full aspect-square overflow-hidden">
+                  <li key={m.id} className="bg-ground">
+                    <button type="button" onClick={() => { setLightbox(m); }} aria-label={`Open ${m.type} ${i + 1}`} className="group relative block w-full aspect-square overflow-hidden">
                       {m.type === "image" ? (
                         <Image src={m.src} alt="" fill unoptimized className="object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
                       ) : (
@@ -281,7 +291,7 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
               <div className="grid grid-cols-3 gap-2">
                 {phoneDigits && <a href={`tel:+${phoneDigits}`} className="min-h-11 inline-flex items-center justify-center gap-1.5 border-[1.5px] border-rod text-sm font-semibold hover:bg-ink hover:text-ground"><Phone size={15} /> Call</a>}
                 {vendor.email && <a href={`mailto:${vendor.email}`} className="min-h-11 inline-flex items-center justify-center gap-1.5 border-[1.5px] border-rod text-sm font-semibold hover:bg-ink hover:text-ground"><Mail size={15} /> Email</a>}
-                <button type="button" onClick={() => toggle(id)} aria-pressed={saved}
+                <button type="button" onClick={() => { toggle(id); }} aria-pressed={saved}
                   className={`min-h-11 inline-flex items-center justify-center gap-1.5 border-[1.5px] text-sm font-semibold transition-colors ${saved ? "border-cord text-cord" : "border-rod hover:bg-ink hover:text-ground"}`}>
                   <Bookmark size={15} className={saved ? "fill-current" : ""} /> {saved ? "Saved" : "Save"}
                 </button>
@@ -293,13 +303,17 @@ export default function SupplierProfilePage({ params }: { params: Promise<{ id: 
       </div>
 
       {lightbox && (
-        <div role="dialog" aria-modal="true" aria-label="Portfolio item" className="fixed inset-0 z-[100] bg-[#121212]/95 flex items-center justify-center p-4" onClick={() => setLightbox(null)}>
-          <button type="button" aria-label="Close" onClick={() => setLightbox(null)} className="absolute top-4 right-4 w-10 min-h-10 border-[1.5px] border-[#ece9e4]/60 text-[#ece9e4] flex items-center justify-center"><X size={18} /></button>
+        <div role="dialog" aria-modal="true" aria-label="Portfolio item" className="fixed inset-0 z-[100] bg-[#121212]/95 flex items-center justify-center p-4">
+          {/* The backdrop is a real button, so clicking outside, keyboard and screen readers all close it. */}
+          <button type="button" aria-label="Close" tabIndex={-1} onClick={() => { setLightbox(null); }} className="absolute inset-0 cursor-zoom-out" />
+          <button ref={closeRef} type="button" aria-label="Close" onClick={() => { setLightbox(null); }} className="absolute top-4 right-4 z-10 w-10 min-h-10 border-[1.5px] border-[#ece9e4]/60 text-[#ece9e4] flex items-center justify-center"><X size={18} /></button>
           {lightbox.type === "image" ? (
-            // eslint-disable-next-line @next/next/no-img-element -- user-uploaded data URL shown at natural size
-            <img src={lightbox.src} alt="" className="max-w-full max-h-full object-contain" onClick={(e) => e.stopPropagation()} />
+            <div className="relative z-10 w-[min(92vw,1600px)] h-[85svh]">
+              <Image src={lightbox.src} alt="" fill unoptimized sizes="92vw" className="object-contain" />
+            </div>
           ) : (
-            <video src={lightbox.src} controls autoPlay className="max-w-full max-h-full" onClick={(e) => e.stopPropagation()} />
+            // biome-ignore lint/a11y/useMediaCaption: supplier-uploaded portfolio clips have no caption files to attach
+            <video src={lightbox.src} controls autoPlay className="relative z-10 max-w-full max-h-full" />
           )}
         </div>
       )}

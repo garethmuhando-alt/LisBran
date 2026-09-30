@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 
-export default function Error({
+export default function ErrorPage({
   error,
   unstable_retry,
 }: {
@@ -25,7 +25,7 @@ export default function Error({
       <div className="flex flex-wrap justify-center gap-3">
         <button
           type="button"
-          onClick={() => unstable_retry()}
+          onClick={() => { unstable_retry(); }}
           className="inline-flex min-h-11 items-center px-5 font-bold text-cord-ink bg-cord hover:brightness-110"
         >
           Try again

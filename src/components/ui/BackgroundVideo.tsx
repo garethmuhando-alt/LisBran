@@ -30,10 +30,10 @@ export function BackgroundVideo({
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
     const conn = (navigator as Navigator & { connection?: NetworkInformation }).connection;
     const slow = !!conn && (conn.saveData === true || /(^|-)2g$/.test(conn.effectiveType ?? ""));
-    const update = () => setAllowed(!reduce.matches && !slow);
+    const update = () => { setAllowed(!reduce.matches && !slow); };
     update();
     reduce.addEventListener("change", update);
-    return () => reduce.removeEventListener("change", update);
+    return () => { reduce.removeEventListener("change", update); };
   }, []);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export function BackgroundVideo({
     let onScreen = false;
     const sync = () => {
       if (onScreen && document.visibilityState === "visible") {
-        video.play().catch(() => setPlaying(false));
+        video.play().catch(() => { setPlaying(false); });
       } else {
         video.pause();
       }
@@ -82,8 +82,8 @@ export function BackgroundVideo({
         disableRemotePlayback
         aria-hidden
         tabIndex={-1}
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
+        onPlay={() => { setPlaying(true); }}
+        onPause={() => { setPlaying(false); }}
       >
         <source src="/video/lisbran-intro-480.webm" type="video/webm" media="(max-width: 767px)" />
         <source src="/video/lisbran-intro-480.mp4" type="video/mp4" media="(max-width: 767px)" />
@@ -94,7 +94,7 @@ export function BackgroundVideo({
       {allowed && (
         <button
           type="button"
-          onClick={() => setUserPaused((p) => !p)}
+          onClick={() => { setUserPaused((p) => !p); }}
           aria-label={playing ? "Pause background video" : "Play background video"}
           className={`theme-preserve absolute z-20 w-9 min-h-9 bg-[#121212]/80 border-[1.5px] border-[#ece9e4]/60 text-[#ece9e4] flex items-center justify-center hover:bg-[#121212] transition-colors ${controlClassName}`}
         >

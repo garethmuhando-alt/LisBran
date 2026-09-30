@@ -32,7 +32,7 @@ export default function LogoDesignPage() {
 
   const valid = step === 0 ? !!style : step === 1 ? brand.trim().length > 0 : colours.length > 0;
   const toggleColour = (id: string) =>
-    setColours((c) => (c.includes(id) ? c.filter((x) => x !== id) : c.length < 2 ? [...c, id] : c));
+    { setColours((c) => (c.includes(id) ? c.filter((x) => x !== id) : c.length < 2 ? [...c, id] : c)); };
 
   const next = () => {
     if (!valid) return;
@@ -55,7 +55,7 @@ export default function LogoDesignPage() {
               <button
                 type="button"
                 disabled={i > step}
-                onClick={() => setStep(i)}
+                onClick={() => { setStep(i); }}
                 aria-current={i === step ? "step" : undefined}
                 className={`w-full flex items-center gap-3 py-2 lg:py-3 text-left text-sm font-semibold border-t-[1.5px] disabled:opacity-50 ${i <= step ? "border-rod" : "border-rod-soft text-ink-3"}`}
               >
@@ -74,7 +74,7 @@ export default function LogoDesignPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-rod border-[1.5px] border-rod">
                 {styles.map((s) => (
                   <label key={s.id} className="relative bg-ground cursor-pointer">
-                    <input type="radio" name="style" value={s.id} checked={style === s.id} onChange={() => setStyle(s.id)} className="peer sr-only" />
+                    <input type="radio" name="style" value={s.id} checked={style === s.id} onChange={() => { setStyle(s.id); }} className="peer sr-only" />
                     <span className="block p-5 peer-checked:bg-cord peer-checked:text-cord-ink peer-focus-visible:outline-2 peer-focus-visible:outline-cord">
                       <span className="block font-display text-2xl">{s.name}</span>
                       <span className="block text-sm opacity-80 mt-1">{s.note}</span>
@@ -90,11 +90,11 @@ export default function LogoDesignPage() {
               <h2 className="font-display text-3xl">What should the logo say?</h2>
               <div>
                 <label htmlFor="brand" className="block text-sm font-semibold text-ink-2 mb-1.5">Brand name</label>
-                <input id="brand" value={brand} onChange={(e) => setBrand(e.target.value)} autoComplete="organization" className="min-h-12 w-full bg-surface border-[1.5px] border-rod px-3 text-lg focus:outline-none focus:border-cord" />
+                <input id="brand" value={brand} onChange={(e) => { setBrand(e.target.value); }} autoComplete="organization" className="min-h-12 w-full bg-surface border-[1.5px] border-rod px-3 text-lg focus:outline-none focus:border-cord" />
               </div>
               <div>
                 <label htmlFor="slogan" className="block text-sm font-semibold text-ink-2 mb-1.5">Slogan <span className="font-normal text-ink-3">(optional)</span></label>
-                <input id="slogan" value={slogan} onChange={(e) => setSlogan(e.target.value)} className="min-h-12 w-full bg-surface border-[1.5px] border-rod px-3 focus:outline-none focus:border-cord" />
+                <input id="slogan" value={slogan} onChange={(e) => { setSlogan(e.target.value); }} className="min-h-12 w-full bg-surface border-[1.5px] border-rod px-3 focus:outline-none focus:border-cord" />
               </div>
             </div>
           )}
@@ -108,7 +108,7 @@ export default function LogoDesignPage() {
                   const on = colours.includes(p.id);
                   return (
                     <label key={p.id} className="flex items-center gap-4 py-3 border-b border-rod-soft cursor-pointer">
-                      <input type="checkbox" checked={on} onChange={() => toggleColour(p.id)} disabled={!on && colours.length >= 2} className="w-5 h-5" />
+                      <input type="checkbox" checked={on} onChange={() => { toggleColour(p.id); }} disabled={!on && colours.length >= 2} className="w-5 h-5" />
                       <span className="flex h-8 border-[1.5px] border-rod" aria-hidden>
                         {p.swatch.map((c) => <span key={c} className="w-8 h-full" style={{ background: c }} />)}
                       </span>
@@ -122,7 +122,7 @@ export default function LogoDesignPage() {
 
           <div className="mt-8 flex items-center gap-3">
             {step > 0 && (
-              <button type="button" onClick={() => setStep(step - 1)} className="min-h-12 px-5 inline-flex items-center gap-2 border-[1.5px] border-rod font-bold hover:bg-ink hover:text-ground">
+              <button type="button" onClick={() => { setStep(step - 1); }} className="min-h-12 px-5 inline-flex items-center gap-2 border-[1.5px] border-rod font-bold hover:bg-ink hover:text-ground">
                 <ArrowLeft size={18} /> Back
               </button>
             )}

@@ -119,11 +119,10 @@ export default function RootLayout({
     // The head script sets the theme class on <html> before hydration.
     <html lang="en" suppressHydrationWarning className={`${archivo.variable} ${geistMono.variable} h-full antialiased`}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
-        />
+        {/* Static, first-party content only. React writes <script> children verbatim;
+            the theme script contains no "</" and the JSON-LD escapes "<". */}
+        <script>{themeInitScript}</script>
+        <script type="application/ld+json">{JSON.stringify(jsonLd).replace(/</g, "\\u003c")}</script>
       </head>
       <body className="min-h-full flex flex-col bg-ground text-ink overflow-x-hidden">
         <a href="#content" className="skip-link">Skip to content</a>

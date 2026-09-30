@@ -9,7 +9,8 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { budgetLabel, cities, services, urgencyLabel, type Budget, type Urgency } from "@/lib/catalog";
 import { supabase } from "@/lib/supabase";
 
-type Media = { url: string; type: "image" | "video" };
+type Media = { id: string; url: string; type: "image" | "video" };
+type Contact = { kind: "email" | "phone"; value: string };
 type VendorRecord = {
   id?: string; business_name: string; phone?: string; email?: string; category?: string; bio?: string;
   social_link?: string; verified?: boolean; city?: string; turnaround?: string; budget?: string; price_from?: number;
@@ -72,26 +73,26 @@ export default function SellerOnboardingPage() {
 
   useEffect(() => {
     if (resendIn <= 0) return;
-    const t = setTimeout(() => setResendIn((n) => n - 1), 1000);
-    return () => clearTimeout(t);
+    const t = setTimeout(() => { setResendIn((n) => n - 1); }, 1000);
+    return () => { clearTimeout(t); };
   }, [resendIn]);
 
   const fullPhone = (p: string) => `+254${p.replace(/\D/g, "").replace(/^0/, "").replace(/^254/, "")}`;
 
   // ── Codes ────────────────────────────────────────────────────────────────
-  const sendCode = async (target: { email?: string; phone?: string }, createUser: boolean) => {
+  const sendCode = async (target: Contact, createUser: boolean) => {
     setError("");
     setBusy(true);
     try {
       if (supabase) {
-        const { error: err } = target.email
-          ? await supabase.auth.signInWithOtp({ email: target.email, options: { shouldCreateUser: createUser } })
-          : await supabase.auth.signInWithOtp({ phone: target.phone!, options: { shouldCreateUser: createUser } });
+        const { error: err } = target.kind === "email"
+          ? await supabase.auth.signInWithOtp({ email: target.value, options: { shouldCreateUser: createUser } })
+          : await supabase.auth.signInWithOtp({ phone: target.value, options: { shouldCreateUser: createUser } });
         if (err) throw err;
       } else if (IS_DEV) {
-        setDevCode(String(Math.floor(100000 + Math.random() * 900000)));
+        setDevCode(String(100000 + (crypto.getRandomValues(new Uint32Array(1))[0] % 900000)));
       }
-      setCodeSentTo(target.email ?? target.phone ?? "");
+      setCodeSentTo(target.value);
       setResendIn(60);
     } catch (e) {
       setError((e as Error).message || "We couldn't send the code. Check the address and try again.");
@@ -99,15 +100,15 @@ export default function SellerOnboardingPage() {
     setBusy(false);
   };
 
-  const checkCode = async (target: { email?: string; phone?: string }) => {
+  const checkCode = async (target: Contact) => {
     if (code.length < 6) { setError("Enter the 6-digit code."); return false; }
     setError("");
     setBusy(true);
     try {
       if (supabase) {
-        const { error: err } = target.email
-          ? await supabase.auth.verifyOtp({ email: target.email, token: code, type: "email" })
-          : await supabase.auth.verifyOtp({ phone: target.phone!, token: code, type: "sms" });
+        const { error: err } = target.kind === "email"
+          ? await supabase.auth.verifyOtp({ email: target.value, token: code, type: "email" })
+          : await supabase.auth.verifyOtp({ phone: target.value, token: code, type: "sms" });
         if (err) throw err;
       } else if (IS_DEV && code !== devCode) {
         throw new Error("That code doesn't match.");
@@ -129,14 +130,14 @@ export default function SellerOnboardingPage() {
     if (verified) { setStep(1); return; }
     // Without Supabase in production there is nothing to verify against: listings stay on this device.
     if (!supabase && !IS_DEV) { setVerified(true); setStep(1); return; }
-    if (!codeSentTo) { await sendCode({ email }, true); return; }
-    if (await checkCode({ email })) { setVerified(true); setCodeSentTo(null); setCode(""); setStep(1); }
+    if (!codeSentTo) { await sendCode({ kind: "email", value: email }, true); return; }
+    if (await checkCode({ kind: "email", value: email })) { setVerified(true); setCodeSentTo(null); setCode(""); setStep(1); }
   };
 
   const addMedia = (type: Media["type"]) => (e: React.ChangeEvent<HTMLInputElement>) => {
     Array.from(e.target.files ?? []).forEach((file) => {
       const reader = new FileReader();
-      reader.onload = (ev) => setMedia((m) => [...m, { url: ev.target?.result as string, type }]);
+      reader.onload = (ev) => { setMedia((m) => [...m, { id: crypto.randomUUID(), url: ev.target?.result as string, type }]); };
       reader.readAsDataURL(file);
     });
     e.target.value = "";
@@ -189,7 +190,7 @@ export default function SellerOnboardingPage() {
   };
 
   // ── Sign in ──────────────────────────────────────────────────────────────
-  const signinTarget = () => (signinBy === "email" ? { email: signinValue.trim() } : { phone: fullPhone(signinValue) });
+  const signinTarget = (): Contact => (signinBy === "email" ? { kind: "email", value: signinValue.trim() } : { kind: "phone", value: fullPhone(signinValue) });
 
   const signin = async () => {
     const target = signinTarget();
@@ -200,18 +201,16 @@ export default function SellerOnboardingPage() {
       }
       if (!supabase) {
         const saved = signinBy === "email" ? localStorage.getItem("seller_email") : localStorage.getItem("seller_phone");
-        const value = target.email ?? target.phone;
-        if (saved && saved === value) router.push("/seller/dashboard");
+        if (saved && saved === target.value) router.push("/seller/dashboard");
         else setError("No listing on this device matches that. Create one below.");
         return;
       }
       await sendCode(target, false);
       return;
     }
-    if (!(await checkCode(target))) return;
+    if (!(await checkCode(target)) || !supabase) return;
     setBusy(true);
-    const col = target.email ? "email" : "phone";
-    const { data } = await supabase!.from("vendors").select("*").eq(col, target.email ?? target.phone!).maybeSingle();
+    const { data } = await supabase.from("vendors").select("*").eq(target.kind, target.value).maybeSingle();
     if (!data) { setError("You're signed in, but there's no listing for this contact yet. Create one below."); setBusy(false); return; }
     saveLocal(data as VendorRecord);
     router.push("/seller/dashboard");
@@ -257,22 +256,22 @@ export default function SellerOnboardingPage() {
         <div className={`col-span-12 ${mode === "signup" ? "lg:col-span-9" : "lg:col-span-6"} max-w-3xl`}>
           {mode === "signin" ? (
             <form className="flex flex-col gap-5" onSubmit={(e) => { e.preventDefault(); void signin(); }}>
-              <div role="radiogroup" aria-label="Sign in with" className="flex border-[1.5px] border-rod self-start">
-                {(["email", "phone"] as const).map((k) => (
-                  <button key={k} type="button" role="radio" aria-checked={signinBy === k}
-                    onClick={() => { setSigninBy(k); setCodeSentTo(null); setCode(""); setError(""); }}
-                    className={`min-h-10 px-4 text-sm font-semibold ${signinBy === k ? "bg-cord text-cord-ink" : "hover:bg-surface"}`}>
-                    {k === "email" ? "Email" : "Phone"}
-                  </button>
-                ))}
-              </div>
+              <fieldset>
+                <legend className={labelCls}>Sign in with</legend>
+                <div className="flex flex-wrap gap-2">
+                  {(["email", "phone"] as const).map((k) => (
+                    <Chip key={k} name="signin-by" checked={signinBy === k} label={k === "email" ? "Email" : "Phone"}
+                      onPick={() => { setSigninBy(k); setCodeSentTo(null); setCode(""); setError(""); }} />
+                  ))}
+                </div>
+              </fieldset>
               <div>
                 <label htmlFor="signin-value" className={labelCls}>{signinBy === "email" ? "Email address" : "Phone number"}</label>
-                <input id="signin-value" value={signinValue} onChange={(e) => setSigninValue(e.target.value)} disabled={!!codeSentTo}
+                <input id="signin-value" value={signinValue} onChange={(e) => { setSigninValue(e.target.value); }} disabled={!!codeSentTo}
                   type={signinBy === "email" ? "email" : "tel"} autoComplete={signinBy === "email" ? "email" : "tel"}
                   placeholder={signinBy === "email" ? "you@business.co.ke" : "0712 345 678"} className={field} />
               </div>
-              {codeSentTo && <CodeField code={code} setCode={setCode} sentTo={codeSentTo} devCode={IS_DEV ? devCode : ""} resendIn={resendIn} onResend={() => sendCode(signinTarget(), false)} onChange={() => { setCodeSentTo(null); setCode(""); }} />}
+              {codeSentTo && <CodeField code={code} setCode={setCode} sentTo={codeSentTo} devCode={IS_DEV ? devCode : ""} resendIn={resendIn} onResend={() => { void sendCode(signinTarget(), false); }} onChange={() => { setCodeSentTo(null); setCode(""); }} />}
               {error && <p role="alert" className="text-sm font-semibold text-cord">{error}</p>}
               <button type="submit" disabled={busy} className="self-start min-h-12 px-6 inline-flex items-center gap-2 bg-cord text-cord-ink font-bold hover:brightness-110 disabled:opacity-50">
                 {busy ? "Please wait…" : codeSentTo ? "Sign in" : "Send code"} <ArrowRight size={18} />
@@ -284,19 +283,19 @@ export default function SellerOnboardingPage() {
                 <>
                   <div>
                     <label htmlFor="biz" className={labelCls}>Business name</label>
-                    <input id="biz" value={businessName} onChange={(e) => setBusinessName(e.target.value)} autoComplete="organization" required className={field} />
+                    <input id="biz" value={businessName} onChange={(e) => { setBusinessName(e.target.value); }} autoComplete="organization" required className={field} />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label htmlFor="service" className={labelCls}>Main service</label>
-                      <select id="service" value={service} onChange={(e) => setService(e.target.value)} required className={field}>
+                      <select id="service" value={service} onChange={(e) => { setService(e.target.value); }} required className={field}>
                         <option value="" disabled>Choose one</option>
                         {services.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
                       </select>
                     </div>
                     <div>
                       <label htmlFor="city" className={labelCls}>City</label>
-                      <select id="city" value={city} onChange={(e) => setCity(e.target.value)} className={field}>
+                      <select id="city" value={city} onChange={(e) => { setCity(e.target.value); }} className={field}>
                         {cities.map((c) => <option key={c} value={c}>{c}</option>)}
                       </select>
                     </div>
@@ -310,13 +309,13 @@ export default function SellerOnboardingPage() {
                       <label htmlFor="phone" className={labelCls}>Phone (WhatsApp)</label>
                       <div className="flex">
                         <span className="min-h-12 px-3 inline-flex items-center border-[1.5px] border-r-0 border-rod bg-surface-2 font-mono tabular text-sm">+254</span>
-                        <input id="phone" type="tel" inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel-national" placeholder="712 345 678" required className={field} />
+                        <input id="phone" type="tel" inputMode="tel" value={phone} onChange={(e) => { setPhone(e.target.value); }} autoComplete="tel-national" placeholder="712 345 678" required className={field} />
                       </div>
                     </div>
                   </div>
                   {codeSentTo && (
                     <CodeField code={code} setCode={setCode} sentTo={codeSentTo} devCode={IS_DEV ? devCode : ""} resendIn={resendIn}
-                      onResend={() => sendCode({ email }, true)} onChange={() => { setCodeSentTo(null); setCode(""); }} />
+                      onResend={() => { void sendCode({ kind: "email", value: email }, true); }} onChange={() => { setCodeSentTo(null); setCode(""); }} />
                   )}
                   {verified && <p className="text-sm font-semibold text-ok flex items-center gap-1.5"><Check size={16} /> Email verified</p>}
                 </>
@@ -326,13 +325,13 @@ export default function SellerOnboardingPage() {
                 <>
                   <div>
                     <label htmlFor="bio" className={labelCls}>What you do</label>
-                    <textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} rows={4} placeholder="Who you've worked with, what you're best at, how fast you deliver." className="w-full bg-surface border-[1.5px] border-rod p-3 text-ink focus:outline-none focus:border-cord" />
+                    <textarea id="bio" value={bio} onChange={(e) => { setBio(e.target.value); }} rows={4} placeholder="Who you've worked with, what you're best at, how fast you deliver." className="w-full bg-surface border-[1.5px] border-rod p-3 text-ink focus:outline-none focus:border-cord" />
                   </div>
                   <fieldset>
                     <legend className={labelCls}>How fast can you usually deliver?</legend>
                     <div className="flex flex-wrap gap-2">
                       {(Object.keys(urgencyLabel) as Urgency[]).map((u) => (
-                        <Chip key={u} name="turnaround" checked={turnaround === u} onPick={() => setTurnaround(u)} label={urgencyLabel[u]} />
+                        <Chip key={u} name="turnaround" checked={turnaround === u} onPick={() => { setTurnaround(u); }} label={urgencyLabel[u]} />
                       ))}
                     </div>
                   </fieldset>
@@ -341,18 +340,18 @@ export default function SellerOnboardingPage() {
                       <legend className={labelCls}>Price tier</legend>
                       <div className="flex flex-wrap gap-2">
                         {(Object.keys(budgetLabel) as Budget[]).map((b) => (
-                          <Chip key={b} name="budget" checked={budget === b} onPick={() => setBudget(b)} label={budgetLabel[b]} />
+                          <Chip key={b} name="budget" checked={budget === b} onPick={() => { setBudget(b); }} label={budgetLabel[b]} />
                         ))}
                       </div>
                     </fieldset>
                     <div>
                       <label htmlFor="price" className={labelCls}>Prices from (KES) <span className="font-normal text-ink-3">optional</span></label>
-                      <input id="price" type="number" inputMode="numeric" min={0} step={100} value={priceFrom} onChange={(e) => setPriceFrom(e.target.value)} className={`${field} font-mono tabular`} />
+                      <input id="price" type="number" inputMode="numeric" min={0} step={100} value={priceFrom} onChange={(e) => { setPriceFrom(e.target.value); }} className={`${field} font-mono tabular`} />
                     </div>
                   </div>
                   <div>
                     <label htmlFor="social" className={labelCls}>Instagram or website <span className="font-normal text-ink-3">optional</span></label>
-                    <input id="social" type="url" value={social} onChange={(e) => setSocial(e.target.value)} placeholder="https://instagram.com/yourbusiness" className={field} />
+                    <input id="social" type="url" value={social} onChange={(e) => { setSocial(e.target.value); }} placeholder="https://instagram.com/yourbusiness" className={field} />
                   </div>
                   <div>
                     <p className={labelCls}>Portfolio</p>
@@ -365,9 +364,9 @@ export default function SellerOnboardingPage() {
                     {media.length > 0 ? (
                       <ul className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                         {media.map((m, i) => (
-                          <li key={i} className="relative aspect-square border-[1.5px] border-rod bg-surface overflow-hidden">
+                          <li key={m.id} className="relative aspect-square border-[1.5px] border-rod bg-surface overflow-hidden">
                             {m.type === "image" ? <Image src={m.url} alt="" fill unoptimized className="object-cover" /> : <video src={m.url} className="absolute inset-0 w-full h-full object-cover" muted />}
-                            <button type="button" aria-label="Remove" onClick={() => setMedia((all) => all.filter((_, j) => j !== i))} className="absolute top-1 right-1 w-7 h-7 bg-ink text-ground inline-flex items-center justify-center"><X size={14} /></button>
+                            <button type="button" aria-label="Remove" onClick={() => { setMedia((all) => all.filter((_, j) => j !== i)); }} className="absolute top-1 right-1 w-7 h-7 bg-ink text-ground inline-flex items-center justify-center"><X size={14} /></button>
                           </li>
                         ))}
                       </ul>
@@ -436,10 +435,12 @@ function Chip({ name, checked, onPick, label }: { name: string; checked: boolean
 function CodeField({
   code, setCode, sentTo, devCode, resendIn, onResend, onChange,
 }: { code: string; setCode: (v: string) => void; sentTo: string; devCode: string; resendIn: number; onResend: () => void; onChange: () => void }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => { inputRef.current?.focus(); }, []);
   return (
     <div className="border-[1.5px] border-rod p-4 bg-surface">
       <label htmlFor="otp" className="block font-semibold">Enter the 6-digit code sent to {sentTo}</label>
-      <input id="otp" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))} inputMode="numeric" autoComplete="one-time-code" autoFocus
+      <input id="otp" value={code} onChange={(e) => { setCode(e.target.value.replace(/\D/g, "").slice(0, 6)); }} ref={inputRef} inputMode="numeric" autoComplete="one-time-code"
         className="mt-2 min-h-12 w-48 bg-ground border-[1.5px] border-rod px-3 font-mono tabular text-2xl tracking-[0.3em] focus:outline-none focus:border-cord" />
       {devCode && <p className="mt-2 text-xs text-ink-3">Development build, no Supabase: use code <span className="font-mono">{devCode}</span></p>}
       <div className="mt-3 flex gap-4 text-sm">

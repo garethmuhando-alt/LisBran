@@ -16,8 +16,8 @@ export default function NotificationsPage() {
       const seller = (localStorage.getItem("seller_name") || "").toLowerCase().replace(/\s+/g, "-");
       if (!seller) return;
       const list = JSON.parse(localStorage.getItem(`seller_bookings_${seller}`) || "[]") as Enquiry[];
-      const id = requestAnimationFrame(() => setItems(list));
-      return () => cancelAnimationFrame(id);
+      const id = requestAnimationFrame(() => { setItems(list); });
+      return () => { cancelAnimationFrame(id); };
     } catch {}
   }, []);
 

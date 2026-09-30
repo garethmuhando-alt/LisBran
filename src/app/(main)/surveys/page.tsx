@@ -17,7 +17,7 @@ export default function SurveysPage() {
         {surveys.map((s) => (
           <li key={s.title} className="bg-ground">
             <a
-              href={`mailto:${siteConfig.email}?subject=${encodeURIComponent(`Survey: ${s.title}`)}&body=${encodeURIComponent(s.desc + "\n\n")}`}
+              href={`mailto:${siteConfig.email}?subject=${encodeURIComponent(`Survey: ${s.title}`)}&body=${encodeURIComponent(`${s.desc}\n\n`)}`}
               className="group flex h-full flex-col gap-6 p-5 hover:bg-surface transition-colors"
             >
               <span className="flex items-start justify-between gap-4">

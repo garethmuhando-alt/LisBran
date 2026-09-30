@@ -72,20 +72,17 @@ export default function MapPage() {
         parent={{ href: "/events", label: "Events" }}
         description="Where suppliers and events are across Kenya. Events are illustrative; suppliers are sample listings."
       >
-        <div role="radiogroup" aria-label="Show" className="flex flex-wrap border-[1.5px] border-rod">
+        <fieldset className="flex flex-wrap border-[1.5px] border-rod">
+          <legend className="sr-only">Show</legend>
           {(["all", "event", "supplier"] as const).map((k) => (
-            <button
-              key={k}
-              type="button"
-              role="radio"
-              aria-checked={show === k}
-              onClick={() => setShow(k)}
-              className={`min-h-10 px-4 text-sm font-semibold ${show === k ? "bg-cord text-cord-ink" : "hover:bg-surface"}`}
-            >
-              {k === "all" ? "Everything" : k === "event" ? "Events" : "Suppliers"}
-            </button>
+            <label key={k} className="relative cursor-pointer">
+              <input type="radio" name="map-show" value={k} checked={show === k} onChange={() => { setShow(k); }} className="peer sr-only" />
+              <span className="flex min-h-10 items-center px-4 text-sm font-semibold hover:bg-surface peer-checked:bg-cord peer-checked:text-cord-ink peer-focus-visible:outline-2 peer-focus-visible:outline-cord">
+                {k === "all" ? "Everything" : k === "event" ? "Events" : "Suppliers"}
+              </span>
+            </label>
           ))}
-        </div>
+        </fieldset>
       </PageHeader>
 
       <div className="wrap pb-16 grid grid-cols-12 gap-y-6 lg:gap-x-[2.5vw]">
@@ -127,7 +124,7 @@ export default function MapPage() {
             <li key={p.id} className="border-b border-rod-soft">
               <button
                 type="button"
-                onClick={() => select(p)}
+                onClick={() => { select(p); }}
                 aria-pressed={selectedId === p.id}
                 className={`w-full text-left flex items-start gap-3 py-3 px-2 hover:bg-surface ${selectedId === p.id ? "bg-surface" : ""}`}
               >
@@ -179,7 +176,7 @@ function LiveMap({
           key={p.id}
           position={{ lat: p.lat, lng: p.lng }}
           title={p.name}
-          onClick={() => onSelect(p)}
+          onClick={() => { onSelect(p); }}
           icon={{
             path: p.kind === "event" ? google.maps.SymbolPath.CIRCLE : "M -6 -6 L 6 -6 L 6 6 L -6 6 Z",
             scale: p.kind === "event" ? 8 : 1,

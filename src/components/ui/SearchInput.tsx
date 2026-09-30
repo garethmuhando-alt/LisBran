@@ -16,7 +16,8 @@ export function SearchInput({ className, ...props }: SearchInputProps) {
   };
 
   return (
-    <form role="search" onSubmit={handleSearch} className={cn("relative w-full", className)}>
+    <search className={cn("block relative w-full", className)}>
+    <form onSubmit={handleSearch} className="relative w-full">
       <label htmlFor="site-search" className="sr-only">Search services</label>
       <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-3 pointer-events-none" aria-hidden />
       <input
@@ -27,5 +28,6 @@ export function SearchInput({ className, ...props }: SearchInputProps) {
         {...props}
       />
     </form>
+    </search>
   );
 }

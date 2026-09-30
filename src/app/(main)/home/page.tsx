@@ -29,8 +29,8 @@ export default function HomePage() {
       const saved = localStorage.getItem(CITY_KEY);
       if (saved) {
         const city = saved[0].toUpperCase() + saved.slice(1);
-        const id = requestAnimationFrame(() => setJob((j) => ({ ...j, city })));
-        return () => cancelAnimationFrame(id);
+        const id = requestAnimationFrame(() => { setJob((j) => ({ ...j, city })); });
+        return () => { cancelAnimationFrame(id); };
       }
     } catch {}
   }, []);
@@ -137,7 +137,7 @@ export default function HomePage() {
                     <span className="md:hidden block text-sm text-ink-2">{svc.blurb}</span>
                   </span>
                   <span className="hidden md:block text-ink-2 min-w-0">{svc.blurb}</span>
-                  <span className="hidden md:flex items-center gap-2 text-sm" aria-label={`${able} of ${total} can take this job`}>
+                  <span className="hidden md:flex items-center gap-2 text-sm">
                     <span aria-hidden className={`w-2 h-2 shrink-0 ${able > 0 ? "bg-cord" : "bg-rod-soft"}`} />
                     <span><span className="font-mono tabular font-semibold">{able}</span> of <span className="font-mono tabular">{total}</span> can take it{quickest && <span className="block text-ink-3 text-xs">fastest: {urgencyLabel[quickest]}</span>}</span>
                   </span>

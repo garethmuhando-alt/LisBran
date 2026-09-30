@@ -43,20 +43,20 @@ export default function SellerDashboardPage() {
       }
     } catch {}
     const id = requestAnimationFrame(() => { setSeller(next); setViews(v); setEnquiries(e); });
-    return () => cancelAnimationFrame(id);
+    return () => { cancelAnimationFrame(id); };
   }, []);
 
   // Refresh verification status from Supabase when connected.
   useEffect(() => {
     const id = typeof window !== "undefined" ? localStorage.getItem("seller_supabase_id") : null;
     if (!supabase || !id) return;
-    supabase.from("vendors").select("verified").eq("id", id).maybeSingle().then(({ data }) => {
+    void supabase.from("vendors").select("verified").eq("id", id).maybeSingle().then(({ data }) => {
       if (data && typeof data.verified === "boolean") {
         localStorage.setItem("seller_verified", data.verified ? "true" : "false");
         setSeller((s) => (s ? { ...s, verified: data.verified } : s));
       }
     });
-  }, [seller?.slug]);
+  }, []);
 
   if (seller === undefined) return <div className="wrap py-16 text-ink-3">Loading…</div>;
 

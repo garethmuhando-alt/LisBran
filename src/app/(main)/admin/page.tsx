@@ -33,9 +33,9 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (!supabase) return;
-    supabase.auth.getSession().then(({ data }) => { setSession(data.session); setReady(true); });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
-    return () => sub.subscription.unsubscribe();
+    void supabase.auth.getSession().then(({ data }) => { setSession(data.session); setReady(true); });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => { setSession(s); });
+    return () => { sub.subscription.unsubscribe(); };
   }, []);
 
   const load = useCallback(async () => {
@@ -53,7 +53,7 @@ export default function AdminPage() {
   useEffect(() => {
     if (!isAdmin(session)) return;
     const id = requestAnimationFrame(() => { void load(); });
-    return () => cancelAnimationFrame(id);
+    return () => { cancelAnimationFrame(id); };
   }, [session, load]);
 
   const signIn = async (e: React.FormEvent) => {
@@ -99,14 +99,14 @@ export default function AdminPage() {
     return (
       <div>
         <PageHeader title="Admin sign in" description="For the LisBran team only." />
-        <form onSubmit={signIn} className="wrap pb-16 max-w-md flex flex-col gap-4">
+        <form onSubmit={(e) => { void signIn(e); }} className="wrap pb-16 max-w-md flex flex-col gap-4">
           <div>
             <label htmlFor="admin-email" className="block text-sm font-semibold text-ink-2 mb-1.5">Email</label>
-            <input id="admin-email" type="email" required autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} className="min-h-12 w-full bg-surface border-[1.5px] border-rod px-3 focus:outline-none focus:border-cord" />
+            <input id="admin-email" type="email" required autoComplete="username" value={email} onChange={(e) => { setEmail(e.target.value); }} className="min-h-12 w-full bg-surface border-[1.5px] border-rod px-3 focus:outline-none focus:border-cord" />
           </div>
           <div>
             <label htmlFor="admin-password" className="block text-sm font-semibold text-ink-2 mb-1.5">Password</label>
-            <input id="admin-password" type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} className="min-h-12 w-full bg-surface border-[1.5px] border-rod px-3 focus:outline-none focus:border-cord" />
+            <input id="admin-password" type="password" required autoComplete="current-password" value={password} onChange={(e) => { setPassword(e.target.value); }} className="min-h-12 w-full bg-surface border-[1.5px] border-rod px-3 focus:outline-none focus:border-cord" />
           </div>
           {error && <p role="alert" className="text-sm font-semibold text-cord">{error}</p>}
           <button type="submit" disabled={busy} className="self-start min-h-12 px-6 bg-ink text-ground font-bold hover:bg-cord hover:text-cord-ink disabled:opacity-50">
@@ -120,7 +120,7 @@ export default function AdminPage() {
   return (
     <div>
       <PageHeader title="Admin" description={`Signed in as ${session?.user.email}`}>
-        <button type="button" onClick={() => supabase!.auth.signOut()} className="inline-flex min-h-11 items-center gap-2 px-4 border-[1.5px] border-rod font-bold hover:bg-ink hover:text-ground">
+        <button type="button" onClick={() => { void supabase?.auth.signOut(); }} className="inline-flex min-h-11 items-center gap-2 px-4 border-[1.5px] border-rod font-bold hover:bg-ink hover:text-ground">
           <LogOut size={16} /> Sign out
         </button>
       </PageHeader>
@@ -148,8 +148,8 @@ export default function AdminPage() {
                     {v.created_at && <p className="text-xs text-ink-3 font-mono tabular">{new Date(v.created_at).toLocaleString("en-KE", { dateStyle: "medium", timeStyle: "short" })}</p>}
                   </div>
                   <div className="flex gap-2">
-                    <button type="button" onClick={() => decide(v, false)} className="min-h-10 px-4 inline-flex items-center gap-1.5 border-[1.5px] border-rod text-sm font-semibold hover:bg-ink hover:text-ground"><X size={15} /> Reject</button>
-                    <button type="button" onClick={() => decide(v, true)} className="min-h-10 px-4 inline-flex items-center gap-1.5 bg-cord text-cord-ink text-sm font-bold hover:brightness-110"><Check size={15} /> Approve</button>
+                    <button type="button" onClick={() => { void decide(v, false); }} className="min-h-10 px-4 inline-flex items-center gap-1.5 border-[1.5px] border-rod text-sm font-semibold hover:bg-ink hover:text-ground"><X size={15} /> Reject</button>
+                    <button type="button" onClick={() => { void decide(v, true); }} className="min-h-10 px-4 inline-flex items-center gap-1.5 bg-cord text-cord-ink text-sm font-bold hover:brightness-110"><Check size={15} /> Approve</button>
                   </div>
                 </li>
               ))}

@@ -51,7 +51,7 @@ function Results({ category }: { category: string }) {
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+    void (async () => {
       const found: Supplier[] = [];
       if (supabase) {
         const { data } = await supabase.from("vendors").select("*").eq("verified", true);

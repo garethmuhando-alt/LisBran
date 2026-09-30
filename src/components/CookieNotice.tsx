@@ -21,8 +21,8 @@ export function CookieNotice() {
       // Storage blocked — show the notice; it just won't be remembered.
     }
     if (!seen) {
-      const id = requestAnimationFrame(() => setOpen(true));
-      return () => cancelAnimationFrame(id);
+      const id = requestAnimationFrame(() => { setOpen(true); });
+      return () => { cancelAnimationFrame(id); };
     }
   }, []);
 
@@ -38,8 +38,7 @@ export function CookieNotice() {
   // A slim bar on the bottom edge (above the phone tab bar), so it never
   // covers the page's primary action.
   return (
-    <div
-      role="region"
+    <section
       aria-label="Cookie notice"
       className="fixed inset-x-0 bottom-16 lg:bottom-0 z-[60] bg-surface border-t-[1.5px] border-rod lg:pb-[env(safe-area-inset-bottom)]"
     >
@@ -56,6 +55,6 @@ export function CookieNotice() {
           Got it
         </button>
       </div>
-    </div>
+    </section>
   );
 }

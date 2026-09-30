@@ -82,7 +82,7 @@ export default function ProfilePage() {
             <div className="grid grid-cols-3 gap-px bg-rod border-[1.5px] border-rod">
               {appearance.map((a) => (
                 <label key={a.value} className="relative bg-ground cursor-pointer">
-                  <input type="radio" name="appearance" value={a.value} checked={theme === a.value} onChange={() => setTheme(a.value)} className="peer sr-only" />
+                  <input type="radio" name="appearance" value={a.value} checked={theme === a.value} onChange={() => { setTheme(a.value); }} className="peer sr-only" />
                   <span className="block p-4 peer-checked:bg-cord peer-checked:text-cord-ink peer-focus-visible:outline-2 peer-focus-visible:outline-cord">
                     <span className="block font-semibold">{a.label}</span>
                     <span className="block text-sm opacity-75">{a.note}</span>

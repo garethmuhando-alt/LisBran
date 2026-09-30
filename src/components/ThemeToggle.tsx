@@ -19,7 +19,7 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
   return (
     <button
       type="button"
-      onClick={() => setTheme(next)}
+      onClick={() => { setTheme(next); }}
       aria-label={`${LABELS[theme]} — switch to ${LABELS[next].toLowerCase()}`}
       title={`${LABELS[theme]} (click for ${LABELS[next].toLowerCase()})`}
       className={`inline-flex w-9 min-h-9 items-center justify-center text-ink-2 hover:text-ink transition-colors ${className}`}

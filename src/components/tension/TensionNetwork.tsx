@@ -67,7 +67,7 @@ export function TensionNetwork({ job }: { job: Job }) {
 
       {/* Cords */}
       <div aria-hidden className="hidden md:block md:col-span-2 lg:col-span-3" style={{ height: `${rows.length * ROW_REM}rem` }}>
-        <svg viewBox={`0 0 100 ${h}`} preserveAspectRatio="none" className="w-full h-full overflow-visible">
+        <svg aria-hidden="true" focusable="false" viewBox={`0 0 100 ${h}`} preserveAspectRatio="none" className="w-full h-full overflow-visible">
           {rows.map(({ s, ok }, i) => (
             <motion.path
               key={s.id}
