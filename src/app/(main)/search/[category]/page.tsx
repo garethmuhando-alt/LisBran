@@ -14,18 +14,20 @@ type VendorRow = { business_name: string; category?: string; bio?: string; phone
 const slugify = (v: string) => v.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 // Categories used by earlier versions of onboarding, mapped onto the current services.
-const LEGACY_CATEGORY: Record<string, string> = {
-  agencies: "consultancy",
-  ambassadors: "activations",
-  dancers: "activations",
-  events: "activations",
-  promotion: "influencer",
-};
+// A Map, not an object literal: the key comes from vendor data, and a plain
+// object would also answer for inherited keys such as "constructor".
+const LEGACY_CATEGORY = new Map<string, string>([
+  ["agencies", "consultancy"],
+  ["ambassadors", "activations"],
+  ["dancers", "activations"],
+  ["events", "activations"],
+  ["promotion", "influencer"],
+]);
 
 // Map a live vendor record (Supabase or this device's onboarding) onto the catalog shape.
 function toSupplier(v: VendorRow): Supplier {
   const cat = slugify(v.category || "");
-  const service = serviceBySlug(cat)?.slug ?? LEGACY_CATEGORY[cat] ?? "consultancy";
+  const service = serviceBySlug(cat)?.slug ?? LEGACY_CATEGORY.get(cat) ?? "consultancy";
   return {
     id: slugify(v.business_name),
     name: v.business_name,
