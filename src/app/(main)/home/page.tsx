@@ -124,9 +124,7 @@ export default function HomePage() {
                   className="group grid grid-cols-[3.5rem_minmax(0,1fr)_auto] md:grid-cols-[4.5rem_minmax(0,1.2fr)_minmax(0,2fr)_9rem_auto] items-center gap-x-4 md:gap-x-6 py-3"
                 >
                   {svc.art ? (
-                    <span className="theme-preserve relative w-14 h-14 md:w-[4.5rem] md:h-[4.5rem] border-[1.5px] border-rod bg-[#13181e] overflow-hidden">
-                      <Image src={svc.art} alt="" fill sizes="72px" className="object-cover" />
-                    </span>
+                    <Image src={svc.art} alt="" width={72} height={72} sizes="72px" className="w-14 h-14 md:w-[4.5rem] md:h-[4.5rem]" />
                   ) : (
                     <span aria-hidden className="w-14 md:w-[4.5rem] flex justify-center">
                       <span className={`w-2.5 h-2.5 ${selected ? "bg-cord" : "border-[1.5px] border-rod"}`} />

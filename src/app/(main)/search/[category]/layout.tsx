@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/metadata";
 
-import { serviceBySlug } from "@/lib/catalog";
+import { serviceBySlug, services } from "@/lib/catalog";
 
 const humanize = (slug: string) =>
   slug === "all" ? "All Services" : serviceBySlug(slug)?.name ?? slug.split("-").map((w) => w[0]?.toUpperCase() + w.slice(1)).join(" ");
@@ -17,9 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
 }
 
 export function generateStaticParams() {
-  return [
-    "all", "graphic-design", "printing", "consultancy", "agencies", "influencer", "activations", "ambassadors", "dancers",
-  ].map((category) => ({ category }));
+  return ["all", ...services.map((s) => s.slug)].map((category) => ({ category }));
 }
 
 export default function SearchCategoryLayout({ children }: { children: React.ReactNode }) {

@@ -28,10 +28,8 @@ export default function GraphicDesignServices() {
   const designers = suppliers.filter((s) => s.service === "graphic-design");
   return (
     <div>
-      <PageHeader title="Graphic design" parent={{ href: "/categories", label: "Services" }} description="Logos, brand identity, social and print artwork from Kenyan designers.">
-        <div className="theme-preserve relative w-24 h-24 md:w-32 md:h-32 border-[1.5px] border-rod bg-[#0d0d0f] overflow-hidden">
-          <Image src="/icon-graphic.png" alt="" fill sizes="128px" className="object-cover" priority />
-        </div>
+      <PageHeader title="Creative design" parent={{ href: "/categories", label: "Services" }} description="Logos, brand identity, social and print artwork from Kenyan designers.">
+        <Image src="/services/creative-design.png" alt="" width={128} height={128} sizes="128px" className="w-24 h-24 md:w-32 md:h-32" priority />
       </PageHeader>
 
       <div className="wrap pb-16 grid grid-cols-12 gap-y-10 lg:gap-x-[2.5vw]">

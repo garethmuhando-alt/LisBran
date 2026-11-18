@@ -44,7 +44,7 @@ export default function LogoDesignPage() {
     <div>
       <PageHeader
         title="Logo design"
-        parent={{ href: "/services/graphic-design", label: "Graphic design" }}
+        parent={{ href: "/services/graphic-design", label: "Creative design" }}
         description="Three quick choices and we'll show designers who work in that style."
       />
 

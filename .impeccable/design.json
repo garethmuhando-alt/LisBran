@@ -508,7 +508,7 @@
       "kind": "card",
       "refersTo": null,
       "description": "A ruled listing row: name, service and city, mono turnaround and price, urgent turnaround in cord.",
-      "html": "<a href=\"#\" class=\"ds-row\"><span class=\"ds-row-node\"></span><span class=\"ds-row-main\"><span class=\"ds-row-name\">River Road Print Works</span><span class=\"ds-row-meta\">Branding &amp; printing · Nairobi</span></span><span class=\"ds-row-data\"><span class=\"ds-row-urgent\">Overnight</span><span class=\"ds-row-price\">from KES 2,500</span></span><span class=\"ds-row-rating\">4.7</span></a>",
+      "html": "<a href=\"#\" class=\"ds-row\"><span class=\"ds-row-node\"></span><span class=\"ds-row-main\"><span class=\"ds-row-name\">River Road Print Works</span><span class=\"ds-row-meta\">Branding &amp; printing \u00b7 Nairobi</span></span><span class=\"ds-row-data\"><span class=\"ds-row-urgent\">Overnight</span><span class=\"ds-row-price\">from KES 2,500</span></span><span class=\"ds-row-rating\">4.7</span></a>",
       "css": ".ds-row{position:relative;display:flex;align-items:center;gap:16px;height:4.5rem;padding:0 8px 0 16px;border-bottom:1px solid var(--rod-soft,#c7c2ba);color:var(--ink,#141414);text-decoration:none;font-family:var(--font-archivo),'Helvetica Neue',Arial,sans-serif;transition:background-color .15s}.ds-row:hover{background:var(--surface,#f5f3ef)}.ds-row:focus-visible{outline:2px solid var(--cord,#d9143a);outline-offset:2px}.ds-row-node{position:absolute;left:-4px;top:50%;width:8px;height:8px;transform:translateY(-50%);background:var(--cord,#d9143a)}.ds-row-main{flex:1;min-width:0;display:flex;flex-direction:column}.ds-row-name{font-weight:600}.ds-row-meta{font-size:.875rem;color:var(--ink-2,#494744)}.ds-row-data{display:flex;flex-direction:column;text-align:right;font-family:var(--font-geist-mono),ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:.75rem;line-height:1.25rem}.ds-row-urgent{color:var(--cord,#d9143a);font-weight:600}.ds-row-price{color:var(--ink-2,#494744)}.ds-row-rating{width:48px;text-align:right;font-family:var(--font-geist-mono),ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:.875rem}"
     },
     {
@@ -568,7 +568,7 @@
       "**Do** keep every corner square (0px) and every surface flat.",
       "**Do** run content full width on the clamp(16px, 3.2vw, 112px) gutter, and hold measure on text with 48ch to 70ch.",
       "**Do** set every compared number in Geist Mono with tabular numerals.",
-      "**Do** list suppliers, services and items as ruled rows. Use owner service artwork (icon-graphic.png, icon-printing.png, icon-marketing.png) only as thumbnails inside those rows, on film-edge.",
+      "**Do** list suppliers, services and items as ruled rows. Use the owner service artwork (`/public/services/*.png`, ten line icons in the brand circle, transparent corners) only as thumbnails inside those rows, set directly on the ground with no frame.",
       "**Do** use the on-dark scope for anything placed over the brand film.",
       "**Do** ship day and night together and check WCAG 2.2 AA contrast in both.",
       "**Do** size signature geometry in rem so it survives 200% text."

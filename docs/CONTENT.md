@@ -4,7 +4,7 @@ LisBran's product principle is *honest about what is live*. Anything not yet rea
 
 ## Services
 
-`src/lib/catalog.ts` → `services`. The eight services come from the product brief. Each has a `slug` (used in `/search/<slug>`), a name, a one-line blurb, a link, and optional artwork in `public/` (`icon-graphic.png`, `icon-printing.png`, `icon-marketing.png`). Adding a service here adds it to the job tensioner, the Services index, the footer, onboarding and the sitemap.
+`src/lib/catalog.ts` → `services`. The ten services match the owner's service artwork in `public/services/`. Each has a `slug` (used in `/search/<slug>`), a name, a one-line blurb, a link, and its artwork. Brand ambassadors and dance crews sit under Brand activation, and agency overflow work under Sales & marketing consulting. Listings saved under older categories are mapped onto these (see `LEGACY_CATEGORY` in `src/app/(main)/search/[category]/page.tsx`). Adding a service here adds it to the job tensioner, the Services index, the footer, onboarding and the sitemap.
 
 ## Suppliers (sample)
 
