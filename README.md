@@ -67,6 +67,9 @@ src/
     site.ts metadata.ts   Brand/contact details and per-page metadata helper
     theme.ts saved.ts supabase.ts
 public/
+  brand/                  Logo mark (clean SVG from the vector master) and the full horizontal lockup, white and black
+  services/               The ten service icons supplied by LisBran
+  icons/                  PWA icons derived from the mark
   video/                  Intro film, web-optimised (see below)
 supabase/migrations/      Database schema + Row Level Security
 docs/                     Supabase, deployment, content guides

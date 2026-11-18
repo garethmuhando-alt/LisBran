@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LogoLockup } from "@/components/ui/Logo";
 import { services } from "@/lib/catalog";
 import { siteConfig } from "@/lib/site";
 
@@ -21,8 +22,10 @@ export default function SiteFooter() {
     <footer className="rod-top mt-4">
       <div className="wrap py-10 grid grid-cols-2 md:grid-cols-12 gap-8 text-sm">
         <div className="col-span-2 md:col-span-4">
-          <p className="font-display text-3xl">LisBran</p>
-          <p className="mt-2 text-ink-2 max-w-[36ch]">The agency of marketing agencies. Nairobi, Kenya.</p>
+          <Link href="/home" aria-label="LisBran home" className="inline-block">
+            <LogoLockup width={280} className="max-w-full" />
+          </Link>
+          <p className="mt-4 text-ink-2 max-w-[36ch]">The agency of marketing agencies. Nairobi, Kenya.</p>
           <p className="mt-4 flex flex-col gap-1">
             <a href={`mailto:${siteConfig.email}`} className="inline-flex min-h-7 items-center break-anywhere hover:text-cord">{siteConfig.email}</a>
             <a href={`tel:${siteConfig.phone}`} className="inline-flex min-h-7 items-center font-mono tabular hover:text-cord">{siteConfig.phoneDisplay}</a>

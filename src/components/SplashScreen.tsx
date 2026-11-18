@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
-import { Logo } from "@/components/ui/Logo";
+import { LogoLockup } from "@/components/ui/Logo";
 import { VideoMasthead } from "@/components/ui/VideoMasthead";
 
 // The one Persuade moment: the brand film owns the whole screen, with the
@@ -13,9 +13,8 @@ export default function SplashScreen() {
     <div className="relative min-h-[100svh] bg-[#13181e]">
       <header className="on-dark theme-preserve absolute inset-x-0 top-0 z-20">
         <div className="wrap h-16 flex items-center justify-between">
-          <Link href="/home" aria-label="LisBran home" className="flex items-center gap-2">
-            <Logo size={24} />
-            <span className="font-display text-2xl leading-none">LisBran</span>
+          <Link href="/home" aria-label="LisBran home" className="block">
+            <LogoLockup width={208} priority />
           </Link>
           <div className="flex items-center gap-2">
             <Link href="/home" className="hidden sm:inline-flex text-sm font-semibold text-ink-2 hover:text-ink px-2">Browse the marketplace</Link>

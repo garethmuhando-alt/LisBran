@@ -42,9 +42,9 @@ Open decisions: exact tier criteria and pricing; commission rate (brief suggests
 ## Brand Commitments
 
 - Name **LisBran**; operated by LisBran Marketing, Nairobi.
-- Logo: the "B" mark (white and black PNGs in `/public`) and the LisBran wordmark.
+- Logo (owner delivery, 2026-11-18): the "B" mark, used from its vector master `/public/brand/lisbran-mark.svg`; the full horizontal lockup "LisBran Marketing Services · Design·Branding·Marketing" in white and black (`/public/brand/lisbran-lockup-*.png`); favicons derived from the mark.
 - Intro video (`/public/video/lisbran-intro-*`) — brand-owned; its own palette is magenta/violet on near-black. Its lines: "Where identity meets intention", "We build brands with depth and design with purpose", "It all starts here, with us", "Ready to think differently?"
-- Service artwork: `/public/icon-graphic.png`, `/public/icon-marketing.png`, `/public/icon-printing.png`.
+- Service artwork (owner delivery, 2026-11-18): ten line icons in the pink-to-violet brand circle, one per service, in `/public/services/`. The ten services are Creative design, Social media management, Brand strategy & positioning, Branding & printing, Brand activation (including brand ambassadors and dance crews), Marketing materials procurement, 3D modelling, Photography & videography, Sales & marketing consulting, Influencer management.
 - Owner requirements: no emojis anywhere; must not look AI-generated; full-width layout; consistent navigation across every page; working dark and light themes.
 
 ## Evidence on Hand

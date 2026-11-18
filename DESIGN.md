@@ -257,7 +257,7 @@ Blunt, square, heavy-labelled.
 - **Placeholder:** ink-muted at full opacity.
 
 ### Navigation
-- **Top bar (1024px and up):** sticky, 56px high, ground background, 1.5px rod bottom border. It holds the logo mark and the "LisBran" wordmark in display face. Section links are 0.875rem at 600 weight, ink-secondary until active, and the active link gets a 3px cord underline on the rod. After the links come an outline "Sell on LisBran" button and 18px utility icons (Saved, Notifications, Account, theme). Over the film, the bar is transparent in the on-dark scope and turns solid once the film's bottom edge passes under it.
+- **Top bar (1024px and up):** sticky, 56px high, ground background, 1.5px rod bottom border. It holds the vector logo mark (drawn in currentColor) and the "LisBran" name in display face. The footer and the landing header carry the owner's full horizontal lockup. Section links are 0.875rem at 600 weight, ink-secondary until active, and the active link gets a 3px cord underline on the rod. After the links come an outline "Sell on LisBran" button and 18px utility icons (Saved, Notifications, Account, theme). Over the film, the bar is transparent in the on-dark scope and turns solid once the film's bottom edge passes under it.
 - **Tab bar (below 1024px):** fixed to the bottom, 64px high plus the safe-area inset, with a rod top border. It has five always-labelled tabs (Home, Services, Events, Saved, Account) with 20px icons and 11px labels. The active tab shows in ink with a 3px cord bar on top and a heavier icon stroke.
 - There is one navigation system. The same section map drives both bars.
 
@@ -284,7 +284,7 @@ The brand film, muted and covering, with a pause control. The words sit at its f
 - **Do** keep every corner square (0px) and every surface flat.
 - **Do** run content full width on the clamp(16px, 3.2vw, 112px) gutter, and hold measure on text with 48ch to 70ch.
 - **Do** set every compared number in Geist Mono with tabular numerals.
-- **Do** list suppliers, services and items as ruled rows. Use owner service artwork (icon-graphic.png, icon-printing.png, icon-marketing.png) only as thumbnails inside those rows, on film-edge.
+- **Do** list suppliers, services and items as ruled rows. Use the owner service artwork (`/public/services/*.png`, ten line icons in the brand circle, transparent corners) only as thumbnails inside those rows, set directly on the ground with no frame.
 - **Do** use the on-dark scope for anything placed over the brand film.
 - **Do** ship day and night together and check WCAG 2.2 AA contrast in both.
 - **Do** size signature geometry in rem so it survives 200% text.
