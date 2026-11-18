@@ -102,7 +102,7 @@ function Results({ category }: { category: string }) {
 
   return (
     <div>
-      <PageHeader title={title} parent={{ href: "/categories", label: "Services" }} description={serviceBySlug(category)?.blurb} />
+      <PageHeader title={title} parent={{ href: "/categories", label: "Services" }} description={serviceBySlug(category)?.blurb} art={serviceBySlug(category)?.art} />
       <div className="wrap pb-16 grid grid-cols-12 gap-y-8 md:gap-x-[2.5vw]">
         {known && (
           <aside className="col-span-12 lg:col-span-4 min-w-0" aria-label="Filters">

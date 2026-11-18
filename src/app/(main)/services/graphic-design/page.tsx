@@ -1,9 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { SupplierCard } from "@/components/ui/SupplierCard";
-import { suppliers } from "@/lib/catalog";
+import { serviceBySlug, suppliers } from "@/lib/catalog";
 
 const sections = [
   { title: "Logo and brand identity", items: [
@@ -28,9 +27,7 @@ export default function GraphicDesignServices() {
   const designers = suppliers.filter((s) => s.service === "graphic-design");
   return (
     <div>
-      <PageHeader title="Creative design" parent={{ href: "/categories", label: "Services" }} description="Logos, brand identity, social and print artwork from Kenyan designers.">
-        <Image src="/services/creative-design.png" alt="" width={128} height={128} sizes="128px" className="w-24 h-24 md:w-32 md:h-32" priority />
-      </PageHeader>
+      <PageHeader title="Creative design" parent={{ href: "/categories", label: "Services" }} description="Logos, brand identity, social and print artwork from Kenyan designers." art={serviceBySlug("graphic-design")?.art} />
 
       <div className="wrap pb-16 grid grid-cols-12 gap-y-10 lg:gap-x-[2.5vw]">
         <div className="col-span-12 lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-8">
